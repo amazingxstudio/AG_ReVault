@@ -1,0 +1,2997 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b0f18">
+<meta name="description" content="AG ReVault — private file recovery and restore utility.">
+<title>AG ReVault</title>
+<style>
+/* =========================
+BASE / DESIGN
+========================= */
+:root{
+  --bg:#080b12;
+  --bg2:#0d1220;
+  --glass:rgba(255,255,255,.065);
+  --glass-strong:rgba(255,255,255,.10);
+  --line:rgba(255,255,255,.12);
+  --line-soft:rgba(255,255,255,.07);
+  --text:#f5f7fb;
+  --muted:#aab3c2;
+  --accent:#8fb7ff;
+  --accent2:#a889ff;
+  --success:#7de2b0;
+  --warning:#ffd17c;
+  --danger:#ff8d9c;
+  --shadow:0 18px 60px rgba(0,0,0,.34);
+  --radius:24px;
+  --nav-h:76px;
+  --nav-surface:rgba(12,16,26,.62);
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body{
+  overflow-x:hidden;
+  background:
+    radial-gradient(900px 500px at 12% -10%,rgba(143,183,255,.10),transparent 60%),
+    radial-gradient(800px 520px at 100% 10%,rgba(168,137,255,.08),transparent 58%),
+    var(--bg);
+}
+button,input{font:inherit}
+button{color:inherit}
+button,.card,.nav-item,.profile-card,.file-row,.result-card,.drop-zone,.action-button,.icon-button{-webkit-tap-highlight-color:transparent}
+body,.app-shell,.page,.card,.profile-card,.file-row,.result-card,.drop-zone,.nav-item,.button,.icon-button,.preview-box{
+  user-select:none;
+}
+input[type="text"],input[type="search"],textarea{user-select:text}
+svg{display:block}
+img,video,audio{user-select:none;-webkit-user-drag:none}
+.hidden{display:none!important}
+.app-shell{min-height:100vh}
+main{width:100%;max-width:780px;margin:0 auto;padding:14px 12px 100px;overflow-x:clip}.page{padding-top:72px}
+.page{display:none;animation:none}
+.page.active{display:block}
+@keyframes pageIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.app-header{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:22px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-mark{
+  width:42px;height:42px;border-radius:14px;display:grid;place-items:center;
+  background:linear-gradient(145deg,rgba(143,183,255,.22),rgba(168,137,255,.13));
+  border:1px solid var(--line);box-shadow:0 8px 28px rgba(0,0,0,.22)
+}
+.brand h1{font-size:18px;margin:0;font-weight:700;letter-spacing:-.02em}
+.brand p{margin:3px 0 0;color:var(--muted);font-size:12px}
+.icon-button{
+  width:44px;height:44px;border:1px solid var(--line);border-radius:14px;background:var(--glass);
+  display:grid;place-items:center;cursor:pointer;box-shadow:var(--shadow);backdrop-filter:blur(18px)
+}
+.icon-button:hover{background:var(--glass-strong)}
+.hero{padding:16px 2px 14px}
+.hero h2{font-size:clamp(27px,8vw,40px);line-height:1.06;letter-spacing:-.04em;margin:0 0 10px;max-width:680px}
+.hero p{margin:0;color:var(--muted);font-size:15px;line-height:1.65;max-width:700px}
+.card,.profile-card,.drop-zone,.result-card,.preview-box{
+  background:var(--glass);border:1px solid var(--line-soft);border-radius:var(--radius);
+  box-shadow:var(--shadow);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px)
+}
+.card{padding:20px}
+.section-title{font-size:14px;font-weight:700;margin:0 0 12px}
+.muted{color:var(--muted)}
+.privacy{font-size:12px;color:var(--muted);margin:15px 2px 0;display:flex;gap:8px;align-items:center}
+.privacy svg{flex:none;color:var(--success)}
+.primary-button,.secondary-button,.danger-button{
+  border:1px solid var(--line);border-radius:15px;min-height:48px;padding:0 17px;cursor:pointer;
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;font-weight:700
+}
+.primary-button{background:linear-gradient(135deg,rgba(143,183,255,.26),rgba(168,137,255,.20));border-color:rgba(143,183,255,.30)}
+.secondary-button{background:rgba(255,255,255,.055)}
+.danger-button{background:rgba(255,100,120,.09);border-color:rgba(255,100,120,.20)}
+.primary-button:disabled,.secondary-button:disabled{opacity:.45;cursor:not-allowed}
+.button-row{display:flex;flex-wrap:wrap;gap:10px}
+.full{width:100%}
+.profile-selected{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.profile-pill{display:flex;align-items:center;gap:10px}
+.profile-icon{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:rgba(255,255,255,.06);border:1px solid var(--line)}
+.profile-name{font-weight:700}
+.profile-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.selection-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.profile-card{
+  min-height:138px;padding:18px;cursor:pointer;position:relative;transition:.18s ease;
+}
+.profile-card:hover{transform:translateY(-2px);background:var(--glass-strong)}
+.profile-card.selected{border-color:rgba(143,183,255,.55);box-shadow:0 0 0 1px rgba(143,183,255,.12),var(--shadow)}
+.profile-card .check{
+  position:absolute;right:14px;top:14px;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;
+  background:rgba(143,183,255,.18);color:var(--accent);opacity:0;transform:scale(.8);transition:.18s
+}
+.profile-card.selected .check{opacity:1;transform:none}
+.profile-card h3{margin:17px 0 6px;font-size:16px}
+.profile-card p{margin:0;color:var(--muted);font-size:12px;line-height:1.55}
+.app-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
+.app-grid .profile-card{min-height:135px}
+.subhead{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin:8px 0 13px}
+.subhead h2{margin:0;font-size:24px;letter-spacing:-.03em}
+.subhead p{margin:4px 0 0;color:var(--muted);font-size:13px}
+.drop-zone{
+  min-height:190px;padding:24px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+  border-style:dashed;border-color:rgba(255,255,255,.16);cursor:pointer
+}
+.drop-zone.dragover{border-color:rgba(143,183,255,.7);background:rgba(143,183,255,.08)}
+.drop-icon{width:54px;height:54px;border-radius:18px;display:grid;place-items:center;background:rgba(143,183,255,.10);border:1px solid rgba(143,183,255,.16);margin-bottom:14px}
+.drop-zone h3{margin:0 0 6px;font-size:17px}
+.drop-zone p{margin:0;color:var(--muted);font-size:13px;max-width:520px;line-height:1.55}
+.file-list{display:grid;gap:9px;margin-top:14px}
+.file-row{
+  display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:13px 14px;
+  border:1px solid var(--line-soft);background:rgba(255,255,255,.035);border-radius:17px
+}
+.file-type-icon{width:38px;height:38px;border-radius:12px;background:rgba(255,255,255,.06);display:grid;place-items:center}
+.file-name{font-size:13px;font-weight:650;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.file-meta{font-size:11px;color:var(--muted);margin-top:3px}
+.remove-file{width:34px;height:34px;border:1px solid var(--line-soft);border-radius:11px;background:transparent;display:grid;place-items:center;cursor:pointer}
+.recover-actions{display:flex;justify-content:flex-end;margin-top:14px}
+.progress-card{margin-top:14px}
+.progress-top{display:flex;justify-content:space-between;gap:12px;font-size:13px;font-weight:650}
+.progress-track{height:7px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden;margin-top:12px}
+.progress-bar{height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:inherit;transition:width .2s ease}
+.result-list{display:grid;gap:14px;margin-top:16px}
+.result-card{padding:17px}
+.result-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.result-title{font-size:15px;font-weight:700;overflow:hidden;text-overflow:ellipsis}
+.status-badge{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;padding:6px 8px;border-radius:9px;background:rgba(125,226,176,.10);color:var(--success);white-space:nowrap}
+.status-badge.error{background:rgba(255,141,156,.10);color:var(--danger)}
+.status-badge.warning{background:rgba(255,209,124,.10);color:var(--warning)}
+.result-meta{display:flex;flex-wrap:wrap;gap:6px 14px;color:var(--muted);font-size:11px;margin-top:7px}
+.preview-box{margin-top:13px;padding:10px;min-height:110px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.preview-box img,.preview-box video{max-width:100%;max-height:min(56vh,420px);border-radius:15px;object-fit:contain;background:#03050a}.media-shell{position:relative;display:flex;align-items:center;justify-content:center;max-width:100%;width:100%;border-radius:18px;overflow:hidden;background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(0,0,0,.18));}.media-shell video{display:block;width:100%;margin:0}.media-play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:54px;height:54px;border-radius:50%;border:1px solid rgba(255,255,255,.22);background:rgba(12,16,26,.62);backdrop-filter:blur(16px);color:#fff;display:grid;place-items:center;cursor:pointer;opacity:.92;transition:.18s}.media-shell.playing .media-play{opacity:0;pointer-events:none}.media-shell:hover .media-play{opacity:.95;pointer-events:auto}.media-shell.playing:hover .media-play{opacity:.72;pointer-events:auto}
+.preview-box audio{width:min(100%,560px)}
+.preview-box iframe{width:100%;height:min(62vh,520px);border:0;border-radius:15px;background:#fff}
+.preview-message{text-align:center;color:var(--muted);font-size:13px;padding:24px}
+.result-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:11px}
+.small-button{min-height:40px;border-radius:12px;padding:0 13px;font-size:12px}
+.history-list{display:grid;gap:10px}
+.history-item{
+  width:100%;text-align:left;border:1px solid var(--line-soft);background:var(--glass);border-radius:18px;padding:15px;cursor:pointer;
+  display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center
+}
+.history-item:hover{background:var(--glass-strong)}
+.history-thumb{width:44px;height:44px;border-radius:13px;overflow:hidden;background:rgba(255,255,255,.06);display:grid;place-items:center}
+.history-thumb img{width:100%;height:100%;object-fit:cover}
+.history-name{font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.history-meta{font-size:11px;color:var(--muted);margin-top:4px}
+.empty-state{text-align:center;padding:44px 20px;color:var(--muted)}
+.empty-state strong{display:block;color:var(--text);margin-bottom:7px}
+.nav{
+  position:fixed;left:50%;bottom:calc(10px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:40;width:min(360px,calc(100% - 24px));height:64px;padding:7px;
+  background:var(--nav-surface);border:1px solid rgba(255,255,255,.13);border-radius:24px;
+  box-shadow:0 18px 55px rgba(0,0,0,.38),inset 0 1px 0 rgba(255,255,255,.09);
+  backdrop-filter:blur(26px) saturate(155%);-webkit-backdrop-filter:blur(26px) saturate(155%);
+}
+.nav-inner{width:100%;height:100%;margin:auto;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}
+.nav-item{border:0;background:transparent;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--muted);cursor:pointer;font-size:10px;font-weight:700;min-width:0;min-height:50px;padding:5px 2px;line-height:1;transition:background .18s ease,color .18s ease,transform .18s ease}
+.nav-item.active{background:linear-gradient(135deg,rgba(143,183,255,.18),rgba(168,137,255,.13));color:var(--text);box-shadow:inset 0 1px 0 rgba(255,255,255,.10)}
+.nav-item:active{transform:scale(.96)}
+.nav-item svg{width:21px;height:21px;flex:none}
+.nav-item span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.modal-root{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(0,0,0,.62);backdrop-filter:blur(10px)}
+.modal-root.open{display:flex}
+.modal{
+  width:min(680px,100%);max-height:min(88vh,760px);overflow:auto;border-radius:26px;padding:20px;
+  background:rgba(18,23,34,.94);border:1px solid var(--line);box-shadow:0 30px 100px rgba(0,0,0,.55)
+}
+.modal-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:16px}
+.modal-head h3{margin:0;font-size:18px}
+.modal-head p{margin:5px 0 0;color:var(--muted);font-size:12px;line-height:1.5}
+.alert-icon{width:45px;height:45px;border-radius:15px;display:grid;place-items:center;background:rgba(255,255,255,.07);border:1px solid var(--line)}
+.alert-icon.success{color:var(--success)}.alert-icon.error{color:var(--danger)}.alert-icon.warning{color:var(--warning)}.alert-icon.info{color:var(--accent)}
+.modal-body{color:var(--muted);font-size:13px;line-height:1.65;white-space:pre-wrap}
+.modal-footer{display:flex;justify-content:flex-end;gap:9px;margin-top:18px}
+.fullscreen-root{position:fixed;inset:0;z-index:200;background:#000;display:none;align-items:center;justify-content:center;padding:18px}
+.fullscreen-root.open{display:flex}
+.fullscreen-content{width:100%;height:100%;display:flex;align-items:center;justify-content:center;position:relative}
+.fullscreen-content img,.fullscreen-content video{max-width:100%;max-height:100%;object-fit:contain}
+.fullscreen-media-wrap{position:relative;display:flex;align-items:center;justify-content:center;max-width:100%;max-height:100%;width:max-content;height:max-content}.fullscreen-close{position:absolute;top:6px;right:6px;z-index:5;background:rgba(12,16,26,.72);border-color:rgba(255,255,255,.22);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 8px 24px rgba(0,0,0,.28)}
+.toast{position:fixed;left:50%;bottom:calc(var(--nav-h) + 16px);transform:translate(-50%,20px);z-index:150;padding:10px 14px;border:1px solid var(--line);background:rgba(18,23,34,.94);border-radius:13px;font-size:12px;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:.2s}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.divider{height:1px;background:var(--line-soft);margin:17px 0}
+
+/* =========================
+LIQUID GLASS NAV / MOBILE GRID
+========================= */
+.selection-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.profile-card{min-width:0;width:100%;overflow:hidden}
+.profile-card h3,.profile-card p{overflow-wrap:anywhere;word-break:break-word}
+.app-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.button-row{width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.button-row>*{min-width:0;width:100%}
+.history-item{min-width:0;overflow:hidden}.history-item>*{min-width:0}.history-item .history-name{white-space:normal;overflow-wrap:anywhere;word-break:break-word}.history-item .history-meta{overflow-wrap:anywhere}
+.result-head>div{min-width:0}.result-title{white-space:normal;overflow-wrap:anywhere;word-break:break-word}
+.result-actions>*{min-width:0;flex:1 1 110px}
+@media(max-width:560px){
+  :root{--nav-h:70px}
+  main{padding-left:10px;padding-right:10px}
+  .card{padding:14px}
+  .hero{padding-top:8px}
+  .hero h2{font-size:28px}
+  .hero p{font-size:13px;line-height:1.5}
+  .selection-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+  .profile-card{min-height:132px;padding:13px}
+  .profile-card h3{font-size:14px;margin-top:13px}
+  .profile-card p{font-size:11px;line-height:1.45}
+  .button-row{grid-template-columns:1fr;gap:8px}
+  .button-row>*{min-height:45px}
+  .history-item{grid-template-columns:42px minmax(0,1fr) auto;gap:9px;padding:11px}
+  .history-thumb{width:42px;height:42px}
+}
+@media(max-width:340px){.selection-grid{grid-template-columns:1fr}}
+
+@media (max-width:620px){
+  main{padding-left:14px;padding-right:14px}
+  .selection-grid{grid-template-columns:1fr}
+  .profile-card{min-height:130px}
+  .app-grid{gap:9px}
+  .app-grid .profile-card{min-height:125px;padding:14px}
+  .drop-zone{min-height:200px;padding:20px}
+  .button-row>*{flex:1 1 140px}
+  .recover-actions .primary-button{width:100%}
+}
+@media (min-width:800px){
+  .drop-zone{min-height:245px}
+}
+
+/* Mobile stability */
+html{overflow-x:hidden;background:var(--bg)}
+body{width:100%;min-width:0;overflow-x:hidden}
+.app-shell{width:100%;max-width:100%;overflow-x:clip}
+.card{padding:16px;border-radius:20px}
+.app-header{margin-bottom:14px}
+.button-row>*{min-width:0}
+@media (max-width:520px){
+  :root{--nav-h:68px}
+  main{padding:10px 10px calc(var(--nav-h) + 18px)}
+  .app-header{gap:8px}
+  .brand{min-width:0}
+  .brand h1{font-size:16px}
+  .brand p{font-size:11px}
+  .hero{padding:12px 2px 10px}
+  .hero h2{font-size:28px}
+  .hero p{font-size:13px}
+  .profile-selected{align-items:flex-start}
+  .profile-name{font-size:14px}
+  .drop-zone{min-height:170px;padding:18px 12px}
+  .drop-zone .button-row{width:100%;flex-direction:column}
+  .drop-zone .button-row button{width:100%}
+  .file-row{grid-template-columns:auto minmax(0,1fr) auto;padding:11px}
+  .file-name{font-size:12px}
+  .result-card{padding:13px}
+  .result-head{gap:8px}
+  .result-title{font-size:13px}
+  .preview-box{padding:7px;margin-top:10px;border-radius:16px}
+  .preview-box img,.preview-box video{max-height:52vh}
+  .preview-box iframe{height:55vh}
+  .result-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+  .result-actions .small-button{width:100%;padding:0 8px}
+}
+@media (max-width:360px){
+  main{padding-left:8px;padding-right:8px}
+  .card{padding:13px}
+}
+/* =========================
+   LIQUID GLASS / MOBILE REBUILD
+   ========================= */
+html{overflow-x:clip;overflow-y:auto}
+body{overflow-x:clip;overflow-y:auto;min-width:0}
+main{width:min(100%,780px);padding-left:clamp(12px,4vw,24px);padding-right:clamp(12px,4vw,24px);padding-bottom:100px}
+.card,.profile-card,.drop-zone,.result-card,.preview-box{background:linear-gradient(145deg,rgba(255,255,255,.095),rgba(255,255,255,.035));border:1px solid rgba(255,255,255,.13);box-shadow:0 16px 50px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.08);backdrop-filter:blur(28px) saturate(145%);-webkit-backdrop-filter:blur(28px) saturate(145%)}
+.profile-selected{min-width:0}.profile-pill{min-width:0}.profile-pill>div:last-child{min-width:0}.profile-name,.profile-sub{overflow-wrap:anywhere}
+.selection-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.profile-card{width:100%;min-width:0;min-height:148px;padding:16px;text-align:left;overflow:hidden}
+.profile-card h3{padding-right:28px;overflow-wrap:anywhere}
+.profile-card p{overflow-wrap:anywhere}
+.profile-card .profile-status{display:inline-flex;margin-top:12px;padding:5px 8px;border-radius:999px;background:rgba(125,226,176,.10);color:var(--success);font-size:10px;font-weight:750}
+.profile-card .muted-status{background:rgba(255,255,255,.06);color:var(--muted)}
+.profile-card.unsupported{opacity:.8}
+.app-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.button-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%}
+.button-row>*{min-width:0;width:100%}
+.drop-zone{min-width:0}
+.file-row{min-width:0;grid-template-columns:auto minmax(0,1fr) auto}
+.file-name,.result-title,.history-name{min-width:0;overflow-wrap:anywhere}
+.result-card{min-width:0}
+@media (max-width:390px){
+  .selection-grid{grid-template-columns:1fr}
+  .profile-card{min-height:128px}
+  .button-row{grid-template-columns:1fr}
+}
+@media (min-width:621px){
+  .selection-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
+
+/* Final mobile polish */
+.select-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:17px;width:100%;}
+.select-actions .secondary-button{width:100%;min-width:0;}
+.folder-picker{width:min(270px,100%);margin:10px auto 0;min-height:52px;border-radius:17px;background:linear-gradient(135deg,rgba(143,183,255,.13),rgba(168,137,255,.10));}
+.home-accent-row{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:17px}
+.home-accent-row span{display:inline-flex;align-items:center;gap:7px;padding:9px 13px;border-radius:999px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.08);color:var(--text);font-size:11px;font-weight:650;letter-spacing:.015em;box-shadow:inset 0 1px 0 rgba(255,255,255,.04)}
+.home-accent-row i{width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.7;box-shadow:0 0 8px currentColor}
+.file-information{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;margin-top:12px;padding:11px 12px;border-radius:15px;background:rgba(255,255,255,.035);border:1px solid var(--line-soft);box-shadow:inset 0 1px 0 rgba(255,255,255,.025)}
+.file-information-text{min-width:0}.file-information-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}.file-information-value{font-size:12px;font-weight:650;overflow-wrap:anywhere;margin-top:2px}
+.file-information-actions{display:flex;gap:7px;flex-wrap:nowrap}.file-information-actions .small-button{min-width:0;flex:1;white-space:nowrap;font-size:10.5px;padding-left:9px;padding-right:9px}
+.preview-box img,.preview-box video,.fullscreen-content img,.fullscreen-content video{border-radius:18px}
+.fullscreen-content{padding:18px}.fullscreen-content img,.fullscreen-content video{border-radius:20px;box-shadow:0 18px 70px rgba(0,0,0,.55)}
+.result-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:9px}
+.result-actions .small-button{min-width:0;width:100%}
+.history-file-information{margin-top:12px}
+.history-file-information .file-information-actions{display:flex}
+@media(max-width:430px){.result-actions{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:430px){.file-information{grid-template-columns:1fr}.file-information-actions{width:100%}.file-information-actions .small-button{flex:1;min-width:0}.nav{width:min(350px,calc(100% - 20px));bottom:calc(8px + env(safe-area-inset-bottom))}}
+@media(max-width:340px){.select-actions{grid-template-columns:1fr}.folder-picker{width:100%}}
+
+
+.pin-label{font-size:11px;font-weight:700;color:var(--muted);margin:12px 0 7px}.pin-row{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.pin-digit{width:100%;height:50px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.045);color:var(--text);text-align:center;font-size:20px;font-weight:750;outline:none}.pin-digit:focus{border-color:rgba(143,183,255,.65);box-shadow:0 0 0 3px rgba(143,183,255,.10)}.password-note{margin-top:9px;color:var(--muted);font-size:11px;line-height:1.55;overflow-wrap:anywhere}.password-note.warning{color:var(--warning)}.password-note.success{color:var(--success)}/* ============================================================
+   PASSWORD SHEET UI
+   ============================================================ */
+.password-sheet-root{
+  align-items:flex-end;
+  padding:0;
+  background:rgba(0,0,0,.52);
+}
+
+.password-sheet-root .password-sheet{
+  width:min(520px,100%);
+  max-height:min(82vh,620px);
+  overflow:auto;
+  border-radius:28px 28px 0 0;
+  margin:0;
+  padding-bottom:calc(16px + env(safe-area-inset-bottom));
+  box-shadow:0 -18px 70px rgba(0,0,0,.35);
+  animation:sheetUp .22s ease;
+}
+
+.password-sheet-root.open .password-sheet{
+  transform:translateY(0);
+}
+
+@keyframes sheetUp{
+  from{
+    transform:translateY(22px);
+    opacity:.7;
+  }
+  to{
+    transform:translateY(0);
+    opacity:1;
+  }
+}
+
+.password-sheet{
+  width:min(420px,100%);
+  border-radius:26px;
+}
+
+.password-sheet .pin-row{
+  margin-top:8px;
+}
+
+.password-sheet .pin-digit{
+  height:56px;
+  font-size:22px;
+  -webkit-text-security:disc;
+  color:transparent;
+  text-shadow:0 0 0 var(--text);
+}
+
+.password-sheet .modal-footer{
+  display:flex;
+  gap:9px;
+  margin-top:15px;
+}
+
+.password-sheet .modal-footer>*{
+  flex:1;
+  min-height:44px;
+}
+
+.password-sheet .modal-footer .password-icon-action{
+  flex:0 0 52px;
+  width:52px;
+  padding:0;
+}
+
+.password-sheet .modal-footer .password-icon-action svg{
+  width:20px;
+  height:20px;
+}
+
+.password-sheet .modal-footer .password-icon-action + .password-icon-action{
+  margin-left:0;
+}
+
+.password-sheet .modal-footer .password-icon-action + .secondary-button:not(.password-icon-action){
+  flex:1;
+}
+.result-list{transition:none}.result-list.grid-view{transition:none}.result-card{contain:layout paint}.nav,.app-header{background:var(--nav-surface)}
+/* AG ReVault app shell */
+.app-header{position:fixed;top:max(10px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);z-index:90;width:min(756px,calc(100% - 24px));height:60px;min-height:60px;max-height:60px;flex:none;padding:8px 11px;box-sizing:border-box;border:1px solid var(--line-soft);border-radius:20px;background:var(--nav-surface);backdrop-filter:blur(26px) saturate(155%);-webkit-backdrop-filter:blur(22px) saturate(150%);box-shadow:0 12px 36px rgba(0,0,0,.18)}
+.app-header .brand-mark{width:40px;height:40px;border-radius:13px}
+.header-actions{display:flex;gap:7px;align-items:center}
+.results-collection{margin-top:16px;padding:14px;border:1px solid var(--line-soft);border-radius:22px;background:rgba(255,255,255,.035);box-shadow:var(--shadow);overflow:hidden}
+.results-collection-head{display:flex;align-items:center;justify-content:space-between;gap:10px;min-width:0}
+.results-collection-title{font-size:14px;font-weight:750;overflow-wrap:anywhere}
+.results-collection-meta{font-size:11px;color:var(--muted);margin-top:3px}
+.results-collection-tools{display:flex;gap:6px;flex:none}
+.view-toggle{width:38px;height:38px;padding:0;display:grid;place-items:center}
+.results-collection-body{display:none}.results-collection.open .results-collection-body{display:block}
+.results-collection.open .collection-chevron{transform:rotate(180deg)}
+.result-list.grid-view{grid-template-columns:repeat(2,minmax(0,1fr))}
+.result-list.grid-view .result-card{padding:11px}
+.result-card{min-width:0;overflow:hidden}
+.result-title,.file-information-value,.result-card *{max-width:100%}
+.file-information-value{word-break:break-word;overflow-wrap:anywhere}
+.result-actions .small-button{overflow:hidden;text-overflow:ellipsis}
+.settings-grid{display:grid;gap:12px}
+.settings-card{padding:16px;border:1px solid var(--line-soft);border-radius:20px;background:rgba(255,255,255,.035)}
+.theme-options{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}.theme-option{min-height:62px;border:1px solid var(--line);border-radius:15px;background:rgba(255,255,255,.04);cursor:pointer;color:var(--text)}.theme-option.active{border-color:rgba(143,183,255,.55);box-shadow:0 0 0 1px rgba(143,183,255,.12);background:rgba(143,183,255,.1)}
+.settings-card input:focus{outline:2px solid rgba(143,183,255,.25);border-color:rgba(143,183,255,.45)}
+.contact-row{display:grid;gap:8px;margin-top:10px}.contact-link{display:grid;grid-template-columns:58px minmax(0,1fr);align-items:center;gap:10px;padding:12px;border:1px solid var(--line-soft);border-radius:15px;background:rgba(255,255,255,.035);color:var(--text);text-decoration:none;min-width:0}.contact-link span{overflow-wrap:anywhere;word-break:break-word}
+.feedback-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.icon-only-button{display:grid;place-items:center}.contact-icon{width:36px;height:36px;display:grid;place-items:center;border:1px solid var(--line-soft);border-radius:11px;background:rgba(255,255,255,.04)}.contact-icon svg{display:block}.alert-inline{display:flex;gap:11px;align-items:flex-start;padding:13px;border:1px solid var(--line-soft);border-radius:16px;background:rgba(255,255,255,.045);line-height:1.5}.alert-inline.warning{border-color:rgba(245,190,70,.28);background:rgba(245,190,70,.08)}.alert-inline-icon{flex:0 0 30px;width:30px;height:30px;display:grid;place-items:center;border-radius:10px;background:rgba(245,190,70,.12);color:#e5ae35}.alert-inline-icon svg{display:block}
+.logo-ag{font-weight:900;letter-spacing:-.08em;font-size:20px;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+body[data-theme="light"]{--bg:#edf5ff;--bg2:#f7fbff;--glass:rgba(248,252,255,.74);--glass-strong:rgba(255,255,255,.92);--line:rgba(24,55,92,.13);--line-soft:rgba(24,55,92,.08);--text:#14233a;--muted:#60738e;--accent:#3f83e8;--accent2:#6f79e8;--shadow:0 18px 55px rgba(42,91,145,.14)}
+body[data-theme="grey"]{--bg:#181b21;--bg2:#22262e;--glass:rgba(255,255,255,.075);--glass-strong:rgba(255,255,255,.11);--line:rgba(255,255,255,.13);--line-soft:rgba(255,255,255,.075);--text:#f0f2f5;--muted:#aeb5c0;--accent:#aebbd2;--accent2:#a89bbf}
+body[data-theme="light"] .modal{background:rgba(249,251,255,.97);color:var(--text)}
+body[data-theme="light"]{--nav-surface:rgba(240,248,255,.86)}
+body[data-theme="light"] .nav,body[data-theme="light"] .app-header{background:var(--nav-surface)}
+body[data-theme="light"] .toast{background:rgba(249,251,255,.97)}
+body[data-theme="light"] .fullscreen-root{background:#f4f6fa}
+@media(max-width:560px){.result-list.grid-view{grid-template-columns:1fr}.theme-options{grid-template-columns:1fr 1fr 1fr}.app-header{border-radius:18px}}
+
+/* ============================================================
+   AG ReVault — AURORA VAULT UI / V3
+   Visual-only layer. Core recovery logic remains untouched.
+   ============================================================ */
+:root{
+  --bg:#080b12;--bg2:#0d121b;--surface:#101722;--surface2:#151d2a;
+  --glass:rgba(16,23,34,.82);--glass-strong:rgba(20,29,42,.94);
+  --line:rgba(255,255,255,.095);--line-soft:rgba(255,255,255,.055);
+  --text:#f5f7fb;--muted:#8d98a9;--accent:#69d6ff;--accent2:#8e8bff;
+  --success:#67dfae;--warning:#f4c76d;--danger:#ff718b;
+  --shadow:0 24px 70px rgba(0,0,0,.34);--radius:22px;
+  --nav-surface:rgba(13,18,27,.92);
+  --hero-a:rgba(105,214,255,.14);--hero-b:rgba(142,139,255,.12);
+}
+html{background:var(--bg)}
+body{
+  background:
+    radial-gradient(520px 420px at 8% -5%,var(--hero-a),transparent 68%),
+    radial-gradient(600px 440px at 96% 8%,var(--hero-b),transparent 70%),
+    linear-gradient(180deg,var(--bg) 0%,var(--bg2) 52%,var(--bg) 100%);
+}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;opacity:.20;background-image:linear-gradient(rgba(255,255,255,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.022) 1px,transparent 1px);background-size:48px 48px;mask-image:linear-gradient(to bottom,black,transparent 82%)}
+main{max-width:850px;padding:18px 14px 116px}.page{padding-top:78px}.page.active{animation:v3In .3s cubic-bezier(.2,.75,.2,1)}
+@keyframes v3In{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.app-header{width:min(810px,calc(100% - 20px));height:60px;min-height:60px;max-height:60px;top:max(12px,env(safe-area-inset-top));border-radius:18px;padding:7px 9px;background:var(--glass);border:1px solid var(--line);box-shadow:0 16px 45px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.07);backdrop-filter:blur(26px) saturate(155%)}
+.app-header::after{content:"";position:absolute;left:20px;right:20px;bottom:-1px;height:1px;background:linear-gradient(90deg,transparent,var(--accent),var(--accent2),transparent);opacity:.42}
+.brand{gap:10px}.brand-mark{width:42px;height:42px;border-radius:13px;background:#0b111b;border:1px solid var(--line);box-shadow:inset 0 0 0 1px rgba(105,214,255,.08),0 8px 22px rgba(0,0,0,.22)}
+.logo-ag{font-size:17px;letter-spacing:-.08em;background:linear-gradient(135deg,var(--accent),#fff 48%,var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}.brand h1{font-size:15px}.brand p{font-size:10px}
+.hero{position:relative;min-height:300px;display:flex;flex-direction:column;justify-content:flex-end;padding:30px 24px 25px;margin:0 0 14px;overflow:hidden;border:1px solid var(--line);border-radius:28px;background:linear-gradient(145deg,rgba(20,28,42,.94),rgba(10,15,23,.76));box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.07)}
+.hero::before{content:"AG REVAULT / PRIVATE MODE";position:absolute;left:24px;top:20px;font-size:8.5px;font-weight:800;letter-spacing:.18em;color:var(--muted)}
+.hero::after{content:"AG";position:absolute;right:17px;top:15px;font:800 120px/1 system-ui,sans-serif;letter-spacing:-.09em;color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.055);pointer-events:none}
+.hero h2{position:relative;z-index:1;font-size:clamp(34px,9vw,54px);line-height:.94;letter-spacing:-.065em;margin:0 0 13px;max-width:650px}.hero p{position:relative;z-index:1;max-width:550px;font-size:12.5px;line-height:1.65;color:var(--muted)}
+.card,.profile-card,.drop-zone,.result-card,.preview-box{border-radius:22px;background:var(--glass);border:1px solid var(--line);box-shadow:0 18px 55px rgba(0,0,0,.20),inset 0 1px 0 rgba(255,255,255,.045);backdrop-filter:blur(22px)}
+.card{padding:18px}.section-title{font-size:10px;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);font-weight:800}.profile-selected{padding:11px;border:1px solid var(--line-soft);border-radius:16px;background:rgba(255,255,255,.025)}.profile-pill{gap:11px}.profile-icon{width:42px;height:42px;border-radius:12px;background:linear-gradient(145deg,rgba(105,214,255,.10),rgba(142,139,255,.08));border-color:var(--line)}.profile-name{font-size:13px}.profile-sub{font-size:10px}.divider{opacity:.35}
+.primary-button,.secondary-button,.danger-button{min-height:47px;border-radius:13px;font-size:11.5px;transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease}.primary-button{background:linear-gradient(135deg,#67d4fa,#8787ff);color:#07101a;border-color:transparent;box-shadow:0 10px 26px rgba(105,214,255,.16)}.secondary-button{background:rgba(255,255,255,.035);border-color:var(--line)}.danger-button{background:rgba(255,113,139,.07);border-color:rgba(255,113,139,.19)}.primary-button:hover,.secondary-button:hover,.danger-button:hover{transform:translateY(-1px);border-color:rgba(255,255,255,.20)}
+.privacy{margin:13px 2px 0;font-size:10px}.home-accent-row{justify-content:flex-start;margin:10px 2px 0;gap:6px}.home-accent-row span{padding:6px 9px;border-radius:9px;background:rgba(255,255,255,.025);border-color:var(--line-soft);font-size:9px;color:var(--muted)}
+.subhead{margin:10px 2px 13px}.subhead h2{font-size:26px;letter-spacing:-.05em}.subhead p{font-size:11px;line-height:1.55}
+.drop-zone{min-height:305px;padding:26px 20px;position:relative;overflow:hidden;border-style:dashed;border-color:rgba(105,214,255,.20);background:linear-gradient(145deg,rgba(16,25,38,.86),rgba(9,14,22,.72))}.drop-zone::before{content:"";position:absolute;inset:22px;border-radius:18px;border:1px solid rgba(255,255,255,.035);pointer-events:none}.drop-icon{position:relative;z-index:1;width:68px;height:68px;border-radius:19px;margin-bottom:15px;background:#0b131f;border:1px solid rgba(105,214,255,.22);box-shadow:0 12px 32px rgba(0,0,0,.25),inset 0 0 0 1px rgba(142,139,255,.07)}.drop-zone h3,.drop-zone p,.select-actions,.folder-picker{position:relative;z-index:1}.drop-zone h3{font-size:18px}.drop-zone p{font-size:11px;max-width:420px}.select-actions{gap:8px;margin-top:18px}.folder-picker{margin-top:8px;min-height:40px;border-radius:11px;width:min(225px,100%);background:rgba(255,255,255,.025)}
+.file-row{border-radius:15px;background:rgba(255,255,255,.025);border-color:var(--line-soft);padding:10px 11px}.file-type-icon{width:39px;height:39px;border-radius:11px;background:linear-gradient(145deg,rgba(105,214,255,.07),rgba(142,139,255,.07))}.progress-card{padding:15px;border-radius:17px}.progress-track{height:5px;background:rgba(255,255,255,.06)}.result-list{gap:10px;margin-top:12px}.result-card{padding:12px;border-radius:19px}.result-head{padding:2px}.result-title{font-size:12.5px}.result-meta{font-size:9.5px}.status-badge{border-radius:999px;padding:5px 8px;font-size:8px}.preview-box{margin-top:9px;padding:6px;border-radius:17px;background:rgba(0,0,0,.18);min-height:125px}.preview-box img,.preview-box video,.fullscreen-content img,.fullscreen-content video{border-radius:13px}.file-information{border-radius:13px;background:rgba(255,255,255,.022);border-color:var(--line-soft);padding:9px}.file-information-label{font-size:8px}.file-information-value{font-size:10.5px}.result-actions{gap:6px}.small-button{min-height:37px;border-radius:10px;font-size:10px}.results-collection{margin-top:12px;padding:11px;border-radius:18px;background:rgba(255,255,255,.022);border-color:var(--line-soft)}.results-collection-title{font-size:11.5px}.results-collection-meta{font-size:9px}.view-toggle{width:34px;height:34px;border-radius:10px}
+.history-list{gap:7px}.history-item{padding:11px;border-radius:15px;background:rgba(255,255,255,.025);border-color:var(--line-soft)}.history-thumb{width:40px;height:40px;border-radius:11px}.history-name{font-size:11.5px}.history-meta{font-size:9.5px}.settings-grid{gap:8px}.settings-card{padding:15px;border-radius:18px;background:var(--glass);border-color:var(--line);box-shadow:0 14px 42px rgba(0,0,0,.17),inset 0 1px 0 rgba(255,255,255,.045)}.theme-option{min-height:52px;border-radius:12px;background:rgba(255,255,255,.025);border-color:var(--line-soft);font-size:10.5px}.theme-option.active{background:linear-gradient(135deg,rgba(105,214,255,.09),rgba(142,139,255,.09));border-color:rgba(105,214,255,.28)}
+.contact-link{grid-template-columns:38px minmax(0,1fr);gap:9px;padding:9px;border-radius:13px;background:rgba(255,255,255,.022);border-color:var(--line-soft);font-size:10.5px}.contact-icon{width:32px;height:32px;border-radius:9px;background:rgba(255,255,255,.045);display:grid;place-items:center}.feedback-grid .secondary-button{min-height:50px;border-radius:13px}
+.nav{width:min(390px,calc(100% - 28px));height:64px;padding:6px;border-radius:20px;background:var(--nav-surface);border:1px solid var(--line);box-shadow:0 20px 65px rgba(0,0,0,.38),inset 0 1px 0 rgba(255,255,255,.07)}.nav-inner{gap:4px}.nav-item{border-radius:14px;gap:4px;font-size:8.5px;min-height:51px;color:#768296;position:relative}.nav-item::before{content:"";position:absolute;inset:5px;border-radius:12px;background:linear-gradient(135deg,rgba(105,214,255,.12),rgba(142,139,255,.10));opacity:0;transform:scale(.94);transition:.18s ease;z-index:-1}.nav-item.active{background:transparent;color:var(--text);box-shadow:none}.nav-item.active::before{opacity:1;transform:none}.nav-item svg{width:19px;height:19px}
+.modal-root{background:rgba(3,5,9,.66);backdrop-filter:blur(16px) saturate(125%)}.modal{border-radius:24px;background:var(--glass-strong);border:1px solid var(--line);box-shadow:0 28px 90px rgba(0,0,0,.52),inset 0 1px 0 rgba(255,255,255,.06)}.modal-head{padding-bottom:12px}.modal-head h3{letter-spacing:-.025em}.modal-head p{font-size:10.5px}.password-sheet-root .password-sheet{border-radius:25px 25px 0 0;background:var(--glass-strong);box-shadow:0 -22px 80px rgba(0,0,0,.50),inset 0 1px 0 rgba(255,255,255,.06)}.password-sheet .pin-digit{height:56px;border-radius:14px;background:rgba(255,255,255,.03);border-color:var(--line)}.password-sheet .pin-digit:focus{border-color:rgba(105,214,255,.52);box-shadow:0 0 0 3px rgba(105,214,255,.08),0 7px 22px rgba(105,214,255,.08)}.alert-inline{border-radius:14px;background:rgba(255,255,255,.022);border-color:var(--line-soft)}.fullscreen-root{background:radial-gradient(circle at 50% 35%,#111927,#03050a 74%)}.fullscreen-close{border-radius:13px;background:rgba(10,15,24,.76);border-color:var(--line)}
+/* Light theme: complete surface override so no dark V3 colors leak into light mode. */
+body[data-theme="light"]{--bg:#f3f7fc;--bg2:#e9f0f8;--surface:#ffffff;--surface2:#f8fbff;--glass:rgba(255,255,255,.88);--glass-strong:rgba(255,255,255,.97);--line:rgba(25,52,82,.12);--line-soft:rgba(25,52,82,.075);--text:#17263a;--muted:#64758a;--accent:#287eea;--accent2:#6d68d8;--shadow:0 20px 60px rgba(41,76,113,.13);--nav-surface:rgba(248,251,255,.94);--hero-a:rgba(40,126,234,.11);--hero-b:rgba(109,104,216,.09)}
+body[data-theme="light"]{background:radial-gradient(520px 420px at 8% -5%,var(--hero-a),transparent 68%),radial-gradient(600px 440px at 96% 8%,var(--hero-b),transparent 70%),linear-gradient(180deg,var(--bg) 0%,var(--bg2) 52%,var(--bg) 100%)}
+body[data-theme="light"]::before{opacity:.14;background-image:linear-gradient(rgba(35,72,112,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(35,72,112,.035) 1px,transparent 1px)}
+body[data-theme="light"] .app-header{background:var(--glass);box-shadow:0 14px 40px rgba(50,84,120,.11),inset 0 1px 0 rgba(255,255,255,.8)}
+body[data-theme="light"] .hero{background:linear-gradient(145deg,rgba(255,255,255,.94),rgba(237,244,252,.86));box-shadow:var(--shadow),inset 0 1px 0 #fff}.hero p{color:var(--muted)}
+body[data-theme="light"] .hero::before{color:#718198}.hero::after{opacity:.8}
+body[data-theme="light"] .card,body[data-theme="light"] .profile-card,body[data-theme="light"] .drop-zone,body[data-theme="light"] .result-card,body[data-theme="light"] .preview-box,body[data-theme="light"] .settings-card{background:var(--glass);box-shadow:0 16px 46px rgba(48,83,119,.10),inset 0 1px 0 rgba(255,255,255,.95)}
+body[data-theme="light"] .drop-zone{background:linear-gradient(145deg,rgba(255,255,255,.96),rgba(239,246,253,.92));border-color:rgba(40,126,234,.24)}
+body[data-theme="light"] .drop-zone::before{border-color:rgba(30,70,110,.045)}
+body[data-theme="light"] .primary-button{background:linear-gradient(135deg,#328be9,#706dde);color:#fff;box-shadow:0 10px 24px rgba(62,115,201,.18)}
+body[data-theme="light"] .secondary-button{background:rgba(255,255,255,.68)}body[data-theme="light"] .nav{background:var(--nav-surface);box-shadow:0 18px 55px rgba(42,73,108,.16)}body[data-theme="light"] .nav-item{color:#718198}body[data-theme="light"] .nav-item.active{color:#18283c}
+body[data-theme="light"] .modal-root{background:rgba(31,48,69,.24)}body[data-theme="light"] .modal,body[data-theme="light"] .password-sheet-root .password-sheet{background:var(--glass-strong);box-shadow:0 25px 80px rgba(41,67,94,.22),inset 0 1px 0 #fff}body[data-theme="light"] .password-sheet .pin-digit{background:#f5f8fc}
+body[data-theme="light"] .fullscreen-root{background:radial-gradient(circle at 50% 35%,#e8f0f8,#cfdbe8 78%)}body[data-theme="light"] .fullscreen-close{background:rgba(255,255,255,.86);color:#17263a}
+body[data-theme="grey"]{--bg:#191d24;--bg2:#232832;--glass:rgba(255,255,255,.075);--glass-strong:rgba(255,255,255,.11);--line:rgba(255,255,255,.13);--line-soft:rgba(255,255,255,.075);--text:#f0f2f5;--muted:#aeb5c0;--accent:#b9c4d8;--accent2:#aaa1c6}
+@media(max-width:560px){.hero{min-height:270px;border-radius:24px;padding:28px 19px 21px}.hero::after{font-size:90px;right:12px;top:22px}.drop-zone{min-height:292px;border-radius:20px}.nav{width:min(370px,calc(100% - 20px))}}
+/* ============================================================
+   END AURORA VAULT UI / V3
+   ============================================================ */
+   ============================================================ */
+</style>
+
+<style id="agr-v5-smart-branding">
+/* AG ReVault V5 — About + Home feature polish */
+.about-revault-card{position:relative;overflow:hidden}
+.about-revault-card::after{content:"AG";position:absolute;right:-10px;top:-22px;font:900 118px/1 system-ui,sans-serif;letter-spacing:-.12em;color:transparent;-webkit-text-stroke:1px rgba(110,231,255,.055);pointer-events:none}
+.about-brand-row{position:relative;z-index:1;display:flex;align-items:center;gap:12px;padding:13px;border:1px solid var(--line-soft);border-radius:17px;background:linear-gradient(135deg,rgba(110,231,255,.055),rgba(139,124,255,.045));margin-top:11px}
+.about-logo{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;flex:none;font-size:17px;font-weight:950;letter-spacing:-.09em;color:#071018;background:linear-gradient(145deg,#8ef0ff,#8d82ff);box-shadow:0 8px 24px rgba(110,231,255,.13),inset 0 1px 0 rgba(255,255,255,.65)}
+.about-brand-name{font-size:15px;font-weight:800;letter-spacing:-.025em}.about-brand-sub{margin-top:3px;font-size:10px;color:var(--muted)}
+.about-meta-grid{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:8px}
+.about-meta-item{min-width:0;padding:11px 10px;border:1px solid var(--line-soft);border-radius:14px;background:rgba(255,255,255,.025)}
+.about-meta-item span{display:block;font-size:8px;text-transform:uppercase;letter-spacing:.11em;color:var(--muted);font-weight:800}.about-meta-item strong{display:block;margin-top:5px;font-size:10.5px;line-height:1.3;overflow-wrap:anywhere}
+.about-revault-card .contact-row{position:relative;z-index:1;margin-top:8px}
+.home-accent-row{position:relative;z-index:2;justify-content:center;gap:9px;margin:20px auto 0;max-width:620px}
+.home-accent-row span{padding:10px 15px;border-radius:13px;background:linear-gradient(135deg,rgba(110,231,255,.075),rgba(139,124,255,.065));border:1px solid rgba(255,255,255,.09);font-size:11px;font-weight:750;color:var(--text);box-shadow:inset 0 1px 0 rgba(255,255,255,.045),0 8px 24px rgba(0,0,0,.10)}
+.home-accent-row i{width:6px;height:6px}
+@media(max-width:560px){.about-meta-grid{grid-template-columns:1fr}.about-meta-item{padding:10px 11px}.about-meta-item strong{font-size:11px}.home-accent-row{gap:7px;margin-top:19px}.home-accent-row span{font-size:10.5px;padding:9px 12px}.about-revault-card::after{font-size:90px;right:-7px;top:-12px}}
+@media(min-width:900px){.about-meta-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.about-meta-item{min-height:72px}.home-accent-row span{font-size:12px;padding:11px 17px}}
+</style>
+<style id="agr-v4-application-ui">
+/* ============================================================
+   AG REVAULT V4 — AURORA VAULT / DESKTOP-FIRST RESPONSIVE UI
+   Visual layer only. Recovery/storage logic remains unchanged.
+   ============================================================ */
+:root{
+  --v4-max:1180px;
+  --v4-rail:82px;
+  --v4-radius:26px;
+  --v4-accent:#6ee7ff;
+  --v4-accent-2:#8b7cff;
+}
+
+/* ---------- GLOBAL SURFACE ---------- */
+html,body{min-width:0;overflow-x:hidden}
+body{background:radial-gradient(circle at 15% 5%,rgba(110,231,255,.055),transparent 28%),radial-gradient(circle at 90% 10%,rgba(139,124,255,.065),transparent 30%),var(--bg)}
+.app-shell{max-width:none;overflow-x:clip}
+main{width:min(calc(100% - 32px),var(--v4-max));max-width:none;margin:0 auto;padding:14px 0 118px}
+.page{padding-top:8px;display:none;animation:none!important}
+.page.active{display:block;animation:none!important}
+
+/* ---------- STABLE HEADER ---------- */
+.app-header{
+  position:sticky!important;
+  top:max(10px,env(safe-area-inset-top))!important;
+  left:auto!important;
+  transform:none!important;
+  z-index:70;
+  width:100%!important;
+  height:66px!important;
+  min-height:66px!important;
+  max-height:66px!important;
+  margin:0 0 18px!important;
+  padding:8px 10px!important;
+  border-radius:20px!important;
+  box-sizing:border-box!important;
+  display:flex!important;
+  align-items:center!important;
+  background:color-mix(in srgb,var(--glass-strong) 86%,transparent)!important;
+  border:1px solid var(--line)!important;
+  box-shadow:0 14px 38px rgba(0,0,0,.16),inset 0 1px 0 rgba(255,255,255,.07)!important;
+  backdrop-filter:blur(24px) saturate(145%);
+  -webkit-backdrop-filter:blur(24px) saturate(145%);
+}
+.app-header::after{display:none!important}
+.app-header .brand{min-width:0;display:flex;align-items:center;gap:11px}
+.app-header .brand-mark.logo-ag{
+  width:42px!important;height:42px!important;border-radius:14px!important;
+  display:grid;place-items:center;flex:none;
+  font-size:16px!important;font-weight:950;letter-spacing:-.08em!important;
+  color:#071018!important;background:linear-gradient(145deg,#8ef0ff,#8d82ff)!important;
+  box-shadow:0 9px 24px rgba(110,231,255,.16),inset 0 1px 0 rgba(255,255,255,.65)!important;
+}
+.app-header .brand h1{font-size:16px!important;line-height:1.1!important;margin:0!important;letter-spacing:-.025em}
+.app-header .brand p{font-size:10px!important;margin:4px 0 0!important;color:var(--muted)}
+
+/* ---------- V4 HOME / RECOVERY ---------- */
+.hero{
+  min-height:330px!important;margin:0 0 16px!important;padding:34px!important;border-radius:32px!important;
+  background:
+    radial-gradient(circle at 78% 20%,rgba(110,231,255,.16),transparent 25%),
+    radial-gradient(circle at 92% 80%,rgba(139,124,255,.18),transparent 30%),
+    linear-gradient(145deg,#101b28,#0b1019 62%,#111326)!important;
+  border:1px solid rgba(255,255,255,.10)!important;
+  box-shadow:0 30px 90px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.07)!important;
+}
+.hero::before{content:"AG REVAULT  /  PRIVATE RECOVERY"!important;left:34px!important;top:28px!important;color:rgba(255,255,255,.46)!important;font-size:8px!important;letter-spacing:.2em!important}
+.hero::after{content:"AG"!important;right:28px!important;top:20px!important;font-size:150px!important;font-weight:950!important;letter-spacing:-.13em!important;-webkit-text-stroke:1px rgba(255,255,255,.06)!important;opacity:1!important}
+.hero h2{font-size:clamp(38px,5vw,64px)!important;max-width:760px!important;letter-spacing:-.065em!important}
+.hero p{max-width:650px!important;font-size:13px!important;color:rgba(232,241,248,.68)!important}
+
+.drop-zone{
+  min-height:260px!important;border-radius:28px!important;padding:30px!important;
+  background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.018))!important;
+  border:1px dashed rgba(110,231,255,.24)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.045)!important;
+}
+.drop-zone:hover,.drop-zone.dragover{border-color:rgba(110,231,255,.55)!important;background:rgba(110,231,255,.045)!important}
+.drop-icon{width:64px!important;height:64px!important;border-radius:20px!important;background:linear-gradient(145deg,rgba(110,231,255,.11),rgba(139,124,255,.11))!important;border-color:rgba(110,231,255,.18)!important}
+
+/* ---------- CONTENT CARDS ---------- */
+.card,.settings-card,.results-collection,.history-item,.profile-card{
+  border-color:var(--line)!important;
+  box-shadow:0 16px 42px rgba(0,0,0,.10),inset 0 1px 0 rgba(255,255,255,.035)!important;
+}
+.card,.settings-card{border-radius:24px!important}
+.subhead{margin:4px 0 14px!important}
+.subhead h2{font-size:25px!important;letter-spacing:-.04em!important}
+
+/* ---------- NAV: MOBILE DOCK / DESKTOP RAIL ---------- */
+.nav{
+  z-index:80!important;
+  background:color-mix(in srgb,var(--glass-strong) 90%,transparent)!important;
+  border-color:var(--line)!important;
+  box-shadow:0 22px 60px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.08)!important;
+}
+.nav-item.active{background:linear-gradient(145deg,rgba(110,231,255,.15),rgba(139,124,255,.13))!important;color:var(--text)!important}
+
+/* ---------- PASSWORD: NO FLICKER ---------- */
+.password-sheet-root{transition:none!important;animation:none!important}
+.password-sheet-root.open{display:flex!important}
+.password-sheet-root .password-sheet{
+  animation:none!important;
+  transition:none!important;
+  transform:none!important;
+  opacity:1!important;
+  will-change:auto!important;
+  width:min(560px,100%)!important;
+  max-height:min(78vh,640px)!important;
+  border-radius:28px 28px 0 0!important;
+}
+.password-sheet-root.open .password-sheet{transform:none!important;opacity:1!important}
+.password-sheet .pin-row{min-height:56px!important}
+.password-sheet .pin-digit{transition:border-color .12s ease,box-shadow .12s ease!important}
+
+/* ---------- LIGHT THEME: FULL V4 SURFACE ---------- */
+body[data-theme="light"]{
+  --bg:#eef5fb!important;--bg2:#f8fbff!important;
+  --glass:rgba(255,255,255,.78)!important;--glass-strong:rgba(255,255,255,.96)!important;
+  --line:rgba(30,58,87,.12)!important;--line-soft:rgba(30,58,87,.075)!important;
+  --text:#152436!important;--muted:#64758a!important;
+  --accent:#287fd6!important;--accent2:#6b67d8!important;
+  --shadow:0 20px 55px rgba(39,75,110,.12)!important;
+  background:linear-gradient(180deg,#eef5fb,#f7fbff)!important;
+}
+body[data-theme="light"] .app-header{background:rgba(255,255,255,.88)!important;box-shadow:0 14px 38px rgba(42,76,109,.12),inset 0 1px 0 #fff!important}
+body[data-theme="light"] .hero{background:radial-gradient(circle at 78% 20%,rgba(61,157,225,.12),transparent 27%),radial-gradient(circle at 90% 80%,rgba(111,102,218,.10),transparent 30%),linear-gradient(145deg,#ffffff,#edf5fc)!important;border-color:rgba(35,74,111,.10)!important;box-shadow:0 28px 70px rgba(47,87,124,.13),inset 0 1px 0 #fff!important}
+body[data-theme="light"] .hero::before{color:#718298!important}
+body[data-theme="light"] .hero::after{-webkit-text-stroke-color:rgba(30,65,95,.075)!important}
+body[data-theme="light"] .hero p{color:#60738b!important}
+body[data-theme="light"] .drop-zone{background:linear-gradient(145deg,rgba(255,255,255,.96),rgba(241,247,252,.9))!important;border-color:rgba(42,121,183,.22)!important}
+body[data-theme="light"] .nav{background:rgba(255,255,255,.92)!important;box-shadow:0 18px 48px rgba(44,78,110,.16),inset 0 1px 0 #fff!important}
+body[data-theme="light"] .modal-root{background:rgba(27,49,70,.22)!important}
+body[data-theme="light"] .password-sheet-root .password-sheet{background:rgba(255,255,255,.98)!important;box-shadow:0 -20px 70px rgba(35,66,95,.20),inset 0 1px 0 #fff!important}
+
+/* ---------- DESKTOP VIEW / CHROME DESKTOP SITE ---------- */
+@media (min-width:900px){
+  main{width:min(calc(100% - 150px),var(--v4-max));margin-left:calc(var(--v4-rail) + 42px);margin-right:auto;padding-top:20px;padding-bottom:40px}
+  .page{padding-top:0}
+  .app-header{top:16px!important;margin-bottom:22px!important}
+  .nav{
+    left:20px!important;right:auto!important;top:50%!important;bottom:auto!important;transform:translateY(-50%)!important;
+    width:var(--v4-rail)!important;height:auto!important;padding:9px!important;border-radius:26px!important;
+  }
+  .nav-inner{grid-template-columns:1fr!important;gap:7px!important;height:auto!important}
+  .nav-item{min-height:68px!important;border-radius:19px!important;gap:6px!important;font-size:10px!important}
+  .nav-item svg{width:22px!important;height:22px!important}
+  .hero{min-height:380px!important;padding:42px!important}
+  .hero::after{font-size:190px!important;right:48px!important;top:25px!important}
+  #page-home .hero{display:flex!important}
+  #page-recover .drop-zone{min-height:330px!important}
+  .settings-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:14px!important}
+  .result-list.grid-view{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  .results-collection{padding:17px!important}
+}
+
+/* ---------- SMALL MOBILE ---------- */
+@media (max-width:560px){
+  main{width:calc(100% - 20px)!important;padding:10px 0 104px!important}
+  .app-header{top:max(8px,env(safe-area-inset-top))!important;height:62px!important;min-height:62px!important;max-height:62px!important;border-radius:19px!important;margin-bottom:14px!important}
+  .app-header .brand-mark.logo-ag{width:40px!important;height:40px!important}
+  .hero{min-height:300px!important;padding:27px 21px 22px!important;border-radius:26px!important}
+  .hero::before{left:21px!important;top:21px!important}
+  .hero::after{font-size:96px!important;right:15px!important;top:27px!important}
+  .hero h2{font-size:34px!important}
+  .drop-zone{min-height:235px!important;padding:22px!important}
+  .password-sheet-root .password-sheet{max-height:82vh!important;border-radius:26px 26px 0 0!important}
+}
+</style>
+
+<style id="agr-v6-recovery-profiles">
+.profile-selection-grid{display:flex!important;flex-direction:column!important;gap:9px!important}
+.profile-list-item{border:1px solid var(--line-soft);border-radius:18px;background:rgba(255,255,255,.035);overflow:hidden;transition:border-color .16s ease,background .16s ease,box-shadow .16s ease}
+.profile-list-item.selected{border-color:rgba(143,183,255,.35);background:rgba(143,183,255,.07);box-shadow:0 8px 30px rgba(0,0,0,.12)}
+.profile-list-main{display:grid;grid-template-columns:42px minmax(0,1fr) 38px;align-items:center;gap:11px;padding:12px;cursor:pointer}
+.profile-list-main .profile-icon{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:rgba(255,255,255,.055);border:1px solid var(--line-soft);color:var(--accent)}
+.profile-list-copy{min-width:0}.profile-list-title{font-size:13px;font-weight:760;line-height:1.2}.profile-list-sub{margin-top:4px;color:var(--muted);font-size:10.5px;line-height:1.45;overflow-wrap:anywhere}
+.profile-list-badge{display:inline-flex;margin-top:7px;padding:4px 7px;border-radius:999px;font-size:9px;font-weight:750;letter-spacing:.02em;border:1px solid var(--line-soft)}
+.profile-list-badge.decrypt{color:#b9d1ff;background:rgba(143,183,255,.10)}.profile-list-badge.signature{color:#b9f0d0;background:rgba(125,226,176,.08)}
+.profile-details-button{width:34px;height:34px;border:1px solid var(--line-soft);border-radius:11px;background:rgba(255,255,255,.035);display:grid;place-items:center;color:var(--muted);cursor:pointer}
+.profile-details-button svg{transition:transform .18s ease}.profile-details-button.open svg{transform:rotate(180deg)}
+.profile-list-details{padding:0 13px 13px 65px;border-top:1px solid var(--line-soft)}
+.profile-detail-line{display:grid;grid-template-columns:84px minmax(0,1fr);gap:9px;padding-top:9px;font-size:10.5px;line-height:1.5}.profile-detail-line b{color:var(--text);font-weight:700}.profile-detail-line span{color:var(--muted);overflow-wrap:anywhere}
+@media(max-width:560px){.profile-list-main{grid-template-columns:38px minmax(0,1fr) 34px;padding:11px}.profile-list-main .profile-icon{width:38px;height:38px}.profile-list-details{padding-left:12px}.profile-detail-line{grid-template-columns:1fr;gap:2px}}
+</style>
+<style id="agr-recovery-profile-one-column">
+/* Recovery Profile only: 1 column list. No other grid/layout is changed. */
+#profile-selection-grid.selection-grid{
+  display:grid !important;
+  grid-template-columns:1fr !important;
+  gap:10px !important;
+}
+#profile-selection-grid .profile-card{
+  width:100%;
+  min-width:0;
+}
+</style>
+
+<style id="agr-premium-brand-and-profile-check">
+/* Premium AG branding — visual polish only */
+.brand{gap:13px}
+.brand-mark.logo-ag{position:relative;width:46px;height:46px;border-radius:15px;font-size:21px;letter-spacing:-.09em;background:linear-gradient(145deg,rgba(143,183,255,.22),rgba(168,137,255,.18));border:1px solid rgba(170,195,255,.28);box-shadow:0 0 0 1px rgba(255,255,255,.025) inset,0 10px 32px rgba(84,115,190,.22),0 0 24px rgba(143,183,255,.12)}
+.brand-mark.logo-ag::before{content:"";position:absolute;inset:5px;border-radius:11px;border:1px solid rgba(255,255,255,.09);pointer-events:none}
+.brand-mark.logo-ag::after{content:"";position:absolute;inset:-7px;border-radius:20px;background:radial-gradient(circle,rgba(143,183,255,.12),transparent 68%);z-index:-1;pointer-events:none}
+.brand h1{font-size:19px;font-weight:800;letter-spacing:-.035em;background:linear-gradient(100deg,var(--text),var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.brand p{font-size:10.5px;letter-spacing:.025em}
+#page-home .app-header{margin-bottom:18px}
+#page-home .hero{position:relative;overflow:hidden}
+#page-home .hero::after{opacity:.95;-webkit-text-stroke:1px rgba(143,183,255,.10);text-shadow:0 0 35px rgba(143,183,255,.10)}
+
+/* Selected recovery profile check */
+.profile-list-title{display:flex;align-items:center;gap:7px}
+.profile-selected-check{width:18px;height:18px;flex:0 0 18px;display:inline-grid;place-items:center;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;box-shadow:0 4px 14px rgba(96,132,220,.28),0 0 0 2px rgba(143,183,255,.08);animation:profileCheckIn .18s ease-out}
+.profile-selected-check svg{width:11px;height:11px;stroke-width:3}
+@keyframes profileCheckIn{from{opacity:0;transform:scale(.72)}to{opacity:1;transform:scale(1)}}
+</style>
+
+<style id="agr-final-shell-brand-fix">
+/* Fixed glass header: content scrolls underneath it while the top content stays clear. */
+.app-header{
+  position:fixed!important;
+  top:max(12px,env(safe-area-inset-top))!important;
+  left:50%!important;
+  transform:translateX(-50%)!important;
+  z-index:90!important;
+  width:min(810px,calc(100% - 20px))!important;
+  margin:0!important;
+}
+main{padding-top:92px!important}
+
+/* Premium AG mark: gradient lettering + layered glass background + stronger light-theme presence. */
+.app-header .brand-mark.logo-ag{
+  position:relative!important;
+  isolation:isolate;
+  overflow:visible!important;
+  color:transparent!important;
+  -webkit-text-fill-color:transparent!important;
+  background:linear-gradient(145deg,rgba(255,255,255,.94),rgba(231,240,255,.78))!important;
+  border:1px solid rgba(151,181,235,.38)!important;
+  box-shadow:
+    0 10px 30px rgba(62,91,145,.22),
+    0 0 0 1px rgba(255,255,255,.28) inset,
+    0 0 24px rgba(109,151,255,.14)!important;
+}
+.app-header .brand-mark.logo-ag::before{
+  content:"";
+  position:absolute;
+  inset:1px;
+  z-index:-1;
+  border-radius:inherit;
+  background:
+    radial-gradient(circle at 20% 10%,rgba(110,231,255,.42),transparent 46%),
+    radial-gradient(circle at 88% 88%,rgba(139,124,255,.38),transparent 52%),
+    linear-gradient(145deg,rgba(255,255,255,.94),rgba(226,237,255,.72));
+  border:1px solid rgba(255,255,255,.48);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.78);
+}
+.app-header .brand-mark.logo-ag::after{
+  content:"";
+  position:absolute;
+  inset:-9px;
+  z-index:-2;
+  border-radius:23px;
+  background:radial-gradient(circle,rgba(104,150,255,.25) 0%,rgba(104,150,255,.09) 42%,transparent 72%);
+  filter:blur(2px);
+  pointer-events:none;
+}
+
+/* Keep the actual AG letters gradient-filled. */
+.app-header .brand-mark.logo-ag{
+  background-image:linear-gradient(135deg,#22c7f3 0%,#687cff 48%,#a05cff 100%)!important;
+  background-size:100% 100%!important;
+  background-clip:text!important;
+  -webkit-background-clip:text!important;
+}
+.app-header .brand-mark.logo-ag::before{
+  /* decorative glass layer behind the gradient lettering */
+  z-index:-1;
+}
+
+/* Hero AG watermark/shadow: stronger and still visible on light theme. */
+#page-home .hero::after{
+  color:transparent!important;
+  -webkit-text-fill-color:transparent!important;
+  background:linear-gradient(145deg,rgba(65,196,236,.18),rgba(108,108,235,.16),rgba(154,89,238,.18));
+  -webkit-background-clip:text!important;
+  background-clip:text!important;
+  -webkit-text-stroke:1.35px rgba(91,126,204,.20)!important;
+  text-shadow:0 12px 38px rgba(78,111,181,.18),0 0 34px rgba(92,137,232,.15)!important;
+}
+body[data-theme="light"] #page-home .hero::after{
+  -webkit-text-stroke:1.55px rgba(61,96,159,.20)!important;
+  text-shadow:0 14px 42px rgba(57,91,151,.22),0 0 38px rgba(88,125,214,.16)!important;
+}
+body[data-theme="light"] .app-header .brand-mark.logo-ag{
+  border-color:rgba(91,119,180,.42)!important;
+  box-shadow:0 12px 32px rgba(53,82,137,.24),0 0 0 1px rgba(255,255,255,.62) inset,0 0 26px rgba(82,127,220,.16)!important;
+}
+
+@media(min-width:900px){
+  main{padding-top:104px!important}
+}
+@media(max-width:560px){
+  main{padding-top:84px!important}
+}
+</style>
+
+</head>
+<body>
+<div class="app-shell">
+  <main>
+    <section id="page-home" class="page active" aria-label="Home">
+      <header class="app-header">
+        <div class="brand">
+          <div class="brand-mark logo-ag" aria-hidden="true">AG</div>
+          <div><h1>AG ReVault</h1><p id="brand-sub">Local browser recovery utility</p></div>
+        </div>
+      </header>
+      <div class="hero">
+        <h2 id="home-title">Your files will be recovered privately.</h2>
+        <p id="home-description">Bring back supported photos, videos and files — right on your device.</p>
+      </div>
+      <div class="card">
+        <div class="section-title" id="profile-label">Recovery profile</div>
+        <div class="profile-selected">
+          <div class="profile-pill">
+            <div class="profile-icon" id="selected-profile-icon"></div>
+            <div><div class="profile-name" id="selected-profile-name">Xiaomi / Redmi / POCO</div><div class="profile-sub" id="selected-profile-sub">MIUI / HyperOS • .lsa / .lsav</div></div>
+          </div>
+          <button id="change-profile-button" class="secondary-button small-button" type="button">Change</button>
+        </div>
+        <div class="divider"></div>
+        <button id="start-recover-button" class="primary-button full" type="button">
+          <span id="start-recover-text">Start recovery</span>
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="m9 5 7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="privacy" id="privacy-home">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 3 5 6v5c0 5 3.2 8.1 7 10 3.8-1.9 7-5 7-10V6l-7-3Z" stroke="currentColor" stroke-width="1.6"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Files are processed locally in your browser.</span>
+        </div>
+      </div>
+      <div class="home-accent-row" aria-hidden="true">
+        <span><i></i> Local</span>
+        <span><i></i> Secure</span>
+        <span><i></i> Preview</span>
+      </div>
+    </section>
+
+    <section id="page-recover" class="page" aria-label="Recover">
+      <header class="app-header">
+        <div class="brand"><div class="brand-mark logo-ag" aria-hidden="true">AG</div><div><h1>Recover</h1><p id="recover-profile-caption">Xiaomi / Redmi / POCO</p></div></div>
+      </header>
+      <div class="subhead"><div><h2 id="recover-title">Recover files</h2><p id="recover-subtitle">Select one file, multiple files, a folder, or a ZIP archive.</p></div></div>
+      <div id="drop-zone" class="drop-zone" tabindex="0">
+        <div class="drop-icon"><svg width="25" height="25" viewBox="0 0 24 24" fill="none"><path d="M12 16V4m0 0L8 8m4-4 4 4M5 14v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h3 id="drop-title">Choose what to recover</h3>
+        <p id="drop-description">Your files stay on this device. ZIP archives are processed in the browser.</p>
+        <div class="select-actions">
+          <button id="select-file-button" class="secondary-button" type="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 3h8l4 4v14H6V3Z" stroke="currentColor" stroke-width="1.6"/><path d="M14 3v5h5" stroke="currentColor" stroke-width="1.6"/></svg><span>Select File</span></button>
+          <button id="select-multiple-button" class="secondary-button" type="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 4h12v16H6zM9 7h6M9 11h6M9 15h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><span>Select Multiple</span></button>
+        </div>
+        <button id="select-folder-button" class="secondary-button folder-picker" type="button"><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M3.5 7.5h6l1.5 2H20.5v9H3.5v-11Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg><span>Select Folder</span></button>
+      </div>
+      <input id="file-input" type="file" class="hidden">
+      <input id="multiple-input" type="file" class="hidden" multiple>
+      <input id="folder-input" type="file" class="hidden" webkitdirectory directory multiple>
+      <div id="selected-files-card" class="card hidden" style="margin-top:14px">
+        <div class="section-title"><span id="selected-count">0 files</span></div>
+        <div id="file-list" class="file-list"></div>
+        <div class="recover-actions"><button id="recover-button" class="primary-button" type="button"><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M12 3v12m0 0-4-4m4 4 4-4M5 18v2h14v-2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Recover</span></button></div>
+      </div>
+      <div id="progress-card" class="card progress-card hidden">
+        <div class="progress-top"><span id="progress-label">Processing</span><span id="progress-count">0 / 0</span></div>
+        <div class="progress-track"><div id="progress-bar" class="progress-bar"></div></div>
+      </div>
+      <div id="results-section" class="hidden" style="margin-top:22px">
+        <div class="subhead"><div><h2 id="results-title">Recovery results</h2><p id="results-subtitle">Recovered data is previewed directly from the decrypted bytes.</p></div></div>
+        <div id="result-list" class="result-list"></div>
+      </div>
+    </section>
+
+    <section id="page-history" class="page" aria-label="History">
+      <header class="app-header">
+        <div class="brand"><div class="brand-mark logo-ag" aria-hidden="true">AG</div><div><h1>History</h1><p id="history-subtitle">Local recovery history</p></div></div>
+      </header>
+      <div class="subhead"><div><h2 id="history-title">Recovered files</h2><p id="history-description">Recovery metadata is stored only on this device.</p></div><button id="clear-history-button" class="danger-button small-button" type="button">Clear history</button></div>
+      <div id="history-list" class="history-list"></div>
+    </section>
+
+    <section id="page-settings" class="page" aria-label="Settings">
+      <header class="app-header"><div class="brand"><div class="brand-mark logo-ag">AG</div><div><h1>AG ReVault</h1><p>Settings & support</p></div></div></header>
+      <div class="subhead"><div><h2>Settings</h2><p>Make AG ReVault yours.</p></div></div>
+      <div class="settings-grid">
+        <div class="settings-card"><div class="section-title">Theme</div><div class="muted" style="font-size:12px">Choose a readable interface theme.</div><div class="theme-options"><button class="theme-option" data-theme-choice="light">Light</button><button class="theme-option" data-theme-choice="grey">Grey</button><button class="theme-option" data-theme-choice="dark">Dark</button></div></div>
+        <div class="settings-card about-revault-card"><div class="section-title">About AG ReVault</div><div class="about-brand-row"><div class="about-logo logo-ag">AG</div><div><div class="about-brand-name">AG ReVault</div><div class="about-brand-sub">Private file recovery utility</div></div></div><div class="about-meta-grid"><div class="about-meta-item"><span>Version</span><strong>1.1.23</strong></div><div class="about-meta-item"><span>Creator</span><strong>Aung Myat Minn</strong></div><div class="about-meta-item"><span>Team</span><strong>AmazinG X Studio</strong></div></div><div class="contact-row"><a class="contact-link" href="https://t.me/aung_myat_minn" target="_blank" rel="noopener" aria-label="Telegram"><span class="contact-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="m21 4-3.1 16-5.8-4.5-3.1 2.9.7-4.2L17.5 7l-8.2 5.1-5.1-1.6L21 4Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></span><span>@aung_myat_minn</span></a><a class="contact-link" href="mailto:aungmyatminnx@gmail.com" aria-label="Gmail"><span class="contact-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3.5 6.2 12 12.6l8.5-6.4V18.5" fill="none" stroke="#EA4335" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.5 18.5V6.2L12 12.6" fill="none" stroke="#4285F4" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.5 6.2V18.5" fill="none" stroke="#34A853" stroke-width="2.2" stroke-linecap="round"/><path d="M20.5 6.2V18.5" fill="none" stroke="#FBBC04" stroke-width="2.2" stroke-linecap="round"/></svg></span><span>aungmyatminnx@gmail.com</span></a></div></div>
+        <div class="settings-card"><div class="section-title">History password</div><div id="history-password-status" class="muted" style="font-size:12px;line-height:1.55">Password is not set.</div><button id="history-password-button" class="secondary-button full" type="button" style="margin-top:11px">Set password</button></div>
+        <div class="settings-card"><div class="section-title">Local recovery data</div><div class="muted" style="font-size:12px;line-height:1.55">Delete all locally stored recovered files and recovery history.</div><button id="forgot-password-clear-button" class="danger-button full" type="button" style="margin-top:11px">Delete all local recovery data</button></div>
+        <div class="settings-card"><div class="section-title">Feedback</div><div class="muted" style="font-size:12px;line-height:1.55">Send an issue or suggestion. A starter message will be prepared for you.</div><div class="feedback-grid" style="margin-top:11px"><button id="feedback-telegram" class="secondary-button icon-only-button" type="button" aria-label="Telegram" title="Telegram"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="m21 4-3.1 16-5.8-4.5-3.1 2.9.7-4.2L17.5 7l-8.2 5.1-5.1-1.6L21 4Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button><button id="feedback-gmail" class="secondary-button icon-only-button" type="button" aria-label="Gmail" title="Gmail"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3.5 6.2 12 12.6l8.5-6.4V18.5" fill="none" stroke="#EA4335" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.5 18.5V6.2L12 12.6" fill="none" stroke="#4285F4" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.5 6.2V18.5" fill="none" stroke="#34A853" stroke-width="2.2" stroke-linecap="round"/><path d="M20.5 6.2V18.5" fill="none" stroke="#FBBC04" stroke-width="2.2" stroke-linecap="round"/></svg></button></div></div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="nav" aria-label="Primary navigation">
+    <div class="nav-inner">
+      <button class="nav-item active" data-page="home" type="button" aria-label="Home"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m3.5 10.5 8.5-7 8.5 7v8.25A1.75 1.75 0 0 1 18.75 20.5h-13.5A1.75 1.75 0 0 1 3.5 18.75V10.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 20.5v-6h6v6" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span id="nav-home">Home</span></button>
+      <button class="nav-item" data-page="recover" type="button" aria-label="Recover"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3.5 7.5h6l1.6 2H20.5v8.75A1.75 1.75 0 0 1 18.75 20h-13.5A1.75 1.75 0 0 1 3.5 18.25V7.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 12v5m0 0 2-2m-2 2-2-2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="nav-recover">Recover</span></button>
+      <button class="nav-item" data-page="history" type="button" aria-label="History"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.35-5.65" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M4 5v4h4M12 7.5v5l3 1.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="nav-history">History</span></button>
+      <button class="nav-item" data-page="settings" type="button" aria-label="Settings"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 8.2a3.8 3.8 0 1 0 0 7.6 3.8 3.8 0 0 0 0-7.6Z" stroke="currentColor" stroke-width="1.8"/><path d="M19.4 13.3a7.8 7.8 0 0 0 0-2.6l1.5-1.1-1.9-3.2-1.8.7a8 8 0 0 0-2.2-1.3L14.7 4h-5.4l-.3 1.8a8 8 0 0 0-2.2 1.3L5 6.4 3.1 9.6l1.5 1.1a7.8 7.8 0 0 0 0 2.6l-1.5 1.1L5 17.6l1.8-.7a8 8 0 0 0 2.2 1.3l.3 1.8h5.4l.3-1.8a8 8 0 0 0 2.2-1.3l1.8.7 1.9-3.2-1.5-1.1Z" stroke="currentColor" stroke-width="1.45" stroke-linejoin="round"/></svg><span id="nav-settings">Settings</span></button>
+    </div>
+  </nav>
+</div>
+
+<div id="profile-modal" class="modal-root" aria-hidden="true">
+  <div class="modal">
+    <div class="modal-head"><div><h3 id="profile-modal-title">Choose recovery profile</h3><p id="profile-modal-subtitle">Select a supported application format.</p></div><button id="profile-modal-close" class="icon-button" type="button" aria-label="Close"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></div>
+    <div id="profile-selection-grid" class="selection-grid"></div>
+  </div>
+</div>
+
+<div id="password-sheet" class="modal-root password-sheet-root" aria-hidden="true">
+  <div
+    class="modal password-sheet"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="password-sheet-title"
+  >
+    <div class="modal-head">
+      <div>
+        <h3 id="password-sheet-title">History password</h3>
+        <p id="password-sheet-subtitle">Enter a 4-digit password.</p>
+      </div>
+
+      <button
+        id="password-sheet-close"
+        class="icon-button"
+        type="button"
+        aria-label="Close"
+      >
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none">
+          <path
+            d="m6 6 12 12M18 6 6 18"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+          />
+        </svg>
+      </button>
+    </div>
+
+    <div id="password-sheet-body">
+      <div class="pin-row">
+        <input class="pin-digit" id="pin-sheet-1" type="password" inputmode="numeric" maxlength="1" autocomplete="one-time-code">
+        <input class="pin-digit" id="pin-sheet-2" type="password" inputmode="numeric" maxlength="1" autocomplete="one-time-code">
+        <input class="pin-digit" id="pin-sheet-3" type="password" inputmode="numeric" maxlength="1" autocomplete="one-time-code">
+        <input class="pin-digit" id="pin-sheet-4" type="password" inputmode="numeric" maxlength="1" autocomplete="one-time-code">
+      </div>
+
+      <div id="password-sheet-note" class="password-note"></div>
+    </div>
+
+    <div id="password-sheet-footer" class="modal-footer"></div>
+  </div>
+</div>
+
+<div id="alert-root" class="modal-root" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="alert-title">
+    <div class="modal-head">
+      <div style="display:flex;gap:12px;align-items:flex-start">
+        <div id="alert-icon" class="alert-icon info"></div>
+        <div><h3 id="alert-title">Information</h3><p id="alert-subtitle"></p></div>
+      </div>
+      <button id="alert-close-x" class="icon-button" type="button" aria-label="Close"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+    </div>
+    <div id="alert-body" class="modal-body"></div>
+    <div id="alert-footer" class="modal-footer"></div>
+  </div>
+</div>
+
+<div id="fullscreen-root" class="fullscreen-root" aria-hidden="true">
+  <div id="fullscreen-content" class="fullscreen-content"></div>
+  <button id="fullscreen-close" class="icon-button fullscreen-close" type="button" aria-label="Close fullscreen"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+</div>
+<div id="toast" class="toast"></div>
+
+<script>
+"use strict";
+
+
+/* =========================
+STATE
+========================= */
+const state = {
+  selectedProfile: localStorage.getItem("agr-selected-profile") || "xiaomi",
+  pendingFiles: [],
+  results: [],
+  history: [],
+  objectUrls: new Set(),
+  processing: false,
+  currentPage: "home",
+  fullscreenElement: null,
+  fullscreenSource: null,
+  alertResolver: null,
+  db: null,
+  resultView: localStorage.getItem("agr-result-view") || "list",
+  theme: localStorage.getItem("agr-theme") || "dark",
+  historyUnlocked: false,
+  historyKey: null
+};
+
+const PROFILES = {
+  xiaomi: {
+    id:"xiaomi", name:"Xiaomi / Redmi / POCO", group:"MIUI / HyperOS",
+    extensions:[".lsa",".lsav"], description:"MIUI / HyperOS Gallery encrypted media",
+    supported:true, engine:"miui", level:"decrypt",
+    detailTitle:"MIUI / HyperOS encrypted Gallery files",
+    detail:"Recognizes .lsa and .lsav. .lsa is processed as a full encrypted file; .lsav is processed through its encrypted header/data region. After decryption, AG ReVault validates the result with file signatures before restoring the extension.",
+    paths:"Typical input: files exported/found from MIUI / HyperOS Gallery or hidden storage. Exact paths can vary by Android/MIUI/HyperOS version.",
+    recovery:"Decrypt → verify magic bytes → restore original media extension.",
+    limits:"Only the documented/implemented MIUI profile is decrypted. Unknown OEM-encrypted files are not guessed or brute-forced."
+  },
+  oppo: {
+    id:"oppo", name:"OPPO", group:"ColorOS",
+    extensions:[".nomedia","hidden / extensionless"], description:"Hidden files + signature recovery; Private Safe requires OS access",
+    supported:true, engine:"repair", level:"signature",
+    detailTitle:"ColorOS hidden-file recovery",
+    detail:"AG ReVault scans the bytes of a file you export/select from File Manager, even when the filename or extension is wrong. .nomedia is recognized as a media-scanner marker, not as photo/video data. OPPO Private Safe files are encrypted and must be decrypted by ColorOS before they can be transferred/shared; no public reproducible raw vault key/format is used here.",
+    paths:"File Manager → Show hidden files / the file's original location. Private Safe: use OPPO's own Set as Public/export route first.",
+    recovery:"Raw file → signature detection → correct extension when the original bytes are intact.",
+    limits:"No password bypass and no speculative Private Safe decryptor."
+  },
+  vivo: {
+    id:"vivo", name:"vivo", group:"Funtouch OS / OriginOS",
+    extensions:[".nomedia","hidden / extensionless"], description:"Hidden files + signature recovery; encrypted private files stay protected",
+    supported:true, engine:"repair", level:"signature",
+    detailTitle:"vivo hidden-file recovery",
+    detail:"For a hidden/raw file supplied from File Manager, AG ReVault checks the actual bytes instead of trusting the filename. .nomedia is treated as a scanner-control marker. vivo encrypted/private files are not assigned a fake extension or guessed decryption algorithm.",
+    paths:"File Manager / Albums → show or export the hidden/private file, then select the raw file in AG ReVault.",
+    recovery:"Raw file → magic-byte validation → restore extension when recognizable.",
+    limits:"No private-file password bypass or undocumented key guessing."
+  },
+  huawei: {
+    id:"huawei", name:"Huawei", group:"EMUI / HarmonyOS",
+    extensions:[".nomedia","hidden / extensionless"], description:"Hidden items + signature recovery; PrivateSpace stays protected",
+    supported:true, engine:"repair", level:"signature",
+    detailTitle:"Huawei hidden-file recovery",
+    detail:"Huawei documents Hidden items/blocked albums and .nomedia-related media visibility. AG ReVault can recover an intact raw media file selected from storage by inspecting its bytes. PrivateSpace is a separate protected space and is not bypassed.",
+    paths:"Files → show hidden/system-hidden items where supported; for PrivateSpace, transfer the file back to MainSpace first.",
+    recovery:"Raw media → signature detection → original media extension.",
+    limits:"No PrivateSpace password bypass; Huawei states that inaccessible PrivateSpace data cannot be recovered without the required access method."
+  },
+  samsung: {
+    id:"samsung", name:"Samsung", group:"One UI",
+    extensions:[".nomedia","hidden / extensionless"], description:"Hidden-file + media-signature recovery; Secure Folder stays protected",
+    supported:true, engine:"repair", level:"signature",
+    detailTitle:"Samsung hidden-file recovery",
+    detail:"AG ReVault handles raw files selected from My Files. .nomedia is recognized as a media-indexing marker rather than a damaged media file. Secure Folder is a protected environment; AG ReVault does not attempt to bypass it.",
+    paths:"My Files → show hidden files / locate the raw file. For Secure Folder, use Samsung's supported move/export/backup path first.",
+    recovery:"Raw bytes → signature validation → restore extension if the content is intact.",
+    limits:"No Secure Folder credential bypass or Knox-protected data decryption."
+  },
+  tecno: {
+    id:"tecno", name:"TECNO", group:"HiOS",
+    extensions:[".nomedia","hidden / extensionless"], description:"Hidden/raw file signature recovery",
+    supported:true, engine:"repair", level:"signature",
+    detailTitle:"TECNO hidden-file recovery",
+    detail:"AG ReVault can inspect raw hidden files supplied from the phone's File Manager and recover recognizable media by content signature. Where HiOS Vault/private storage encrypts the file, the OS/app must first export or decrypt it; AG ReVault does not guess undocumented keys.",
+    paths:"File Manager → show hidden files / export from the phone's supported private-storage UI, then select the raw file.",
+    recovery:"Raw bytes → magic-byte detection → correct extension when possible.",
+    limits:"No Vault password bypass or undocumented decryption."
+  },
+  infinix: {
+    id:"infinix", name:"Infinix", group:"XOS",
+    extensions:[".nomedia","hidden / extensionless"], description:"Hidden/raw file signature recovery",
+    supported:true, engine:"repair", level:"signature",
+    detailTitle:"Infinix hidden-file recovery",
+    detail:"AG ReVault inspects the actual bytes of a selected hidden/raw file and restores recognizable media extensions. Private/Vault storage that remains encrypted is not treated as a normal media file.",
+    paths:"File Manager → show hidden files / use the phone's supported export route for private files.",
+    recovery:"Raw bytes → signature validation → restore extension when recognizable.",
+    limits:"No Vault password bypass or undocumented decryption."
+  },
+  itel: {
+    id:"itel", name:"itel", group:"itel OS / Android",
+    extensions:[".nomedia","hidden / extensionless"], description:"Hidden/raw file signature recovery",
+    supported:true, engine:"repair", level:"signature",
+    detailTitle:"itel hidden-file recovery",
+    detail:"For raw hidden files that are accessible through File Manager, AG ReVault validates the content signature and can restore the correct media extension. Encrypted/private containers without a documented public format are left untouched.",
+    paths:"File Manager → show hidden files → select the raw file in AG ReVault.",
+    recovery:"Raw bytes → magic-byte detection → extension restoration.",
+    limits:"No undocumented private-vault decryption or password bypass."
+  },
+  iphone: {
+    id:"iphone", name:"iPhone Photos", group:"iOS Photos", extensions:[".jpg",".jpeg",".png",".heic",".heif",".mov",".mp4"], description:"Exported media + signature recovery", supported:true, engine:"repair", level:"signature", detailTitle:"Exported iPhone media", detail:"This profile is for normal files supplied to the browser. It does not bypass Apple-protected storage.", paths:"Files/iCloud/exports → select the file in AG ReVault.", recovery:"Signature detection → extension restoration.", limits:"No protected-album or account-security bypass." },
+  repair: { id:"repair", name:"Auto Detect / File Repair", group:"Format recovery", extensions:[], description:"Detect supported files by content signature", supported:true, engine:"repair", level:"signature", detailTitle:"Automatic signature recovery", detail:"Checks the actual bytes for common image, video, audio, PDF and archive signatures. Useful when a hidden file has no extension or a wrong extension.", paths:"Any accessible file selected from File Manager.", recovery:"Magic bytes → MIME/type → safe output extension.", limits:"If the bytes are encrypted/randomized or damaged before the signature, extension-only recovery cannot reconstruct the original." },
+  other: { id:"other", name:"Other / Unknown OEM", group:"Format-based recovery", extensions:[], description:"Signature-based recovery only", supported:true, engine:"repair", level:"signature", detailTitle:"Unknown OEM / app files", detail:"Uses content signatures only. This profile deliberately avoids guessing an OEM encryption format.", paths:"Any raw file that the user can legally/accessibly select.", recovery:"Signature detection → supported extension.", limits:"No universal decryptor or brute-force key search." }
+};
+
+const I18N = {
+  en: {
+    brandSub:"Local browser recovery utility",
+    homeTitle:"Your files will be recovered privately.",
+    homeDescription:"Bring back supported photos, videos and files — right on your device.",
+    profileLabel:"Recovery profile",
+    change:"Change",
+    startRecovery:"Start recovery",
+    privacy:"Files are processed locally in your browser.",
+    chooseProfile:"Choose recovery profile",
+    chooseProfileSub:"Select a supported application format.",
+    recover:"Recover",
+    recoverProfile:"Xiaomi / Redmi / POCO",
+    recoverTitle:"Recover files",
+    recoverSubtitle:"Select one file, multiple files, a folder, or a ZIP archive.",
+    dropTitle:"Choose what to recover",
+    dropDescription:"Your files stay on this device. ZIP archives are processed in the browser.",
+    selectFile:"Select File",
+    selectMultiple:"Select Multiple",
+    selectFolder:"Select Folder",
+    files:"files",
+    file:"file",
+    recoverButton:"Recover",
+    processing:"Processing",
+    decrypting:"Decrypting…",
+    resultsTitle:"Recovery results",
+    resultsSubtitle:"Recovered data is previewed directly from the decrypted bytes.",
+    completed:"Completed",
+    partiallyCompleted:"Partially completed",
+    failed:"Failed",
+    preview:"Preview",
+    previewUnavailable:"Preview is not available for this file type.",
+    save:"Save",
+    share:"Share",
+    openWith:"Open with",
+    openWithFallback:"No external app picker is available; the recovered file was downloaded.",
+    fullscreen:"Fullscreen",
+    close:"Close",
+    history:"History",
+    historySubtitle:"Local recovery history",
+    historyTitle:"Recovered files",
+    historyDescription:"Recovery metadata is stored only on this device.",
+    clearHistory:"Clear history",
+    noHistory:"No recovery history yet.",
+    noHistorySub:"Recovered files will appear here after processing.",
+    detected:"Detected",
+    size:"Size",
+    date:"Date",
+    unknown:"Unknown",
+    unsupported:"Unsupported",
+    otherApps:"Other Apps",
+    miuiSupport:"Verified format support: .lsa / .lsav",
+    otherSupport:"No decryption format is currently defined for this profile.",
+    folderUnsupported:"Your browser does not support folder selection.",
+    cryptoUnavailable:"Secure browser cryptography is unavailable. Open this file over HTTPS or from http://localhost.",
+    unableDecrypt:"Unable to decrypt this file.",
+    unsupportedFormat:"Unsupported file format.",
+    shareUnavailable:"File sharing is not supported. The file will be downloaded instead.",
+    downloadComplete:"Download complete",
+    saved:"File saved.",
+    unsupportedProfile:"This recovery profile does not have a verified decryption format yet.",
+    zipEncrypted:"Encrypted ZIP archives are not supported. Please use an unencrypted ZIP.",
+    zipUnsupported:"This ZIP uses a compression or archive feature that this browser-only recovery tool does not support.",
+    zipBad:"The ZIP archive could not be read.",
+    zipEmpty:"The ZIP archive contains no recoverable entries.",
+    confirmClear:"Clear all local recovery history? This cannot be undone.",
+    cancel:"Cancel",
+    confirm:"Clear",
+    recovered:"Recovered",
+    kept:"Kept unchanged",
+    error:"Error",
+    warning:"Warning",
+    info:"Information",
+    selectFirst:"Select at least one file.",
+    noValidFiles:"No supported files were found.",
+    folderNote:"Folder selection keeps relative paths when exported as ZIP.",
+    zipResult:"Recovered collection",
+    saveZip:"Save ZIP",
+    sharing:"Preparing share…",
+    localOnly:"Local only",
+    fileInfo:"File information",
+    type:"Type",
+    path:"Path",
+    original:"Original",
+    output:"Output",
+    browserNoPreview:"Your browser cannot render this media type here.",
+    allDone:"Processing finished.",
+    someFailed:"Some files could not be recovered.",
+    invalidProfile:"The selected profile cannot decrypt this file.",
+    invalidLSA:"The file did not produce a recognized media or document format after decryption."
+  }
+};
+
+function t(key){ return I18N.en[key] || key; }
+
+/* =========================
+DOM HELPERS
+========================= */
+const $ = id => document.getElementById(id);
+function escapeHtml(value){
+  return String(value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[ch]));
+}
+function svgIcon(name, size=18){
+  const common = `width="${size}" height="${size}" viewBox="0 0 24 24" fill="none"`;
+  const paths = {
+    file:`<path d="M6 3h8l4 4v14H6V3Z" stroke="currentColor" stroke-width="1.7"/><path d="M14 3v5h5" stroke="currentColor" stroke-width="1.7"/>`,
+    image:`<rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.7"/><circle cx="8.5" cy="9" r="1.4" stroke="currentColor" stroke-width="1.5"/><path d="m4.5 17 4.5-4 3.5 3 2.5-2.5 4 3.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>`,
+    video:`<rect x="3" y="5" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="m17 10 4-2v8l-4-2" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>`,
+    audio:`<path d="M5 10v4M8 7v10M11 5v14M14 8v8M17 10v4M20 11v2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>`,
+    list:`<path d="M5 7h14M5 12h14M5 17h14" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>`,
+    grid:`<rect x="4" y="4" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.7"/><rect x="14" y="4" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.7"/><rect x="4" y="14" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.7"/><rect x="14" y="14" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.7"/>`,
+    chevron:`<path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>`,
+    archive:`<path d="M5 4h14v16H5V4Z" stroke="currentColor" stroke-width="1.7"/><path d="M9 4v3h6V4M10 10h4M10 14h4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>`,
+    check:`<path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`,
+    close:`<path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>`,
+    warning:`<path d="m12 3 9 17H3L12 3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M12 9v4M12 16.5v.1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>`,
+    error:`<circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><path d="m9 9 6 6m0-6-6 6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>`,
+    info:`<circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><path d="M12 10v6M12 7.5v.1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>`,
+    download:`<path d="M12 3v12m0 0-4-4m4 4 4-4M5 18v2h14v-2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>`,
+    share:`<circle cx="18" cy="5" r="2.5" stroke="currentColor" stroke-width="1.7"/><circle cx="6" cy="12" r="2.5" stroke="currentColor" stroke-width="1.7"/><circle cx="18" cy="19" r="2.5" stroke="currentColor" stroke-width="1.7"/><path d="m8.3 10.8 7.4-4.6M8.3 13.2l7.4 4.6" stroke="currentColor" stroke-width="1.7"/>`,
+    fullscreen:`<path d="M8 4H4v4M16 4h4v4M20 16v4h-4M4 16v4h4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>`,
+    external:`<path d="M14 4h6v6M20 4l-9 9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M19 13v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>`,
+    switch:`<path d="M7 7h10l-2.5-2.5M17 17H7l2.5 2.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M17 7v3M7 14v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>`,
+    delete:`<path d="M5 7.5h14M9 7.5V4.5h6v3M8 10.5v8M12 10.5v8M16 10.5v8M6.5 7.5l1 13h9l1-13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>`,
+    telegram:`<path d="m21 4-3.1 16-5.8-4.5-3.1 2.9.7-4.2L17.5 7l-8.2 5.1-5.1-1.6L21 4Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>`,
+    gmail:`<path d="M3.5 6.2 12 12.6l8.5-6.4V18.5" fill="none" stroke="#EA4335" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.5 18.5V6.2L12 12.6" fill="none" stroke="#4285F4" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.5 6.2V18.5" fill="none" stroke="#34A853" stroke-width="2.2" stroke-linecap="round"/><path d="M20.5 6.2V18.5" fill="none" stroke="#FBBC04" stroke-width="2.2" stroke-linecap="round"/>`
+  };
+  return `<svg ${common}>${paths[name] || paths.file}</svg>`;
+}
+function formatBytes(bytes){
+  if(!Number.isFinite(bytes) || bytes < 0) return "0 B";
+  const units=["B","KB","MB","GB","TB"]; let i=0,n=bytes;
+  while(n>=1024 && i<units.length-1){n/=1024;i++;}
+  return `${n.toFixed(n>=100||i===0?0:1)} ${units[i]}`;
+}
+function formatDate(ts){
+  try{return new Intl.DateTimeFormat("en-US",{dateStyle:"medium",timeStyle:"short"}).format(new Date(ts));}
+  catch{return new Date(ts).toLocaleString();}
+}
+
+/* =========================
+FILE / CRYPTO
+========================= */
+function getExtension(filename){
+  if(typeof filename !== "string") return "";
+  const clean = filename.split(/[\\/]/).pop() || "";
+  const dot = clean.lastIndexOf(".");
+  if(dot <= 0 || dot === clean.length-1) return "";
+  return clean.slice(dot).toLowerCase();
+}
+function startsWithBytes(data, signature, offset=0){
+  if(!data || data.length < offset + signature.length) return false;
+  for(let i=0;i<signature.length;i++) if(data[offset+i] !== signature[i]) return false;
+  return true;
+}
+function asciiAt(data, offset, length){
+  if(data.length < offset+length) return "";
+  return String.fromCharCode(...data.slice(offset,offset+length));
+}
+function isIsoBmff(data){
+  return data.length >= 12 && asciiAt(data,4,4)==="ftyp";
+}
+function detectHiddenMarker(filename){
+  const clean=(filename||"").split(/[\\/]/).pop().toLowerCase();
+  return clean === ".nomedia";
+}
+
+function detectType(data){
+  const d = data instanceof Uint8Array ? data : new Uint8Array(data);
+  if(startsWithBytes(d,[0xFF,0xD8,0xFF])) return {type:"image",mime:"image/jpeg",extension:".jpg",label:"JPEG"};
+  if(startsWithBytes(d,[0x89,0x50,0x4E,0x47,0x0D,0x0A,0x1A,0x0A])) return {type:"image",mime:"image/png",extension:".png",label:"PNG"};
+  if(startsWithBytes(d,[0x47,0x49,0x46,0x38])) return {type:"image",mime:"image/gif",extension:".gif",label:"GIF"};
+  if(startsWithBytes(d,[0x52,0x49,0x46,0x46]) && asciiAt(d,8,4)==="WEBP") return {type:"image",mime:"image/webp",extension:".webp",label:"WebP"};
+  if(startsWithBytes(d,[0x42,0x4D])) return {type:"image",mime:"image/bmp",extension:".bmp",label:"BMP"};
+  if(isIsoBmff(d)){
+    const brand = asciiAt(d,8,4);
+    const brand4 = asciiAt(d,8,4).toLowerCase();
+    if(["heic","heix","hevc","hevx","mif1","msf1"].includes(brand4)) return {type:"image",mime:"image/heic",extension:".heic",label:"HEIC / HEIF"};
+    if(brand4 === "qt") return {type:"video",mime:"video/quicktime",extension:".mov",label:"MOV"};
+    if(["m4a ","M4A ","m4b ","M4B "].some(x=>brand===x) || /^(M4A |M4B )$/i.test(brand)) return {type:"audio",mime:"audio/mp4",extension:".m4a",label:"M4A"};
+    const videoBrands = ["isom","iso2","iso3","iso4","iso5","iso6","mp41","mp42","avc1","dash","msnv","3gp4","3gp5","3g2a"];
+    if(videoBrands.includes(brand4)) return {type:"video",mime:"video/mp4",extension:".mp4",label:"MP4"};
+    if(/^(m4a|m4b)/i.test(brand)) return {type:"audio",mime:"audio/mp4",extension:".m4a",label:"M4A"};
+    return {type:"video",mime:"video/mp4",extension:".mp4",label:"MP4"};
+  }
+  if(startsWithBytes(d,[0x1A,0x45,0xDF,0xA3])) return {type:"video",mime:"video/webm",extension:".webm",label:"WebM / MKV"};
+  if(startsWithBytes(d,[0x52,0x49,0x46,0x46]) && asciiAt(d,8,4)==="AVI ") return {type:"video",mime:"video/x-msvideo",extension:".avi",label:"AVI"};
+  if(startsWithBytes(d,[0x52,0x49,0x46,0x46]) && asciiAt(d,8,4)==="WAVE") return {type:"audio",mime:"audio/wav",extension:".wav",label:"WAV"};
+  if(startsWithBytes(d,[0x4F,0x67,0x67,0x53])) return {type:"audio",mime:"audio/ogg",extension:".ogg",label:"OGG"};
+  if(startsWithBytes(d,[0x66,0x4C,0x61,0x43])) return {type:"audio",mime:"audio/flac",extension:".flac",label:"FLAC"};
+  if(startsWithBytes(d,[0x25,0x50,0x44,0x46])) return {type:"pdf",mime:"application/pdf",extension:".pdf",label:"PDF"};
+  if(startsWithBytes(d,[0x50,0x4B,0x03,0x04]) || startsWithBytes(d,[0x50,0x4B,0x05,0x06]) || startsWithBytes(d,[0x50,0x4B,0x07,0x08])) return {type:"archive",mime:"application/zip",extension:".zip",label:"ZIP"};
+  if(startsWithBytes(d,[0x52,0x61,0x72,0x21,0x1A,0x07])) return {type:"archive",mime:"application/vnd.rar",extension:".rar",label:"RAR"};
+  if(startsWithBytes(d,[0x37,0x7A,0xBC,0xAF,0x27,0x1C])) return {type:"archive",mime:"application/x-7z-compressed",extension:".7z",label:"7-Zip"};
+  if(startsWithBytes(d,[0x49,0x44,0x33]) || (d.length>=2 && d[0]===0xFF && (d[1]&0xE0)===0xE0)) return {type:"audio",mime:"audio/mpeg",extension:".mp3",label:"MP3"};
+  return {type:"unknown",mime:"application/octet-stream",extension:".bin",label:"Unknown"};
+}
+const MIUI_KEY = new Uint8Array([
+  0x30,0x82,0x04,0x6c,0x30,0x82,0x03,0x54,
+  0xa0,0x03,0x02,0x01,0x02,0x02,0x09,0x00
+]);
+const MIUI_IV = new Uint8Array([
+  0x11,0x13,0x21,0x23,0x31,0x33,0x41,0x43,
+  0x51,0x53,0x61,0x66,0x67,0x68,0x71,0x72
+]);
+if(MIUI_KEY.length !== 16 || MIUI_IV.length !== 16) throw new Error("MIUI AES key/IV must be exactly 16 bytes.");
+
+async function decryptMIUI(data){
+  const input = data instanceof Uint8Array ? data : new Uint8Array(data);
+  if(!globalThis.crypto?.subtle) throw new Error("Web Crypto unavailable");
+  const key = await crypto.subtle.importKey("raw",MIUI_KEY,{name:"AES-CTR"},false,["decrypt"]);
+  const result = await crypto.subtle.decrypt({name:"AES-CTR",counter:MIUI_IV,length:128},key,input);
+  return new Uint8Array(result);
+}
+function outputName(originalName, type){
+  const base = (originalName || "recovered").replace(/\.[^.\\/]+$/,"");
+  return base + (type.extension || ".bin");
+}
+function relativePath(file){
+  return file.webkitRelativePath || file._relativePath || file.name;
+}
+function validateCrypto(){
+  return !!globalThis.crypto?.subtle;
+}
+
+/* =========================
+PREVIEW
+========================= */
+function revokeUrl(url){
+  if(!url) return;
+  try{URL.revokeObjectURL(url)}catch{}
+  state.objectUrls.delete(url);
+}
+function createObjectUrl(data,mime){
+  const blob = data instanceof Blob ? data : new Blob([data],{type:mime || "application/octet-stream"});
+  const url = URL.createObjectURL(blob);
+  state.objectUrls.add(url);
+  return url;
+}
+function clearPreview(container){
+  if(!container) return;
+  const nodes = [...container.querySelectorAll("[data-object-url]")];
+  nodes.forEach(n=>{ if(n._visibilityObserver) n._visibilityObserver.disconnect(); if(n.tagName==="VIDEO") try{n.pause()}catch{}; revokeUrl(n.dataset.objectUrl); });
+  container.replaceChildren();
+}
+function previewMessage(text){
+  const el=document.createElement("div");el.className="preview-message";el.textContent=text;return el;
+}
+function showPreview(container,data,type){
+  clearPreview(container);
+  if(!data){container.appendChild(previewMessage(t("previewUnavailable")));return null;}
+  const url=createObjectUrl(data,type.mime);
+  let media=null;
+  if(type.type==="image"){
+    media=document.createElement("img");media.src=url;media.alt=type.label;media.loading="lazy";
+  }else if(type.type==="video"){
+    media=document.createElement("video");media.src=url;media.controls=true;media.playsInline=true;
+  }else if(type.type==="audio"){
+    media=document.createElement("audio");media.src=url;media.controls=true;
+  }else if(type.type==="pdf"){
+    media=document.createElement("iframe");media.src=url;media.title="PDF preview";
+  }else{
+    revokeUrl(url);
+    container.appendChild(previewMessage(t("previewUnavailable")));
+    return null;
+  }
+  media.dataset.objectUrl=url;
+  if(type.type==="image"||type.type==="video") {
+    media.title=t("fullscreen");
+    media.addEventListener("dblclick",()=>showFullscreen(media));
+  }
+  /* Keep video directly inside the recovery preview.
+     It must be visible before entering fullscreen. */
+  container.appendChild(media);
+  if(type.type==="video") {
+    media.muted=true;
+    media.setAttribute("playsinline","");
+    if("IntersectionObserver" in globalThis){
+      const observer=new IntersectionObserver(entries=>{
+        for(const entry of entries){
+          if(entry.isIntersecting && entry.intersectionRatio>=0.55){ media.play().catch(()=>{}); }
+          else { media.pause(); }
+        }
+      },{threshold:[0,.55,1]});
+      observer.observe(media);
+      media._visibilityObserver=observer;
+    }
+  }
+  return media;
+}
+let fullscreenClosing=false;
+async function showFullscreen(media){
+  if(!media) return;
+  const root=$("fullscreen-root"), content=$("fullscreen-content");
+
+  // Do not reuse/move the permanent close button. Moving it into the media
+  // wrapper would remove it when the wrapper is cleared, breaking later opens.
+  if(root.classList.contains("open")){
+    closeFullscreen();
+    return;
+  }
+
+  content.replaceChildren();
+  const wrap=document.createElement("div");
+  wrap.className="fullscreen-media-wrap";
+  const clone=media.cloneNode(true);
+  clone.removeAttribute("id");
+  clone.dataset.objectUrl="";
+  if(media.tagName==="VIDEO") {
+    clone.controls=true;
+    clone.playsInline=true;
+    clone.autoplay=false;
+    try{ clone.currentTime=media.currentTime || 0; }catch{}
+  }
+  clone.style.borderRadius="20px";
+  clone.style.maxWidth="100%";
+  clone.style.maxHeight="100%";
+  wrap.appendChild(clone);
+
+  // Create a fresh close button for this fullscreen instance. The permanent
+  // button stays in #fullscreen-root, so it is never destroyed by cleanup.
+  const closeButton=document.createElement("button");
+  closeButton.type="button";
+  closeButton.className="icon-button fullscreen-close";
+  closeButton.setAttribute("aria-label","Close fullscreen");
+  closeButton.innerHTML='<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+  closeButton.addEventListener("click",e=>{e.preventDefault();e.stopPropagation();closeFullscreen();});
+  wrap.appendChild(closeButton);
+  content.appendChild(wrap);
+
+  // Keep the permanent root button hidden; the instance button above is
+  // positioned directly at the media's top-right corner.
+  $("fullscreen-close").style.display="none";
+
+  state.fullscreenElement=clone;
+  state.fullscreenSource=media;
+  root.classList.add("open");
+  root.setAttribute("aria-hidden","false");
+
+  // Request native fullscreen from the user's click. If the browser rejects
+  // it, the fullscreen overlay still remains usable.
+  try{
+    if(root.requestFullscreen && !document.fullscreenElement){
+      await root.requestFullscreen();
+    }
+  }catch{}
+
+  if(media.tagName==="VIDEO") {
+    try{ await clone.play(); }catch{}
+  }
+}
+async function closeFullscreen(){
+  if(fullscreenClosing) return;
+  fullscreenClosing=true;
+  const root=$("fullscreen-root");
+  const source=state.fullscreenSource;
+  const clone=state.fullscreenElement;
+
+  // Pause both the fullscreen copy and the original preview immediately.
+  if(source && source.tagName==="VIDEO"){ try{ source.pause(); }catch{} }
+  if(clone && clone.tagName==="VIDEO"){ try{ clone.pause(); }catch{} }
+
+  root.classList.remove("open");
+  root.setAttribute("aria-hidden","true");
+  $("fullscreen-content").replaceChildren();
+  $("fullscreen-close").style.display="none";
+  state.fullscreenElement=null;
+  state.fullscreenSource=null;
+
+  try{
+    if(document.fullscreenElement) await document.exitFullscreen();
+  }catch{}
+  fullscreenClosing=false;
+}
+
+/* =========================
+ZIP
+========================= */
+function readU16(d,o){return d[o] | (d[o+1]<<8);}
+function readU32(d,o){return (d[o] | (d[o+1]<<8) | (d[o+2]<<16) | (d[o+3]<<24)) >>> 0;}
+function decodeUtf8(bytes){try{return new TextDecoder("utf-8",{fatal:false}).decode(bytes)}catch{return ""}}
+const CRC_TABLE = (() => {
+  const table=new Uint32Array(256);
+  for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=(c&1)?(0xEDB88320^(c>>>1)):(c>>>1);table[n]=c>>>0;}
+  return table;
+})();
+function crc32(data){
+  let c=0xFFFFFFFF;
+  for(let i=0;i<data.length;i++) c=CRC_TABLE[(c^data[i])&0xFF] ^ (c>>>8);
+  return (c^0xFFFFFFFF)>>>0;
+}
+function dosDateTime(date=new Date()){
+  const year=Math.max(1980,date.getFullYear());
+  return {time:(date.getHours()<<11)|(date.getMinutes()<<5)|Math.floor(date.getSeconds()/2),date:((year-1980)<<9)|((date.getMonth()+1)<<5)|date.getDate()};
+}
+function concatUint8(parts){
+  const total=parts.reduce((n,p)=>n+p.length,0);const out=new Uint8Array(total);let o=0;
+  for(const p of parts){out.set(p,o);o+=p.length}return out;
+}
+async function inflateRaw(bytes){
+  if(!("DecompressionStream" in globalThis)) throw new Error("Compression API unavailable");
+  const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream("deflate-raw"));
+  return new Uint8Array(await new Response(stream).arrayBuffer());
+}
+async function parseZip(arrayBuffer){
+  const d=new Uint8Array(arrayBuffer), entries=[];
+  let eocd=-1;
+  const min=Math.max(0,d.length-65557);
+  for(let i=d.length-22;i>=min;i--){
+    if(startsWithBytes(d,[0x50,0x4B,0x05,0x06],i)){eocd=i;break;}
+  }
+  if(eocd<0) throw new Error("ZIP EOCD not found");
+  const count=readU16(d,eocd+10), cdSize=readU32(d,eocd+12), cdOffset=readU32(d,eocd+16);
+  if(count===0) return [];
+  if(cdOffset+cdSize>d.length) throw new Error("Invalid ZIP central directory");
+  let p=cdOffset;
+  for(let i=0;i<count;i++){
+    if(!startsWithBytes(d,[0x50,0x4B,0x01,0x02],p)) throw new Error("Invalid ZIP entry");
+    const flags=readU16(d,p+8), method=readU16(d,p+10), crc=readU32(d,p+16);
+    const compressedSize=readU32(d,p+20), uncompressedSize=readU32(d,p+24), nameLen=readU16(d,p+28), extraLen=readU16(d,p+30), commentLen=readU16(d,p+32), localOffset=readU32(d,p+42);
+    const name=decodeUtf8(d.slice(p+46,p+46+nameLen));
+    if(flags & 0x1) throw new Error("encrypted ZIP");
+    if(localOffset+30>d.length || !startsWithBytes(d,[0x50,0x4B,0x03,0x04],localOffset)) throw new Error("Invalid local ZIP header");
+    const localNameLen=readU16(d,localOffset+26), localExtraLen=readU16(d,localOffset+28);
+    const dataStart=localOffset+30+localNameLen+localExtraLen;
+    const compressed=d.slice(dataStart,dataStart+compressedSize);
+    entries.push({name,flags,method,crc,compressedSize,uncompressedSize,compressed});
+    p += 46+nameLen+extraLen+commentLen;
+  }
+  return entries;
+}
+async function extractZipEntries(arrayBuffer){
+  const entries=await parseZip(arrayBuffer), files=[];
+  for(const entry of entries){
+    const safeName=entry.name.replaceAll("\\","/").replace(/^\/+/,"").split("/").filter(x=>x && x!==".." ).join("/");
+    if(!safeName || safeName.endsWith("/")) continue;
+    let data;
+    if(entry.method===0) data=entry.compressed.slice();
+    else if(entry.method===8) data=await inflateRaw(entry.compressed);
+    else throw new Error("ZIP compression method unsupported");
+    if(data.length !== entry.uncompressedSize && entry.uncompressedSize !== 0xFFFFFFFF) throw new Error("ZIP size mismatch");
+    files.push({name:safeName,data});
+  }
+  return files;
+}
+function zipNameBytes(name){return new TextEncoder().encode(name.replaceAll("\\","/"));}
+function buildZip(entries){
+  const locals=[], centrals=[];let offset=0;const dt=dosDateTime();
+  for(const entry of entries){
+    const name=zipNameBytes(entry.name), data=entry.data instanceof Uint8Array?entry.data:new Uint8Array(entry.data), crc=crc32(data);
+    const lh=new Uint8Array(30+name.length);
+    const lv=new DataView(lh.buffer);
+    lv.setUint32(0,0x04034B50,true);lv.setUint16(4,20,true);lv.setUint16(6,0,true);lv.setUint16(8,0,true);lv.setUint16(10,dt.time,true);lv.setUint16(12,dt.date,true);
+    lv.setUint32(14,crc,true);lv.setUint32(18,data.length,true);lv.setUint32(22,data.length,true);lv.setUint16(26,name.length,true);lv.setUint16(28,0,true);lh.set(name,30);
+    locals.push(lh,data);
+    const ch=new Uint8Array(46+name.length), cv=new DataView(ch.buffer);
+    cv.setUint32(0,0x02014B50,true);cv.setUint16(4,20,true);cv.setUint16(6,20,true);cv.setUint16(8,0,true);cv.setUint16(10,0,true);cv.setUint16(12,dt.time,true);cv.setUint16(14,dt.date,true);
+    cv.setUint32(16,crc,true);cv.setUint32(20,data.length,true);cv.setUint32(24,data.length,true);cv.setUint16(28,name.length,true);cv.setUint16(30,0,true);cv.setUint16(32,0,true);cv.setUint16(34,0,true);cv.setUint16(36,0,true);cv.setUint32(38,0,true);cv.setUint32(42,offset,true);ch.set(name,46);
+    centrals.push(ch);offset += lh.length+data.length;
+  }
+  const cdOffset=offset, cdSize=centrals.reduce((n,p)=>n+p.length,0);
+  const end=new Uint8Array(22), ev=new DataView(end.buffer);
+  ev.setUint32(0,0x06054B50,true);ev.setUint16(8,entries.length,true);ev.setUint16(10,entries.length,true);ev.setUint32(12,cdSize,true);ev.setUint32(16,cdOffset,true);ev.setUint16(20,0,true);
+  return new Blob([concatUint8([...locals,...centrals,end])],{type:"application/zip"});
+}
+async function processZip(file){
+  const profile=PROFILES[state.selectedProfile];
+  if(!profile || profile.engine!=="miui") throw new Error(t("unsupportedProfile"));
+  const buffer=await file.arrayBuffer(), extracted=await extractZipEntries(buffer);
+  if(!extracted.length) throw new Error("ZIP empty");
+  const outputEntries=[], innerResults=[];
+  for(let i=0;i<extracted.length;i++){
+    const entry=extracted[i], ext=getExtension(entry.name);
+    if(ext===".lsa" || ext===".lsav"){
+      if(!validateCrypto()) throw new Error("Web Crypto unavailable");
+      try{
+        const original=entry.data, decrypted=ext===".lsa" ? await decryptMIUI(original) : await decryptMIUI(original.slice(0,1024)).then(header=>{
+          const copy=original.slice();copy.set(header,0);return copy;
+        });
+        const type=detectType(decrypted);
+        if(type.type==="unknown") throw new Error("Unknown decrypted type");
+        const outPath=entry.name.replace(/\.[^.\/]+$/,"")+type.extension;
+        outputEntries.push({name:outPath,data:decrypted});
+        innerResults.push({name:entry.name,outputName:outPath,type,size:decrypted.length,status:"completed",data:decrypted,path:outPath});
+      }catch(err){
+        console.error("ZIP entry recovery failed:",entry.name,err);
+        outputEntries.push({name:entry.name,data:entry.data});
+        innerResults.push({name:entry.name,outputName:entry.name,type:detectType(entry.data),size:entry.data.length,status:"kept",data:entry.data,path:entry.name});
+      }
+    }else{
+      outputEntries.push({name:entry.name,data:entry.data});
+      innerResults.push({name:entry.name,outputName:entry.name,type:detectType(entry.data),size:entry.data.length,status:"kept",data:entry.data,path:entry.name});
+    }
+    await yieldToBrowser();
+  }
+  return {blob:buildZip(outputEntries),entries:innerResults};
+}
+
+/* =========================
+RECOVERY
+========================= */
+function yieldToBrowser(){return new Promise(resolve=>setTimeout(resolve,0));}
+async function processFile(file, index=0, total=1){
+  const profile=PROFILES[state.selectedProfile];
+  if(!profile) throw new Error(t("unsupportedProfile"));
+  const ext=getExtension(file.name);
+  if(!validateCrypto() && profile.engine==="miui") throw new Error("Web Crypto unavailable");
+  const original=new Uint8Array(await file.arrayBuffer());
+
+  // .nomedia is a media-scanner marker, not recoverable media data.
+  if(detectHiddenMarker(file.name)) {
+    return {name:file.name,outputName:file.name,type:{type:"marker",mime:"application/octet-stream",extension:"",label:".nomedia marker"},size:original.length,status:"kept",data:original,path:relativePath(file),repairOnly:true,message:".nomedia is a media-scanner marker; it does not contain the hidden photo/video itself."};
+  }
+
+  // Safe, non-decrypting recovery for normal files with missing/wrong extensions.
+  if(profile.engine!=="miui") {
+    const type=detectType(original);
+    if(type.type==="unknown") return {name:file.name,outputName:file.name,type,size:file.size,status:"unsupported",message:t("unsupportedFormat"),path:relativePath(file)};
+    const out=outputNameFromPath(relativePath(file),type.extension);
+    return {name:file.name,outputName:out,relativePath:relativePath(file),type,size:original.length,status:"completed",data:original,path:out,repairOnly:true};
+  }
+
+  if(ext!==".lsa" && ext!==".lsav") {
+    const type=detectType(original);
+    if(type.type!=="unknown") {
+      const out=outputNameFromPath(relativePath(file),type.extension);
+      return {name:file.name,outputName:out,relativePath:relativePath(file),type,size:original.length,status:"completed",data:original,path:out,repairOnly:true};
+    }
+    return {name:file.name,outputName:file.name,type,size:file.size,status:"unsupported",message:t("unsupportedFormat"),path:relativePath(file)};
+  }
+  let decrypted;
+  if(ext===".lsa") decrypted=await decryptMIUI(original);
+  else {
+    const header=original.slice(0,1024);
+    const decryptedHeader=await decryptMIUI(header);
+    decrypted=original.slice(); decrypted.set(decryptedHeader,0);
+  }
+  const type=detectType(decrypted);
+  if(type.type==="unknown") throw new Error("Unknown decrypted type");
+  const outputName=outputNameFromPath(relativePath(file),type.extension);
+  return {name:file.name,outputName,relativePath:relativePath(file),type,size:decrypted.length,status:"completed",data:decrypted,path:outputName};
+}
+function outputNameFromPath(path,extension){
+  const normalized=(path||"recovered").replaceAll("\\","/");
+  const base=normalized.replace(/\.[^.\/]+$/,"");
+  return base+extension;
+}
+async function processMultipleFiles(files){
+  const results=[];state.processing=true;state.results=[];renderResults();
+  $("progress-card").classList.remove("hidden");
+  $("progress-count").textContent=`0 / ${files.length}`;$("progress-bar").style.width="0%";
+  for(let i=0;i<files.length;i++){
+    const file=files[i];
+    $("progress-label").textContent=getExtension(file.name)===".lsa"||getExtension(file.name)===".lsav"?t("decrypting"):t("processing");
+    $("progress-count").textContent=`${i+1} / ${files.length}`;$("progress-bar").style.width=`${Math.round((i/files.length)*100)}%`;
+    try{
+      if(getExtension(file.name)===".zip"){
+        const zip=await processZip(file);
+        results.push({name:file.name,outputName:file.name.replace(/\.zip$/i,"_recovered.zip"),type:{type:"archive",mime:"application/zip",extension:".zip",label:"ZIP"},size:zip.blob.size,status:"completed",blob:zip.blob,isZip:true,entries:zip.entries,path:file.name});
+      }else results.push(await processFile(file,i,files.length));
+    }catch(err){
+      console.error("Recovery failed:",file.name,err);
+      const message=err.message==="Web Crypto unavailable"?t("cryptoUnavailable"):t("unableDecrypt");
+      results.push({name:file.name,outputName:file.name,type:{type:"unknown",mime:"application/octet-stream",extension:".bin",label:"Unknown"},size:file.size,status:"failed",message,path:relativePath(file)});
+    }
+    await yieldToBrowser();
+  }
+  state.results=results;$("progress-bar").style.width="100%";
+  $("progress-label").textContent=results.every(r=>r.status==="completed"||r.status==="unsupported"||r.status==="kept")?t("allDone"):t("someFailed");
+  state.processing=false;renderResults();await saveHistory(results);await loadHistory();
+}
+async function openWithFile(result){
+  if(!result || (!result.data && !result.blob)) return;
+  const blob=result.blob || new Blob([result.data],{type:result.type?.mime||"application/octet-stream"});
+  const file=new File([blob],result.outputName||"recovered.bin",{type:blob.type});
+  if(navigator.share){
+    try{
+      if(!navigator.canShare || navigator.canShare({files:[file]})){await navigator.share({files:[file],title:"Open recovered file"});return;}
+    }catch(e){if(e?.name==="AbortError")return;}
+  }
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");a.href=url;a.download=result.outputName||"recovered.bin";document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1500);
+  showToast(t("openWithFallback"));
+}
+async function saveRecoveredFile(result){
+  if(!result || (result.status!=="completed" && result.status!=="kept")) return;
+  const blob=result.blob || new Blob([result.data],{type:result.type.mime});
+  const url=URL.createObjectURL(blob);
+  state.objectUrls.add(url);
+  const a=document.createElement("a");a.href=url;a.download=result.outputName||"recovered.bin";a.rel="noopener";document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>revokeUrl(url),1200);
+  showToast(t("downloadComplete"));
+}
+async function shareRecoveredFile(result){
+  if(!result || (result.status!=="completed" && result.status!=="kept")) return;
+  const blob=result.blob || new Blob([result.data],{type:result.type.mime});
+  const file=new File([blob],result.outputName||"recovered.bin",{type:blob.type||"application/octet-stream"});
+  if(navigator.share && navigator.canShare){
+    try{
+      if(navigator.canShare({files:[file]})){await navigator.share({files:[file],title:"AG ReVault"});return;}
+    }catch(err){
+      if(err?.name==="AbortError") return;
+      console.error("Share failed:",err);
+    }
+  }
+  showAlert("warning",t("shareUnavailable"),"");
+  await saveRecoveredFile(result);
+}
+
+/* =========================
+OPTIONAL HISTORY ENCRYPTION
+========================= */
+function bytesToB64(bytes){let bin="";for(const b of bytes)bin+=String.fromCharCode(b);return btoa(bin)}
+function b64ToBytes(str){const bin=atob(str);const out=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)out[i]=bin.charCodeAt(i);return out}
+async function deriveHistoryKey(password,salt){const base=await crypto.subtle.importKey("raw",new TextEncoder().encode(password),"PBKDF2",false,["deriveKey"]);return crypto.subtle.deriveKey({name:"PBKDF2",salt,iterations:150000,hash:"SHA-256"},base,{name:"AES-GCM",length:256},false,["encrypt","decrypt"])}
+async function encryptHistoryBytes(bytes,key){const iv=crypto.getRandomValues(new Uint8Array(12));const cipher=await crypto.subtle.encrypt({name:"AES-GCM",iv},key,bytes);return {iv:iv.buffer,ciphertext:cipher}}
+async function decryptHistoryBytes(record,key){const plain=await crypto.subtle.decrypt({name:"AES-GCM",iv:new Uint8Array(record.iv)},key,record.ciphertext);return plain}
+function historyLockConfig(){try{return JSON.parse(localStorage.getItem("agr-history-lock")||"null")}catch{return null}}
+
+/* ============================================================
+   PASSWORD STORAGE
+   Set / Change / Verify the History password.
+   ============================================================ */
+async function createHistoryPasswordConfig(password){
+  const salt = crypto.getRandomValues(new Uint8Array(16));
+  const key = await deriveHistoryKey(password,salt);
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const verifier = await crypto.subtle.encrypt(
+    {name:"AES-GCM",iv},
+    key,
+    new TextEncoder().encode("AGREV1")
+  );
+
+  return {
+    enabled:true,
+    salt:btoa(String.fromCharCode(...salt)),
+    iv:btoa(String.fromCharCode(...iv)),
+    ciphertext:btoa(String.fromCharCode(...new Uint8Array(verifier)))
+  };
+}
+
+async function encryptExistingHistory(key){
+  if(!state.db) return;
+
+  const records = await new Promise((resolve,reject)=>{
+    const tx = state.db.transaction("history","readonly");
+    const request = tx.objectStore("history").getAll();
+    request.onsuccess = () => resolve(request.result || []);
+    request.onerror = () => reject(request.error);
+  });
+
+  for(const record of records){
+    if(!record.data || record.encrypted) continue;
+
+    const plain = new Uint8Array(record.data);
+    const enc = await encryptHistoryBytes(plain,key);
+
+    record.data = null;
+    record.iv = enc.iv;
+    record.ciphertext = enc.ciphertext;
+    record.encrypted = true;
+
+    await new Promise((resolve,reject)=>{
+      const tx = state.db.transaction("history","readwrite");
+      tx.objectStore("history").put(record);
+      tx.oncomplete = resolve;
+      tx.onerror = () => reject(tx.error);
+    });
+  }
+}
+
+async function setHistoryPassword(password){
+  try{
+    const config = await createHistoryPasswordConfig(password);
+    const key = await deriveHistoryKey(password,b64ToBytes(config.salt));
+
+    await encryptExistingHistory(key);
+
+    localStorage.setItem("agr-history-lock",JSON.stringify(config));
+
+    // Keep the derived key available for encrypting future recovery data,
+    // but require the password again before opening the History page.
+    state.historyKey = key;
+    state.historyUnlocked = false;
+    state.history = [];
+
+    renderHistory();
+    updateHistoryPasswordUI();
+    return true;
+  }catch(error){
+    console.error("Set history password failed:",error);
+    return false;
+  }
+}
+
+async function changeHistoryPassword(oldPassword,newPassword){
+  try{
+    const oldKey = await deriveHistoryKey(
+      oldPassword,
+      b64ToBytes(historyLockConfig().salt)
+    );
+    const newConfig = await createHistoryPasswordConfig(newPassword);
+    const newKey = await deriveHistoryKey(
+      newPassword,
+      b64ToBytes(newConfig.salt)
+    );
+
+    if(state.db){
+      const records = await new Promise((resolve,reject)=>{
+        const tx = state.db.transaction("history","readonly");
+        const request = tx.objectStore("history").getAll();
+        request.onsuccess = () => resolve(request.result || []);
+        request.onerror = () => reject(request.error);
+      });
+
+      for(const record of records){
+        if(!record.encrypted || !record.ciphertext) continue;
+
+        const plain = await decryptHistoryBytes(record,oldKey);
+        const enc = await encryptHistoryBytes(new Uint8Array(plain),newKey);
+
+        record.data = null;
+        record.iv = enc.iv;
+        record.ciphertext = enc.ciphertext;
+        record.encrypted = true;
+
+        await new Promise((resolve,reject)=>{
+          const tx = state.db.transaction("history","readwrite");
+          tx.objectStore("history").put(record);
+          tx.oncomplete = resolve;
+          tx.onerror = () => reject(tx.error);
+        });
+      }
+    }
+
+    localStorage.setItem("agr-history-lock",JSON.stringify(newConfig));
+    state.historyKey = newKey;
+    state.historyUnlocked = true;
+    await loadHistory();
+    updateHistoryPasswordUI();
+    return true;
+  }catch(error){
+    console.error("Change history password failed:",error);
+    return false;
+  }
+}
+/* ============================================================
+   PASSWORD PIN INPUTS
+   ============================================================ */
+function getSheetPin(){
+  return [1,2,3,4]
+    .map(i => $(`pin-sheet-${i}`)?.value || "")
+    .join("");
+}
+
+function clearPinInputs(){
+  for(let i=1;i<=4;i++){
+    const input = $(`pin-sheet-${i}`);
+    if(input) input.value = "";
+  }
+}
+
+function clearSheetPinAndFocus(){
+  clearPinInputs();
+  setTimeout(() => $("pin-sheet-1")?.focus(),40);
+}
+
+function focusNextPin(input){
+  const row = input.closest(".pin-row");
+  const inputs = [...row.querySelectorAll(".pin-digit")];
+  const index = inputs.indexOf(input);
+
+  if(input.value && index < inputs.length - 1){
+    inputs[index + 1].focus();
+  }
+}
+
+function wirePinInputs(){
+  document.querySelectorAll(".pin-digit").forEach(input => {
+    input.addEventListener("input", async () => {
+      input.value = input.value.replace(/\D/g, "").slice(0,1);
+      focusNextPin(input);
+
+      if(getSheetPin().length === 4){
+        await handlePasswordSheetAction();
+      }
+    });
+
+    input.addEventListener("keydown", event => {
+      if(event.key !== "Backspace" || input.value) return;
+
+      const row = input.closest(".pin-row");
+      const inputs = [...row.querySelectorAll(".pin-digit")];
+      const index = inputs.indexOf(input);
+
+      if(index > 0){
+        inputs[index - 1].value = "";
+        inputs[index - 1].focus();
+      }
+    });
+
+    input.addEventListener("paste", event => {
+      event.preventDefault();
+
+      const value = (event.clipboardData?.getData("text") || "")
+        .replace(/\D/g, "")
+        .slice(0,4);
+
+      const row = input.closest(".pin-row");
+      const inputs = [...row.querySelectorAll(".pin-digit")];
+      const index = inputs.indexOf(input);
+
+      [...value].forEach((digit, offset) => {
+        if(inputs[index + offset]){
+          inputs[index + offset].value = digit;
+        }
+      });
+
+      if(getSheetPin().length === 4){
+        handlePasswordSheetAction();
+        return;
+      }
+
+      const nextIndex = Math.min(index + value.length, inputs.length - 1);
+      inputs[nextIndex]?.focus();
+    });
+  });
+}
+
+/* ============================================================
+   PASSWORD MANAGEMENT ACTIONS
+   ============================================================ */
+async function removeHistoryPassword(currentPassword){
+  if(!(await verifyHistoryPassword(currentPassword))){
+    return false;
+  }
+
+  try{
+    if(state.db){
+      const records = await new Promise((resolve,reject) => {
+        const tx = state.db.transaction("history","readonly");
+        const request = tx.objectStore("history").getAll();
+
+        request.onsuccess = () => resolve(request.result || []);
+        request.onerror = () => reject(request.error);
+      });
+
+      for(const record of records){
+        if(!record.encrypted || !record.ciphertext) continue;
+
+        const plain = await decryptHistoryBytes(record,state.historyKey);
+
+        record.data = plain;
+        record.iv = null;
+        record.ciphertext = null;
+        record.encrypted = false;
+
+        await new Promise((resolve,reject) => {
+          const tx = state.db.transaction("history","readwrite");
+          tx.objectStore("history").put(record);
+          tx.oncomplete = resolve;
+          tx.onerror = () => reject(tx.error);
+        });
+      }
+    }
+
+    localStorage.removeItem("agr-history-lock");
+    state.historyKey = null;
+    state.historyUnlocked = true;
+
+    await loadHistory();
+    updateHistoryPasswordUI();
+
+    return true;
+  }catch(error){
+    console.error("Remove history password failed:",error);
+    return false;
+  }
+}
+
+async function deleteAllLocalDatabaseForForgotPassword(){
+  try{
+    await clearHistory();
+
+    localStorage.removeItem("agr-history-lock");
+    state.historyKey = null;
+    state.historyUnlocked = true;
+
+    updateHistoryPasswordUI();
+    return true;
+  }catch(error){
+    console.error("Forgot password database deletion failed:",error);
+    return false;
+  }
+}
+
+/* ============================================================
+   PASSWORD SHEET BUTTON FACTORY
+   ============================================================ */
+function createPasswordActionButton(label,className,iconName,onClick){
+  const button = document.createElement("button");
+
+  button.className = className;
+  button.type = "button";
+  button.setAttribute("aria-label",label);
+  button.title = label;
+  button.innerHTML = svgIcon(iconName,20);
+  button.addEventListener("click",onClick);
+
+  return button;
+}
+
+/* ============================================================
+   PASSWORD SHEET RENDERING
+
+   manage       = Switch / Delete / Forgot Password
+   change-old   = Confirm current password before changing
+   change-new   = Enter new password
+   change-confirm = Confirm new password
+   remove       = Confirm current password before removing
+   forgot       = Cancel / Delete all local database
+   unlock       = Unlock History
+   ============================================================ */
+async function renderPasswordSheet(mode, step = 1) {
+  const title = $("password-sheet-title");
+  const subtitle = $("password-sheet-subtitle");
+  const note = $("password-sheet-note");
+  const footer = $("password-sheet-footer");
+  const body = $("password-sheet-body");
+
+  note.textContent = "";
+  note.className = "password-note";
+  footer.replaceChildren();
+
+  /* ----------------------------------------------------------
+     MANAGEMENT
+     Switch icon  = Change Password
+     Delete icon  = Remove Password
+     Text button  = Forgot Password
+     ---------------------------------------------------------- */
+  if (mode === "manage") {
+    title.textContent = "History password";
+    subtitle.textContent = "Choose what you want to do.";
+    body.style.display = "none";
+
+    const changeButton = createPasswordActionButton(
+      "Change Password",
+      "secondary-button password-icon-action",
+      "switch",
+      () => {
+        state.passwordSheet = { mode: "change-old", step: 1 };
+        clearPinInputs();
+        renderPasswordSheet("change-old", 1);
+        setTimeout(() => $("pin-sheet-1")?.focus(), 80);
+      }
+    );
+
+    const removeButton = createPasswordActionButton(
+      "Remove Password",
+      "danger-button password-icon-action",
+      "delete",
+      () => {
+        state.passwordSheet = { mode: "remove", step: 1 };
+        clearPinInputs();
+        renderPasswordSheet("remove", 1);
+        setTimeout(() => $("pin-sheet-1")?.focus(), 80);
+      }
+    );
+
+    const forgotButton = document.createElement("button");
+    forgotButton.className = "secondary-button";
+    forgotButton.type = "button";
+    forgotButton.textContent = "Forgot Password";
+    forgotButton.addEventListener("click", () => {
+      state.passwordSheet = { mode: "forgot", step: 1 };
+      renderPasswordSheet("forgot", 1);
+    });
+
+    footer.append(changeButton, removeButton, forgotButton);
+    return;
+  }
+
+  /* ----------------------------------------------------------
+     FORGOT PASSWORD
+
+     No password recovery is possible here. The user must delete
+     all local recovery data before the password can be restarted.
+     ---------------------------------------------------------- */
+  if (mode === "forgot") {
+    title.textContent = "Forgot Password";
+    subtitle.textContent = "Your password cannot be recovered.";
+    body.style.display = "block";
+    body.innerHTML = `
+      <div class="alert-inline warning">
+        <div class="alert-inline-icon">${svgIcon("warning",18)}</div>
+        <div>
+          <b>All local recovery data must be deleted.</b>
+          <div class="muted" style="margin-top:4px">After deletion, the password lock will be removed and you can set a new password.</div>
+        </div>
+      </div>
+    `;
+
+    const deleteButton = document.createElement("button");
+    deleteButton.className = "danger-button full";
+    deleteButton.type = "button";
+    deleteButton.textContent = "Delete all local database";
+    deleteButton.addEventListener("click", () => {
+      showAlert(
+        "warning",
+        "Delete all local database?",
+        "This permanently deletes all locally stored recovered files and recovery history. This action cannot be undone.",
+        {
+          confirm: async () => {
+            const success = await deleteAllLocalDatabaseForForgotPassword();
+            if (success) {
+              closePasswordSheet();
+              showToast("All local database deleted.");
+            } else {
+              showAlert("error", "Delete failed", "The local database could not be deleted.");
+            }
+          }
+        }
+      );
+    });
+
+    footer.appendChild(deleteButton);
+    return;
+  }
+
+  /* ----------------------------------------------------------
+     PIN ENTRY MODES
+     ---------------------------------------------------------- */
+  body.style.display = "block";
+
+  if (mode === "set") {
+    title.textContent = step === 1
+      ? "Set history password"
+      : "Confirm password";
+
+    subtitle.textContent = step === 1
+      ? "Enter a 4-digit password."
+      : "Enter the same 4 digits again.";
+
+    return;
+  }
+
+  if (mode === "change-old") {
+    title.textContent = "Change Password";
+    subtitle.textContent = "Enter your current 4-digit password.";
+    return;
+  }
+
+  if (mode === "change-new") {
+    title.textContent = "New Password";
+    subtitle.textContent = "Enter a new 4-digit password.";
+    return;
+  }
+
+  if (mode === "change-confirm") {
+    title.textContent = "Confirm New Password";
+    subtitle.textContent = "Enter the new 4 digits again.";
+    return;
+  }
+
+  if (mode === "remove") {
+    title.textContent = "Remove Password";
+    subtitle.textContent = "Enter your current 4-digit password to remove the History password.";
+    return;
+  }
+
+  if (mode === "unlock") {
+    title.textContent = "Unlock History";
+    subtitle.textContent = "Enter your 4-digit password to continue.";
+  }
+}
+
+/* ============================================================
+   PASSWORD SHEET OPEN / CLOSE
+   ============================================================ */
+function openPasswordSheet(mode="set",step=1){
+  const root = $("password-sheet");
+
+  state.passwordSheet = {mode,step};
+
+  clearPinInputs();
+  renderPasswordSheet(mode,step);
+
+  root.classList.add("open");
+  root.setAttribute("aria-hidden","false");
+
+  setTimeout(() => $("pin-sheet-1")?.focus(),80);
+}
+
+function closePasswordSheet(){
+  const root = $("password-sheet");
+
+  root.classList.remove("open");
+  root.setAttribute("aria-hidden","true");
+
+  clearPinInputs();
+
+  state.passwordSheet = null;
+  state.passwordFirstPin = "";
+  state.passwordOldPin = "";
+  state.passwordNewPin = "";
+}
+
+/* ============================================================
+   VERIFY CURRENT HISTORY PASSWORD
+   ============================================================ */
+async function verifyHistoryPassword(password){
+  const config = historyLockConfig();
+
+  if(!config?.enabled || !/^[0-9]{4}$/.test(password)){
+    return false;
+  }
+
+  try{
+    const key = await deriveHistoryKey(
+      password,
+      b64ToBytes(config.salt)
+    );
+
+    const plain = await crypto.subtle.decrypt(
+      {
+        name:"AES-GCM",
+        iv:b64ToBytes(config.iv)
+      },
+      key,
+      b64ToBytes(config.ciphertext)
+    );
+
+    if(new TextDecoder().decode(plain) !== "AGREV1"){
+      throw new Error("Invalid password verifier");
+    }
+
+    state.historyKey = key;
+    return true;
+  }catch{
+    return false;
+  }
+}
+
+/* ============================================================
+   PASSWORD SHEET ACTION HANDLER
+
+   Every 4-digit entry is processed automatically.
+   No Continue / Confirm / Unlock buttons are used.
+   ============================================================ */
+async function handlePasswordSheetAction() {
+  const pin = getSheetPin();
+  const note = $("password-sheet-note");
+
+  if (!/^\d{4}$/.test(pin)) return;
+
+  const { mode, step } = state.passwordSheet || {};
+
+  /* ----------------------------------------------------------
+     SET PASSWORD
+     ---------------------------------------------------------- */
+  if (mode === "set" && step === 1) {
+    state.passwordFirstPin = pin;
+    state.passwordSheet = { mode: "set", step: 2 };
+
+    clearPinInputs();
+    renderPasswordSheet("set", 2);
+    $("pin-sheet-1")?.focus();
+    return;
+  }
+
+  if (mode === "set" && step === 2) {
+    if (pin !== state.passwordFirstPin) {
+      note.textContent = "Password confirmation does not match.";
+      note.className = "password-note warning";
+      clearSheetPinAndFocus();
+      return;
+    }
+
+    if (!await setHistoryPassword(pin)) {
+      note.textContent = "Could not set the password.";
+      note.className = "password-note warning";
+      clearSheetPinAndFocus();
+      return;
+    }
+
+    closePasswordSheet();
+    showToast("History password enabled.");
+    return;
+  }
+
+  /* ----------------------------------------------------------
+     CHANGE PASSWORD
+     Step 1 = current password
+     Step 2 = new password
+     Step 3 = confirm new password
+     ---------------------------------------------------------- */
+  if (mode === "change-old") {
+    if (!await verifyHistoryPassword(pin)) {
+      note.textContent = "Incorrect current password.";
+      note.className = "password-note warning";
+      clearSheetPinAndFocus();
+      return;
+    }
+
+    state.passwordOldPin = pin;
+    state.passwordSheet = { mode: "change-new", step: 1 };
+
+    clearPinInputs();
+    renderPasswordSheet("change-new", 1);
+    $("pin-sheet-1")?.focus();
+    return;
+  }
+
+  if (mode === "change-new") {
+    state.passwordNewPin = pin;
+    state.passwordSheet = { mode: "change-confirm", step: 1 };
+
+    clearPinInputs();
+    renderPasswordSheet("change-confirm", 1);
+    $("pin-sheet-1")?.focus();
+    return;
+  }
+
+  if (mode === "change-confirm") {
+    if (pin !== state.passwordNewPin) {
+      note.textContent = "New password confirmation does not match.";
+      note.className = "password-note warning";
+      clearSheetPinAndFocus();
+      return;
+    }
+
+    if (!await changeHistoryPassword(
+      state.passwordOldPin,
+      state.passwordNewPin
+    )) {
+      note.textContent = "Could not change the password.";
+      note.className = "password-note warning";
+      clearSheetPinAndFocus();
+      return;
+    }
+
+    closePasswordSheet();
+    showToast("Password changed.");
+    return;
+  }
+
+  /* ----------------------------------------------------------
+     REMOVE PASSWORD
+     Current password is always required.
+     ---------------------------------------------------------- */
+  if (mode === "remove") {
+    if (!await removeHistoryPassword(pin)) {
+      note.textContent = "Incorrect current password or password removal failed.";
+      note.className = "password-note warning";
+      clearSheetPinAndFocus();
+      return;
+    }
+
+    closePasswordSheet();
+    showToast("History password removed.");
+    return;
+  }
+
+  /* ----------------------------------------------------------
+     UNLOCK HISTORY
+     ---------------------------------------------------------- */
+  if (mode === "unlock") {
+    if (!await verifyHistoryPassword(pin)) {
+      note.textContent = "Incorrect password.";
+      note.className = "password-note warning";
+      clearSheetPinAndFocus();
+      return;
+    }
+
+    state.historyUnlocked = true;
+    await loadHistory();
+    closePasswordSheet();
+    showPage("history", true);
+  }
+}
+
+/* ============================================================
+   HISTORY UNLOCK ENTRY
+   ============================================================ */
+async function unlockHistory(){
+  const config = historyLockConfig();
+
+  /* ----------------------------------------------------------
+     HISTORY UNLOCK MUST ALWAYS START A CLEAN UNLOCK FLOW
+     Never reuse the Forgot / Manage password sheet state.
+     ---------------------------------------------------------- */
+  if(!config?.enabled){
+    state.historyUnlocked = true;
+    await loadHistory();
+    return true;
+  }
+
+  state.passwordSheet = { mode: "unlock", step: 1 };
+  state.passwordFirstPin = "";
+  state.passwordOldPin = "";
+  state.passwordNewPin = "";
+
+  openPasswordSheet("unlock", 1);
+  return false;
+}
+
+/* ============================================================
+   PASSWORD STATUS IN SETTINGS
+   ============================================================ */
+function updateHistoryPasswordUI(){
+  const button = $("history-password-button");
+  const status = $("history-password-status");
+
+  if(!button) return;
+
+  const enabled = !!historyLockConfig()?.enabled;
+
+  button.textContent = enabled
+    ? "Password settings"
+    : "Set password";
+
+  status.textContent = enabled
+    ? "Password is set. Use Password settings to change or remove it."
+    : "Password is not set.";
+}
+
+/* =========================
+HISTORY / INDEXEDDB
+========================= */
+function openHistoryDB(){
+  return new Promise((resolve,reject)=>{
+    if(!("indexedDB" in globalThis)){resolve(null);return;}
+    const req=indexedDB.open("private-file-recovery",1);
+    req.onupgradeneeded=()=>{const db=req.result;if(!db.objectStoreNames.contains("history"))db.createObjectStore("history",{keyPath:"id",autoIncrement:true});};
+    req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error);
+  });
+}
+async function saveHistory(results){
+  const now=Date.now();
+  for(const r of results){
+    if(r.status!=="completed" && r.status!=="kept" && r.status!=="unsupported" && r.status!=="failed") continue;
+    const record={name:r.name,outputName:r.outputName||r.name,type:r.type?.label||"Unknown",mime:r.type?.mime||"application/octet-stream",size:r.size||0,status:r.status,date:now,path:r.path||r.name};
+    if(r.status==="completed" && !r.isZip && r.data){
+      record.data=r.data.buffer.slice(r.data.byteOffset,r.data.byteOffset+r.data.byteLength);
+    }else if(r.status==="completed" && r.isZip && r.blob){
+      record.data=await r.blob.arrayBuffer();
+    }
+    if(record.data && historyLockConfig()?.enabled && state.historyKey){
+      const enc=await encryptHistoryBytes(new Uint8Array(record.data),state.historyKey);record.iv=enc.iv;record.ciphertext=enc.ciphertext;record.data=null;record.encrypted=true;
+    }
+    try{
+      if(state.db){
+        await new Promise((resolve,reject)=>{const tx=state.db.transaction("history","readwrite");tx.objectStore("history").add(record);tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);});
+      }else{
+        const simple=JSON.parse(localStorage.getItem("pfr-history")||"[]");simple.unshift({...record,data:undefined});localStorage.setItem("pfr-history",JSON.stringify(simple.slice(0,50)));
+      }
+    }catch(err){console.error("History save failed:",err);}
+  }
+}
+async function loadHistory(){
+  try{
+    const cfg=historyLockConfig();
+    if(cfg?.enabled && !state.historyUnlocked){state.history=[];renderHistory();return;}
+    if(state.db){
+      const raw=await new Promise((resolve,reject)=>{const tx=state.db.transaction("history","readonly");const req=tx.objectStore("history").getAll();req.onsuccess=()=>resolve(req.result.sort((a,b)=>b.date-a.date));req.onerror=()=>reject(req.error);});
+      if(cfg?.enabled&&state.historyKey){for(const r of raw){if(r.encrypted){try{r.data=await decryptHistoryBytes(r,state.historyKey);}catch{continue;}}}}
+      state.history=raw;
+    }else state.history=JSON.parse(localStorage.getItem("pfr-history")||"[]");
+  }catch(err){console.error("History load failed:",err);state.history=[];}
+  renderHistory();
+}
+async function clearHistory(){
+  if(state.db) await new Promise((resolve,reject)=>{const tx=state.db.transaction("history","readwrite");tx.objectStore("history").clear();tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);});
+  else localStorage.removeItem("pfr-history");
+  state.history=[];state.results=[];state.pendingFiles=[];state.historyUnlocked=historyLockConfig()?.enabled?false:true;renderHistory();renderResults();renderPendingFiles();updateHistoryPasswordUI();
+}
+async function getHistoryRecord(id){
+  if(!state.db){const item=state.history.find(x=>String(x.id)===String(id));return item||null;}
+  const record=await new Promise((resolve,reject)=>{const tx=state.db.transaction("history","readonly");const req=tx.objectStore("history").get(Number(id));req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error);});
+  if(!record)return null;
+  if(record.encrypted&&record.ciphertext){
+    if(!state.historyKey) return null;
+    try{record.data=await decryptHistoryBytes(record,state.historyKey);record.data=new Uint8Array(record.data);}catch(err){console.error("History preview decrypt failed:",err);return null;}
+  }
+  return record;
+}
+
+/* =========================
+UI
+========================= */
+function updateLanguage(){
+  document.documentElement.lang="en";
+  $("brand-sub").textContent=t("brandSub");
+  $("home-title").textContent=t("homeTitle");
+  $("home-description").textContent=t("homeDescription");
+  $("profile-label").textContent=t("profileLabel");
+  $("change-profile-button").textContent=t("change");
+  $("start-recover-text").textContent=t("startRecovery");
+  $("privacy-home").querySelector("span").textContent=t("privacy");
+  $("profile-modal-title").textContent=t("chooseProfile");
+  $("profile-modal-subtitle").textContent=t("chooseProfileSub");
+  $("recover-profile-caption").textContent=PROFILES[state.selectedProfile].name;
+  $("recover-title").textContent=t("recoverTitle");
+  $("recover-subtitle").textContent=t("recoverSubtitle");
+  $("drop-title").textContent=t("dropTitle");
+  $("drop-description").textContent=t("dropDescription");
+  $("select-file-button").querySelector("span").textContent=t("selectFile");
+  $("select-multiple-button").querySelector("span").textContent=t("selectMultiple");
+  $("select-folder-button").querySelector("span").textContent=t("selectFolder");
+  $("recover-button").querySelector("span").textContent=t("recoverButton");
+  $("progress-label").textContent=t("processing");
+  $("results-title").textContent=t("resultsTitle");
+  $("results-subtitle").textContent=t("resultsSubtitle");
+  $("history-subtitle").textContent=t("historySubtitle");
+  $("history-title").textContent=t("historyTitle");
+  $("history-description").textContent=t("historyDescription");
+  $("clear-history-button").textContent=t("clearHistory");
+  $("nav-home").textContent="Home";$("nav-recover").textContent=t("recover");$("nav-history").textContent=t("history");$("nav-settings").textContent="Settings";
+
+  $("selected-profile-name").textContent=PROFILES[state.selectedProfile].name;
+  $("selected-profile-sub").textContent=PROFILES[state.selectedProfile].engine==="miui"?".lsa and .lsav":t("otherSupport");
+  renderProfileGrid();renderPendingFiles();renderResults();renderHistory();
+}
+function profileIcon(profile){
+  const engine = PROFILES[profile]?.engine || profile;
+  return engine === "miui"
+    ? `<svg width="23" height="23" viewBox="0 0 24 24" fill="none"><rect x="5" y="3" width="14" height="18" rx="3" stroke="currentColor" stroke-width="1.7"/><path d="M9 7h6M9 11h6M9 15h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>`
+    : `<svg width="23" height="23" viewBox="0 0 24 24" fill="none"><path d="M4 7.5h6l1.5 2H20v9H4v-11Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M8 13h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>`;
+}
+function profileLevelLabel(profile){
+  if(profile.level === "decrypt") return "Decrypt + verify";
+  return "Signature recovery";
+}
+function renderProfileGrid(){
+  const grid=$("profile-selection-grid");grid.replaceChildren();
+  Object.values(PROFILES).forEach(profile=>{
+    const wrap=document.createElement("div");
+    wrap.className="profile-list-item"+(profile.id===state.selectedProfile?" selected":"");
+    wrap.innerHTML=`
+      <div class="profile-list-main">
+        <div class="profile-icon">${profileIcon(profile.id)}</div>
+        <div class="profile-list-copy">
+          <div class="profile-list-title">${escapeHtml(profile.name)}${profile.id===state.selectedProfile?`<span class="profile-selected-check" aria-label="Selected">${svgIcon("check",11)}</span>`:""}</div>
+          <div class="profile-list-sub">${escapeHtml(profile.description)}</div>
+          <span class="profile-list-badge ${profile.level==='decrypt'?'decrypt':'signature'}">${escapeHtml(profileLevelLabel(profile))}</span>
+        </div>
+        <button type="button" class="profile-details-button" aria-expanded="false" aria-label="Show ${escapeHtml(profile.name)} details">${svgIcon("chevron",16)}</button>
+      </div>
+      <div class="profile-list-details" hidden>
+        <div class="profile-detail-line"><b>Method</b><span>${escapeHtml(profile.recovery)}</span></div>
+        <div class="profile-detail-line"><b>Files</b><span>${escapeHtml(profile.extensions.join(", ") || "Content signature")}</span></div>
+        <div class="profile-detail-line"><b>Where to look</b><span>${escapeHtml(profile.paths)}</span></div>
+        <div class="profile-detail-line"><b>Limit</b><span>${escapeHtml(profile.limits)}</span></div>
+      </div>`;
+    const detailsBtn=wrap.querySelector(".profile-details-button");
+    const details=wrap.querySelector(".profile-list-details");
+    detailsBtn.addEventListener("click",e=>{
+      e.stopPropagation();
+      const open=!details.hidden;
+      details.hidden=open;
+      detailsBtn.setAttribute("aria-expanded",String(!open));
+      detailsBtn.classList.toggle("open",!open);
+    });
+    wrap.querySelector(".profile-list-main").addEventListener("click",e=>{
+      if(e.target.closest(".profile-details-button"))return;
+      selectProfile(profile.id);
+    });
+    grid.appendChild(wrap);
+  });
+}
+function selectProfile(profileId){
+  const profile=PROFILES[profileId];
+  if(!profile) return;
+  state.selectedProfile=profileId;localStorage.setItem("agr-selected-profile",profileId);
+  $("selected-profile-icon").innerHTML=profileIcon(profileId);
+  $("selected-profile-name").textContent=profile.name;
+  $("selected-profile-sub").textContent=profile.engine==="miui"?"MIUI / HyperOS • .lsa / .lsav":profile.description;
+  $("recover-profile-caption").textContent=profile.name;
+  renderProfileGrid();
+  closeProfileModal();
+  showPage(profile.supported?"recover":"recover");
+  if(profile.engine==="repair") showToast(profile.id==="iphone"?"iPhone files are handled as normal exported media; locked Apple authentication is not bypassed.":"Signature-based recovery mode selected.");
+}
+function showPage(page,force=false){
+  const target=$("page-"+page);if(!target)return false;
+
+  /* ----------------------------------------------------------
+     HISTORY ACCESS
+     A locked History page always opens ONLY the Unlock flow.
+     Forgot Password belongs to Password Settings and is never
+     opened by History navigation.
+     ---------------------------------------------------------- */
+  if(page==="history" && historyLockConfig()?.enabled && !state.historyUnlocked && !force){
+    unlockHistory();
+    return false;
+  }
+
+  state.currentPage=page;
+  document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p===target));
+  document.querySelectorAll(".nav-item").forEach(n=>n.classList.toggle("active",n.dataset.page===page));
+  window.scrollTo({top:0,behavior:"smooth"});
+  return true;
+}
+function openProfileModal(){renderProfileGrid();$("profile-modal").classList.add("open");$("profile-modal").setAttribute("aria-hidden","false");}
+function closeProfileModal(){const m=$("profile-modal");m.classList.remove("open");m.setAttribute("aria-hidden","true");}
+function renderPendingFiles(){
+  const card=$("selected-files-card"), list=$("file-list");
+  list.replaceChildren();
+  if(!state.pendingFiles.length){card.classList.add("hidden");return;}
+  card.classList.remove("hidden");
+  $("selected-count").textContent=`${state.pendingFiles.length} ${state.pendingFiles.length===1?t("file"):t("files")}`;
+  state.pendingFiles.forEach((file,index)=>{
+    const row=document.createElement("div");row.className="file-row";
+    const type=detectTypeForName(file);
+    row.innerHTML=`<div class="file-type-icon">${svgIcon(type.icon,18)}</div><div><div class="file-name">${escapeHtml(file.name)}</div><div class="file-meta">${formatBytes(file.size)} · ${escapeHtml(getExtension(file.name)||t("unknown"))}${file.webkitRelativePath?` · ${escapeHtml(file.webkitRelativePath)}`:""}</div></div><button class="remove-file" type="button" aria-label="Remove">${svgIcon("close",16)}</button>`;
+    row.querySelector(".remove-file").addEventListener("click",e=>{e.stopPropagation();state.pendingFiles.splice(index,1);renderPendingFiles();});
+    list.appendChild(row);
+  });
+}
+function detectTypeForName(file){
+  const ext=getExtension(file.name);
+  if(ext===".zip")return {icon:"archive"};
+  if(ext===".lsa"||ext===".lsav")return {icon:"file"};
+  const map={".jpg":"image",".jpeg":"image",".png":"image",".gif":"image",".webp":"image",".bmp":"image",".mp4":"video",".mov":"video",".webm":"video",".mkv":"video",".avi":"video",".mp3":"audio",".m4a":"audio",".wav":"audio",".ogg":"audio",".flac":"audio",".pdf":"file"};
+  return {icon:map[ext]||"file"};
+}
+function renderResults(){
+  const section=$("results-section"), list=$("result-list");list.replaceChildren();
+  if(!state.results.length){section.classList.add("hidden");return;}
+  section.classList.remove("hidden");
+  const collection=document.createElement("div");collection.className="results-collection open";
+  const head=document.createElement("div");head.className="results-collection-head";
+  const total=state.results.length;
+  head.innerHTML=`<div style="min-width:0"><div class="results-collection-title">${escapeHtml(t("zipResult"))}</div><div class="results-collection-meta">${total} ${escapeHtml(total===1?t("file"):t("files"))} · ${escapeHtml(t("localOnly"))}</div></div>`;
+  const tools=document.createElement("div");tools.className="results-collection-tools";
+
+  /* Grid/List is a multi-file result feature only. */
+  let view=null;
+  if(total>1){
+    view=document.createElement("button");
+    view.className="secondary-button small-button view-toggle";
+    view.type="button";
+    view.title="List / Grid";
+    view.setAttribute("aria-label","List / Grid");
+    view.innerHTML=state.resultView==="grid"?svgIcon("list",17):svgIcon("grid",17);
+    tools.appendChild(view);
+  }
+
+  const chev=document.createElement("button");
+  chev.className="secondary-button small-button view-toggle";
+  chev.type="button";
+  chev.title="Expand / Collapse";
+  chev.innerHTML=`<span class="collection-chevron">${svgIcon("chevron",16)}</span>`;
+  tools.appendChild(chev);
+  head.appendChild(tools);
+  collection.appendChild(head);
+  const body=document.createElement("div");body.className="results-collection-body";
+  const inner=document.createElement("div");inner.className="result-list"+(state.resultView==="grid"?" grid-view":"");
+  state.results.forEach(result=>inner.appendChild(createResultCard(result)));
+  body.appendChild(inner);collection.appendChild(body);list.appendChild(collection);
+  chev.addEventListener("click",()=>collection.classList.toggle("open"));
+  head.querySelector(".results-collection-title").addEventListener("click",()=>collection.classList.toggle("open"));
+  if(view){
+    view.addEventListener("click",e=>{
+      e.stopPropagation();
+      state.resultView=state.resultView==="grid"?"list":"grid";
+      localStorage.setItem("agr-result-view",state.resultView);
+      inner.classList.toggle("grid-view",state.resultView==="grid");
+      view.innerHTML=state.resultView==="grid"?svgIcon("list",17):svgIcon("grid",17);
+    });
+  }
+}
+function createResultCard(result){
+  const card=document.createElement("article");card.className="result-card";
+  card.innerHTML=`<div class="preview-box" data-preview></div><div class="file-information"><div class="file-information-text"><div class="file-information-label">${t("fileInfo")}</div><div class="file-information-value">${escapeHtml(result.path||result.relativePath||result.name||"")}</div></div><div class="file-information-actions"></div></div><div class="result-actions"></div>`;
+  const preview=card.querySelector("[data-preview]"),actions=card.querySelector(".result-actions"),infoActions=card.querySelector(".file-information-actions");
+  if(result.status==="completed"&&result.data){
+    const media=showPreview(preview,result.data,result.type);
+    if(media&&(result.type.type==="image"||result.type.type==="video")){const fs=document.createElement("button");fs.className="secondary-button small-button";fs.type="button";fs.innerHTML=`${svgIcon("fullscreen",15)}<span>${t("fullscreen")}</span>`;fs.addEventListener("click",()=>showFullscreen(media));infoActions.appendChild(fs);}
+    const save=document.createElement("button");save.className="secondary-button small-button";save.type="button";save.innerHTML=`${svgIcon("download",15)}<span>${t("save")}</span>`;save.addEventListener("click",()=>saveRecoveredFile(result));infoActions.appendChild(save);
+    const share=document.createElement("button");share.className="secondary-button small-button";share.type="button";share.innerHTML=`${svgIcon("share",15)}<span>${t("share")}</span>`;share.addEventListener("click",()=>shareRecoveredFile(result));actions.appendChild(share);
+    const open=document.createElement("button");open.className="secondary-button small-button";open.type="button";open.innerHTML=`${svgIcon("external",15)}<span>${t("openWith")}</span>`;open.addEventListener("click",()=>openWithFile(result));actions.appendChild(open);
+  }else if(result.status==="completed"&&result.isZip&&result.blob){preview.appendChild(previewMessage(t("previewUnavailable")));const save=document.createElement("button");save.className="secondary-button small-button";save.type="button";save.innerHTML=`${svgIcon("download",15)}<span>${t("saveZip")}</span>`;save.addEventListener("click",()=>saveRecoveredFile(result));actions.appendChild(save);}
+  else {preview.appendChild(previewMessage(result.message||t("previewUnavailable")));if(result.data||result.blob){const save=document.createElement("button");save.className="secondary-button small-button";save.type="button";save.innerHTML=`${svgIcon("download",15)}<span>${t("save")}</span>`;save.addEventListener("click",()=>saveRecoveredFile(result));actions.appendChild(save);}}
+  return card;
+}
+function renderHistory(){
+  const list=$("history-list");list.replaceChildren();
+  if(historyLockConfig()?.enabled && !state.historyUnlocked){const empty=document.createElement("div");empty.className="card empty-state";empty.innerHTML=`<strong>History locked</strong><span>Your recovered files are protected on this device.</span><button id="unlock-history-button" class="primary-button" style="margin-top:15px">Unlock history</button>`;list.appendChild(empty);$("unlock-history-button").addEventListener("click",unlockHistory);return;}
+  if(!state.history.length){
+    const empty=document.createElement("div");empty.className="card empty-state";empty.innerHTML=`<strong>${t("noHistory")}</strong><span>${t("noHistorySub")}</span>`;list.appendChild(empty);return;
+  }
+  state.history.forEach(item=>{
+    const btn=document.createElement("button");btn.type="button";btn.className="history-item";
+    const thumb=document.createElement("div");thumb.className="history-thumb";
+    if(item.data && /^image\//.test(item.mime)){
+      const url=createObjectUrl(new Uint8Array(item.data),item.mime);const img=document.createElement("img");img.src=url;img.alt="";thumb.appendChild(img);
+    }else thumb.innerHTML=svgIcon(item.mime?.startsWith("video/")?"video":item.mime?.startsWith("audio/")?"audio":item.mime==="application/pdf"?"file":"file",19);
+    btn.appendChild(thumb);
+    const mid=document.createElement("div");mid.innerHTML=`<div class="history-name">${escapeHtml(item.outputName||item.name)}</div><div class="history-meta">${escapeHtml(item.type||"Unknown")} · ${formatBytes(item.size||0)} · ${escapeHtml(formatDate(item.date))}</div>`;btn.appendChild(mid);
+    const chevron=document.createElement("div");chevron.innerHTML=`<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="m9 5 7 7-7 7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>`;btn.appendChild(chevron);
+    btn.addEventListener("click",()=>openHistoryPreview(item.id));
+    list.appendChild(btn);
+  });
+}
+async function openHistoryPreview(id){
+  const item=await getHistoryRecord(id);if(!item)return;
+  const type=detectType(item.data?new Uint8Array(item.data):new Uint8Array());
+  const actual={type:item.type==="JPEG"||item.mime?.startsWith("image/")?"image":item.type==="MP4"||item.mime?.startsWith("video/")?"video":item.mime?.startsWith("audio/")?"audio":item.mime==="application/pdf"?"pdf":"unknown",mime:item.mime,extension:getExtension(item.outputName)||".bin",label:item.type||"Unknown"};
+  const data=item.data?new Uint8Array(item.data):null;
+  showAlert("info",t("fileInfo"),"",{hideClose:true});
+  const body=$("alert-body");body.replaceChildren();
+  if(data && actual.type!=="unknown"){
+    const wrap=document.createElement("div");wrap.className="preview-box";body.appendChild(wrap);
+    const media=showPreview(wrap,data,actual);
+    const info=document.createElement("div");info.className="file-information history-file-information";
+    const text=document.createElement("div");text.className="file-information-text";
+    text.innerHTML=`<div class="file-information-label">${t("fileInfo")}</div><div class="file-information-value">${escapeHtml(item.outputName||item.name||"")}</div>`;
+    const infoActions=document.createElement("div");infoActions.className="file-information-actions";
+    if(media && (actual.type==="image"||actual.type==="video")){
+      const fs=document.createElement("button");fs.className="secondary-button small-button";fs.type="button";fs.innerHTML=`${svgIcon("fullscreen",15)}<span>${t("fullscreen")}</span>`;fs.addEventListener("click",()=>showFullscreen(media));infoActions.appendChild(fs);
+    }
+    const save=document.createElement("button");save.className="secondary-button small-button";save.type="button";save.innerHTML=`${svgIcon("download",15)}<span>${t("save")}</span>`;save.addEventListener("click",()=>saveRecoveredFile({outputName:item.outputName,data,type:actual,status:"completed"}));infoActions.appendChild(save);
+    info.append(text,infoActions);body.appendChild(info);
+  }else{
+    body.textContent=t("previewUnavailable");
+    const footer=$("alert-footer");footer.replaceChildren();
+    if(data){const save=document.createElement("button");save.className="secondary-button";save.type="button";save.innerHTML=`${svgIcon("download",15)}<span>${t("save")}</span>`;save.addEventListener("click",()=>saveRecoveredFile({outputName:item.outputName,data,type:actual,status:"completed"}));footer.appendChild(save);}
+  }
+}
+
+/* =========================
+ALERTS
+========================= */
+function showAlert(kind="info",title="",message="",options={}){
+  const root=$("alert-root"), icon=$("alert-icon");
+  icon.className=`alert-icon ${kind}`;
+  icon.innerHTML=svgIcon(kind==="success"?"check":kind==="error"?"error":kind==="warning"?"warning":"info",20);
+  $("alert-title").textContent=title;$("alert-subtitle").textContent=options.subtitle||"";
+  $("alert-body").textContent=message;
+  const footer=$("alert-footer");footer.replaceChildren();
+  if(options.confirm){
+    const cancel=document.createElement("button");cancel.className="secondary-button";cancel.type="button";cancel.textContent=t("cancel");cancel.addEventListener("click",()=>closeAlert(true));
+    const yes=document.createElement("button");yes.className="danger-button";yes.type="button";yes.textContent=t("confirm");yes.addEventListener("click",()=>{closeAlert(true);options.confirm();});
+    footer.append(cancel,yes);
+  }else if(!options.hideClose){
+    const close=document.createElement("button");close.className="primary-button";close.type="button";close.textContent=t("close");close.addEventListener("click",()=>closeAlert(true));footer.appendChild(close);
+  }
+  root.classList.add("open");root.setAttribute("aria-hidden","false");
+}
+function closeAlert(){
+  const root=$("alert-root");root.classList.remove("open");root.setAttribute("aria-hidden","true");
+}
+function showToast(message){
+  const toast=$("toast");toast.textContent=message;toast.classList.add("show");clearTimeout(showToast.timer);showToast.timer=setTimeout(()=>toast.classList.remove("show"),2200);
+}
+
+/* =========================
+EVENTS
+========================= */
+function addFiles(files){
+  const incoming=[...files];
+  if(!incoming.length)return;
+  const existing=new Set(state.pendingFiles.map(f=>`${f.name}|${f.size}|${f.lastModified}|${relativePath(f)}`));
+  for(const file of incoming){
+    const key=`${file.name}|${file.size}|${file.lastModified}|${relativePath(file)}`;
+    if(!existing.has(key)){state.pendingFiles.push(file);existing.add(key);}
+  }
+  renderPendingFiles();
+}
+async function handleSelection(files){
+  if(files?.length){addFiles(files);showPage("recover");}
+}
+function wireEvents(){
+  $("change-profile-button").addEventListener("click",openProfileModal);
+  $("start-recover-button").addEventListener("click",()=>showPage("recover"));
+  $("profile-modal-close").addEventListener("click",closeProfileModal);
+  $("profile-modal").addEventListener("click",e=>{if(e.target===$("profile-modal"))closeProfileModal();});
+  $("alert-root").addEventListener("click",e=>{if(e.target===$("alert-root"))closeAlert();});
+  $("alert-close-x").addEventListener("click",closeAlert);
+  $("fullscreen-close").addEventListener("click",e=>{e.preventDefault();e.stopPropagation();closeFullscreen();});
+  $("fullscreen-root").addEventListener("click",e=>{
+    if(e.target===$("fullscreen-root") || e.target===$("fullscreen-content")) closeFullscreen();
+  });
+  $("fullscreen-root").addEventListener("dblclick",e=>{
+    // Double-clicking any empty fullscreen area closes it.
+    if(!e.target.closest("img,video,.fullscreen-close")) closeFullscreen();
+  });
+  $("select-file-button").addEventListener("click",e=>{e.stopPropagation();$("file-input").click();});
+  $("select-multiple-button").addEventListener("click",e=>{e.stopPropagation();$("multiple-input").click();});
+  $("select-folder-button").addEventListener("click",e=>{e.stopPropagation();if(!("webkitdirectory" in $("folder-input"))){showAlert("warning",t("warning"),t("folderUnsupported"));return}$("folder-input").click();});
+  $("file-input").addEventListener("change",e=>{handleSelection(e.target.files);e.target.value="";});
+  $("multiple-input").addEventListener("change",e=>{handleSelection(e.target.files);e.target.value="";});
+  $("folder-input").addEventListener("change",e=>{handleSelection(e.target.files);e.target.value="";});
+  $("drop-zone").addEventListener("click",e=>{if(e.target.closest("button"))return;$("multiple-input").click();});
+  $("drop-zone").addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&!e.target.closest("button")){$("multiple-input").click();e.preventDefault();}});
+  ["dragenter","dragover"].forEach(ev=>$("drop-zone").addEventListener(ev,e=>{e.preventDefault();$("drop-zone").classList.add("dragover");}));
+  ["dragleave","drop"].forEach(ev=>$("drop-zone").addEventListener(ev,e=>{e.preventDefault();$("drop-zone").classList.remove("dragover");}));
+  $("drop-zone").addEventListener("drop",e=>handleSelection(e.dataTransfer.files));
+  $("recover-button").addEventListener("click",async()=>{
+    if(state.processing)return;
+    if(!state.pendingFiles.length){showAlert("warning",t("warning"),t("selectFirst"));return}
+    const files=[...state.pendingFiles];state.pendingFiles=[];renderPendingFiles();
+    await processMultipleFiles(files);
+  });
+  $("clear-history-button").addEventListener("click",()=>showAlert("warning",t("warning"),t("confirmClear"),{confirm:async()=>{await clearHistory();showToast(t("downloadComplete"));}}));
+  $("history-password-button").addEventListener("click",()=>{if(historyLockConfig()?.enabled)openPasswordSheet("manage");else openPasswordSheet("set",1);});
+  $("password-sheet-close").addEventListener("click",closePasswordSheet);
+  $("password-sheet").addEventListener("click",e=>{if(e.target===$("password-sheet"))closePasswordSheet();});
+  $("forgot-password-clear-button").addEventListener("click",()=>showAlert("warning","Delete all local recovery data","This permanently deletes every locally stored recovered file and recovery history. The password lock will remain until the data is fully deleted, after which you can remove the password.",{confirm:async()=>{await clearHistory();showToast("All local recovery data deleted.");}}));
+  document.querySelectorAll("[data-theme-choice]").forEach(b=>b.addEventListener("click",()=>setTheme(b.dataset.themeChoice)));
+  $("feedback-telegram").addEventListener("click",()=>window.open("https://t.me/aung_myat_minn?text="+encodeURIComponent("AG ReVault feedback\n\nIssue / suggestion: "),"_blank"));
+  $("feedback-gmail").addEventListener("click",()=>{const subject=encodeURIComponent("AG ReVault Feedback");const body=encodeURIComponent("AG ReVault feedback\n\nIssue / suggestion: ");location.href=`mailto:aungmyatminnx@gmail.com?subject=${subject}&body=${body}`;});
+  document.querySelectorAll(".nav-item").forEach(btn=>btn.addEventListener("click",()=>showPage(btn.dataset.page)));
+  document.addEventListener("keydown",e=>{
+    if(e.key==="Escape"){
+      if($("fullscreen-root").classList.contains("open"))closeFullscreen();
+      else if($("alert-root").classList.contains("open"))closeAlert();
+      else if($("profile-modal").classList.contains("open"))closeProfileModal();
+    }
+  });
+  document.addEventListener("fullscreenchange",()=>{
+    // Esc / browser fullscreen exit: close the overlay and stop playback too.
+    if(!document.fullscreenElement && $("fullscreen-root").classList.contains("open") && !fullscreenClosing){
+      const source=state.fullscreenSource;
+      const clone=state.fullscreenElement;
+      if(source && source.tagName==="VIDEO"){ try{ source.pause(); }catch{} }
+      if(clone && clone.tagName==="VIDEO"){ try{ clone.pause(); }catch{} }
+      $("fullscreen-root").classList.remove("open");
+      $("fullscreen-root").setAttribute("aria-hidden","true");
+      $("fullscreen-content").replaceChildren();
+      $("fullscreen-close").style.display="none";
+      state.fullscreenElement=null;
+      state.fullscreenSource=null;
+    }
+  });
+}
+function setTheme(theme){
+  if(!["light","grey","dark"].includes(theme)) theme="dark";
+  state.theme=theme;localStorage.setItem("agr-theme",theme);document.body.dataset.theme=theme;
+  document.querySelectorAll("[data-theme-choice]").forEach(b=>b.classList.toggle("active",b.dataset.themeChoice===theme));
+}
+
+/* =========================
+INITIALIZATION
+========================= */
+async function init(){
+  setTheme(state.theme);
+  wirePinInputs();updateHistoryPasswordUI();
+  $("selected-profile-icon").innerHTML=profileIcon(state.selectedProfile);
+  wireEvents();
+  try{state.db=await openHistoryDB();}catch(err){console.warn("IndexedDB unavailable:",err);state.db=null;}
+  if(!validateCrypto()) showAlert("error",t("error"),t("cryptoUnavailable"));
+  updateLanguage();
+  await loadHistory();
+}
+init();
+</script>
+
+<style id="agr-final-branding-polish">
+/* Final branding polish: gradient AG lettering, glass backing, line-art AG shadows. */
+.app-header .brand-mark.logo-ag{
+  color:transparent!important;
+  -webkit-text-fill-color:transparent!important;
+  background:linear-gradient(135deg,#18c8f2 0%,#657cff 48%,#a451f4 100%)!important;
+  -webkit-background-clip:text!important;
+  background-clip:text!important;
+  position:relative!important;
+  isolation:isolate!important;
+  overflow:visible!important;
+  border:1px solid rgba(110,150,225,.34)!important;
+  box-shadow:0 10px 28px rgba(62,92,150,.18),inset 0 1px 0 rgba(255,255,255,.5)!important;
+}
+.app-header .brand-mark.logo-ag::before,
+.about-logo::before{
+  content:"";
+  position:absolute;
+  inset:2px;
+  border-radius:inherit;
+  background:linear-gradient(145deg,rgba(110,231,255,.10),rgba(139,124,255,.08))!important;
+  border:1px solid rgba(120,155,225,.22)!important;
+  z-index:-1;
+  pointer-events:none;
+}
+.app-header .brand-mark.logo-ag::after,
+.about-logo::after{
+  content:"";
+  position:absolute;
+  inset:-7px;
+  border-radius:inherit;
+  background:transparent!important;
+  border:1px solid rgba(102,145,225,.18)!important;
+  box-shadow:0 0 0 5px rgba(102,145,225,.045),0 0 24px rgba(102,145,225,.10)!important;
+  z-index:-2;
+  pointer-events:none;
+}
+
+/* Home AG watermark: outline/echo lines only — no color fill. */
+#page-home .hero::after{
+  color:transparent!important;
+  -webkit-text-fill-color:transparent!important;
+  background:none!important;
+  -webkit-background-clip:initial!important;
+  background-clip:initial!important;
+  -webkit-text-stroke:1.7px rgba(91,132,207,.27)!important;
+  text-shadow:
+    2px 2px 0 rgba(91,132,207,.10),
+    5px 5px 0 rgba(91,132,207,.075),
+    8px 8px 0 rgba(91,132,207,.05),
+    0 0 26px rgba(91,132,207,.10)!important;
+  opacity:1!important;
+}
+
+/* About AG ReVault gets the same branding language. */
+.about-revault-card{position:relative!important;overflow:hidden!important}
+.about-revault-card::after{
+  content:"AG"!important;
+  position:absolute!important;
+  right:-8px!important;
+  top:-20px!important;
+  font:950 118px/1 system-ui,sans-serif!important;
+  letter-spacing:-.13em!important;
+  color:transparent!important;
+  -webkit-text-fill-color:transparent!important;
+  background:none!important;
+  -webkit-background-clip:initial!important;
+  background-clip:initial!important;
+  -webkit-text-stroke:1.65px rgba(91,132,207,.25)!important;
+  text-shadow:
+    2px 2px 0 rgba(91,132,207,.095),
+    5px 5px 0 rgba(91,132,207,.07),
+    8px 8px 0 rgba(91,132,207,.045),
+    0 0 28px rgba(91,132,207,.10)!important;
+  opacity:1!important;
+  pointer-events:none!important;
+  z-index:0!important;
+}
+.about-brand-row{position:relative!important;z-index:1!important}
+.about-logo{
+  position:relative!important;
+  isolation:isolate!important;
+  overflow:visible!important;
+  color:transparent!important;
+  -webkit-text-fill-color:transparent!important;
+  background:linear-gradient(135deg,#18c8f2 0%,#657cff 48%,#a451f4 100%)!important;
+  -webkit-background-clip:text!important;
+  background-clip:text!important;
+  border:1px solid rgba(110,150,225,.34)!important;
+  box-shadow:0 10px 28px rgba(62,92,150,.18),inset 0 1px 0 rgba(255,255,255,.5)!important;
+}
+
+/* Light theme: keep the outline AG clearly visible without filling it. */
+body[data-theme="light"] #page-home .hero::after,
+body[data-theme="light"] .about-revault-card::after{
+  -webkit-text-stroke:1.8px rgba(48,83,148,.34)!important;
+  text-shadow:
+    2px 2px 0 rgba(48,83,148,.14),
+    5px 5px 0 rgba(48,83,148,.105),
+    8px 8px 0 rgba(48,83,148,.07),
+    0 0 30px rgba(70,110,185,.13)!important;
+}
+body[data-theme="light"] .about-logo{
+  border-color:rgba(70,105,170,.38)!important;
+  box-shadow:0 10px 28px rgba(54,88,145,.18),inset 0 1px 0 rgba(255,255,255,.85)!important;
+}
+@media(max-width:560px){
+  .about-revault-card::after{font-size:92px!important;right:-6px!important;top:-12px!important}
+}
+</style>
+</body>
+</html>
