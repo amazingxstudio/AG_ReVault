@@ -659,6 +659,8 @@ body[data-theme="light"] .hero::after{-webkit-text-stroke-color:rgba(30,65,95,.0
 body[data-theme="light"] .hero p{color:#60738b!important}
 body[data-theme="light"] .drop-zone{background:linear-gradient(145deg,rgba(255,255,255,.96),rgba(241,247,252,.9))!important;border-color:rgba(42,121,183,.22)!important}
 body[data-theme="light"] .nav{background:rgba(255,255,255,.92)!important;box-shadow:0 18px 48px rgba(44,78,110,.16),inset 0 1px 0 #fff!important}
+
+.feedback-modal .modal{width:min(560px,100%);max-height:min(86vh,760px);overflow:auto}.feedback-form{display:grid;gap:13px}.feedback-field{display:grid;gap:7px}.feedback-field label{font-size:11px;font-weight:700;color:var(--text)}.feedback-field input,.feedback-field select,.feedback-field textarea{width:100%;box-sizing:border-box;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.035);color:var(--text);padding:12px 13px;font:inherit;font-size:13px;outline:none;transition:border-color .15s,box-shadow .15s}.feedback-field textarea{min-height:150px;resize:vertical;line-height:1.55}.feedback-field input:focus,.feedback-field select:focus,.feedback-field textarea:focus{border-color:rgba(105,214,255,.55);box-shadow:0 0 0 3px rgba(105,214,255,.08)}.feedback-helper{font-size:10.5px;color:var(--muted);line-height:1.5}.feedback-letter{padding:13px 14px;border:1px solid var(--line-soft);border-radius:15px;background:rgba(255,255,255,.025);font-size:11px;color:var(--muted);line-height:1.55}.feedback-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px}.feedback-actions button{min-height:46px}@media(max-width:520px){.feedback-actions{grid-template-columns:1fr}.feedback-modal .modal{border-radius:22px}}body[data-theme="light"] .feedback-field input,body[data-theme="light"] .feedback-field select,body[data-theme="light"] .feedback-field textarea{background:#f7f9fc}.feedback-modal .modal-footer{margin-top:15px}
 body[data-theme="light"] .modal-root{background:rgba(27,49,70,.22)!important}
 body[data-theme="light"] .password-sheet-root .password-sheet{background:rgba(255,255,255,.98)!important;box-shadow:0 -20px 70px rgba(35,66,95,.20),inset 0 1px 0 #fff!important}
 
@@ -834,6 +836,305 @@ body[data-theme="light"] .app-header .brand-mark.logo-ag{
 }
 </style>
 
+
+<style id="agr-final-v2-polish">
+/* AG line-art: lighter, cleaner, adaptive */
+.ag-brand-mark .ag-shadow-line,.about-ag-brand .ag-shadow-line{opacity:.105!important}
+[data-theme="light"] .ag-brand-mark .ag-shadow-line,[data-theme="light"] .about-ag-brand .ag-shadow-line{opacity:.085!important}
+.ag-brand-card,.about-ag-brand{background:linear-gradient(135deg,rgba(126,160,255,.105),rgba(174,126,255,.07) 52%,rgba(255,255,255,.025))!important}
+[data-theme="light"] .ag-brand-card,[data-theme="light"] .about-ag-brand{background:linear-gradient(135deg,rgba(95,130,235,.09),rgba(157,105,235,.055) 52%,rgba(255,255,255,.52))!important}
+/* Natural media sizing: no artificial preview box */
+.preview-box{min-height:0!important;padding:0!important;margin-top:13px!important;background:transparent!important;border:0!important;box-shadow:none!important;display:block!important;overflow:visible!important}
+.preview-box img,.preview-box video{display:block;width:auto!important;height:auto!important;max-width:100%!important;max-height:72vh!important;margin:0 auto!important;border-radius:15px!important;object-fit:contain!important;background:transparent!important}
+.preview-box video{width:auto!important}
+.preview-stage{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:10px;width:100%;}
+.preview-box{width:fit-content;max-width:100%;background:transparent!important;border:0!important;box-shadow:none!important;border-radius:0!important;padding:0!important}
+.preview-box img,.preview-box video{max-width:min(100%,760px)!important;max-height:72vh!important;width:auto!important;height:auto!important;display:block;margin:0 auto!important;object-fit:contain!important;background:transparent!important;border-radius:14px!important}
+.preview-action-rail{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;align-items:stretch;justify-content:center;width:100%;margin:0!important;padding:0;overflow:hidden}
+.preview-action-rail::-webkit-scrollbar{display:none}
+.preview-action-rail .small-button{min-width:0;min-height:40px;padding:0 6px;white-space:nowrap;overflow:hidden}.preview-action-rail .small-button span{min-width:0;overflow:hidden;text-overflow:ellipsis}
+.preview-stage.vertical-video{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:12px}
+.preview-stage.vertical-video .preview-box{grid-column:1;max-width:100%}
+.preview-stage.vertical-video .preview-action-rail{grid-column:2;width:116px;display:grid;grid-template-columns:1fr;gap:7px;align-self:center;overflow:visible}
+.preview-stage.vertical-video .preview-action-rail .small-button{width:116px;min-width:0;padding:0 8px;justify-content:center}
+.preview-stage.vertical-video .preview-box video{max-height:72vh!important;max-width:min(100%,620px)!important}
+@media(max-width:560px){.preview-stage.vertical-video{grid-template-columns:minmax(0,1fr) 92px;gap:8px}.preview-stage.vertical-video .preview-action-rail,.preview-stage.vertical-video .preview-action-rail .small-button{width:92px}.preview-action-rail{gap:4px}.preview-action-rail .small-button{font-size:9px;padding:0 4px}}
+.result-file-name{display:flex;align-items:center;gap:7px;min-width:0;justify-content:space-between}.result-file-name .file-name-edit{margin-left:auto}
+.result-file-name .file-name-text{overflow-wrap:anywhere;word-break:break-word}
+@media(max-width:560px){
+  .preview-stage.vertical-video{gap:10px}
+  .preview-stage.vertical-video .preview-action-rail{flex-basis:94px;max-width:94px}
+  .preview-stage.vertical-video .preview-action-rail .small-button{font-size:10px;padding:7px 6px}
+  .preview-stage.vertical-video .preview-box video{max-width:calc(100vw - 125px)!important}
+}
+</style>
+<style id="agr-v7-polish">
+.home-best-choice{display:inline-flex;margin-top:14px;padding:7px 11px;border-radius:999px;border:1px solid rgba(105,214,255,.18);background:linear-gradient(100deg,rgba(105,214,255,.08),rgba(142,139,255,.07));color:var(--muted);font-size:11px;font-weight:700;letter-spacing:.01em}
+.settings-modern-card{padding:15px!important;background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.018))!important}
+.settings-card-head{display:flex;align-items:flex-start;gap:11px}.settings-icon{width:40px;height:40px;display:grid;place-items:center;border-radius:13px;background:linear-gradient(135deg,rgba(105,214,255,.12),rgba(142,139,255,.11));border:1px solid var(--line-soft);font-size:17px;flex:none}.settings-card-copy{font-size:11px;line-height:1.5;margin-top:3px}.settings-action{width:100%;min-height:42px!important;margin-top:12px!important;justify-content:space-between!important;border-radius:13px!important}.settings-feedback-grid{grid-template-columns:1fr!important;margin-top:12px!important}.file-type-item{background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.018))}.file-type-item .profile-list-main{cursor:default}.file-type-item .profile-list-title{font-size:13px}.file-type-item .profile-list-sub{font-size:10px;line-height:1.4}.profile-list-details{background:rgba(255,255,255,.018)}
+body[data-theme="light"] .settings-modern-card{background:linear-gradient(145deg,rgba(255,255,255,.96),rgba(239,246,253,.78))!important}.home-best-choice{color:var(--text)}
+</style>
+
+<style id="agr-final-user-polish">
+/* Home AG shadow: outline/line-art only, low opacity, no color fill. */
+#page-home .hero::after{
+  color:transparent!important;
+  -webkit-text-fill-color:transparent!important;
+  background:none!important;
+  -webkit-background-clip:initial!important;
+  background-clip:initial!important;
+  -webkit-text-stroke:1.45px rgba(91,132,207,.105)!important;
+  text-shadow:2px 2px 0 rgba(91,132,207,.035),5px 5px 0 rgba(91,132,207,.018)!important;
+  opacity:.72!important;
+}
+body[data-theme="light"] #page-home .hero::after{
+  -webkit-text-stroke:1.35px rgba(48,83,148,.095)!important;
+  text-shadow:2px 2px 0 rgba(48,83,148,.035),5px 5px 0 rgba(48,83,148,.018)!important;
+  opacity:.66!important;
+}
+.about-revault-card::after{
+  background:none!important;
+  -webkit-background-clip:initial!important;
+  background-clip:initial!important;
+  -webkit-text-stroke:1.35px rgba(91,132,207,.095)!important;
+  text-shadow:2px 2px 0 rgba(91,132,207,.028),5px 5px 0 rgba(91,132,207,.015)!important;
+  opacity:.20!important;
+}
+body[data-theme="light"] .about-revault-card::after{
+  -webkit-text-stroke:1.3px rgba(48,83,148,.085)!important;
+  text-shadow:2px 2px 0 rgba(48,83,148,.028),5px 5px 0 rgba(48,83,148,.015)!important;
+  opacity:.18!important;
+}
+.home-best-choice{display:inline-flex!important;align-items:center!important;gap:7px!important}
+.home-best-choice svg{flex:none!important;opacity:.78}
+.settings-icon{color:var(--accent)!important}
+.settings-icon svg{display:block!important}
+
+/* Recovery preview: images and videos share one clean action system. */
+.preview-stage{width:100%!important;display:flex!important;flex-direction:column!important;align-items:center!important;gap:9px!important;min-width:0!important}
+.preview-box{width:100%!important;max-width:100%!important;display:flex!important;justify-content:center!important;align-items:flex-start!important;min-width:0!important}
+.preview-box img,.preview-box video{display:block!important;width:auto!important;height:auto!important;max-width:100%!important;max-height:68vh!important;margin:0 auto!important;object-fit:contain!important}
+.preview-action-rail{width:100%!important;display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:5px!important;align-items:stretch!important;overflow:hidden!important}
+.preview-action-rail .small-button{width:100%!important;min-width:0!important;min-height:40px!important;padding:0 5px!important;justify-content:center!important;gap:5px!important;white-space:nowrap!important;overflow:hidden!important}
+.preview-action-rail .small-button span{min-width:0!important;overflow:hidden!important;text-overflow:ellipsis!important}
+
+/* Vertical video: smaller media with a contained action rail beside it. */
+.preview-stage.vertical-video{display:grid!important;grid-template-columns:minmax(0,1fr) 92px!important;align-items:center!important;column-gap:9px!important;row-gap:0!important}
+.preview-stage.vertical-video .preview-box{grid-column:1!important;width:100%!important;min-width:0!important;justify-content:center!important}
+.preview-stage.vertical-video .preview-box video{width:auto!important;max-width:min(100%,500px)!important;max-height:66vh!important;margin:0 auto!important}
+.preview-stage.vertical-video .preview-action-rail{grid-column:2!important;width:92px!important;display:grid!important;grid-template-columns:1fr!important;gap:6px!important;align-self:center!important;overflow:hidden!important}
+.preview-stage.vertical-video .preview-action-rail .small-button{width:92px!important;min-height:42px!important;padding:0 5px!important;font-size:10px!important}
+@media(max-width:560px){
+  .preview-action-rail{gap:4px!important}
+  .preview-action-rail .small-button{min-height:39px!important;font-size:9.5px!important;padding:0 3px!important;gap:3px!important}
+  .preview-action-rail .small-button svg{width:13px!important;height:13px!important}
+  .preview-stage.vertical-video{grid-template-columns:minmax(0,1fr) 82px!important;column-gap:7px!important}
+  .preview-stage.vertical-video .preview-action-rail,.preview-stage.vertical-video .preview-action-rail .small-button{width:82px!important}
+  .preview-stage.vertical-video .preview-box video{max-width:calc(100vw - 132px)!important;max-height:64vh!important}
+}
+@media(max-width:370px){
+  .preview-stage.vertical-video{grid-template-columns:minmax(0,1fr) 76px!important}
+  .preview-stage.vertical-video .preview-action-rail,.preview-stage.vertical-video .preview-action-rail .small-button{width:76px!important}
+  .preview-stage.vertical-video .preview-action-rail .small-button{font-size:8.5px!important}
+  .preview-stage.vertical-video .preview-box video{max-width:calc(100vw - 122px)!important}
+}
+
+/* Filename is shown cleanly; editing lives inside Details. */
+.result-file-name-clean{margin-top:9px!important;padding:0 2px!important;display:block!important;border:0!important;background:none!important;box-shadow:none!important}
+.result-file-name-clean .file-name-text{display:block!important;font-size:11px!important;color:var(--muted)!important;overflow-wrap:anywhere!important;word-break:break-word!important;line-height:1.45!important}
+.result-details-sheet{display:grid;gap:8px}
+.result-detail-row{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;padding:10px 11px;border:1px solid var(--line-soft);border-radius:12px;background:rgba(255,255,255,.025)}
+.result-detail-row span{font-size:10px;color:var(--muted)}
+.result-detail-row strong{font-size:11px;text-align:right;overflow-wrap:anywhere;word-break:break-word}
+#alert-footer .secondary-button,#alert-footer .primary-button{display:inline-flex;align-items:center;justify-content:center;gap:6px}
+</style>
+<style id="agr-v9-user-fixes">
+/* Home AG watermark matches the About brand language: subtle outline only. */
+#page-home .hero::after{
+  color:transparent!important;-webkit-text-fill-color:transparent!important;background:none!important;
+  -webkit-background-clip:initial!important;background-clip:initial!important;
+  -webkit-text-stroke:1.45px rgba(91,132,207,.105)!important;
+  text-shadow:2px 2px 0 rgba(91,132,207,.028),5px 5px 0 rgba(91,132,207,.014)!important;
+  opacity:.52!important;
+}
+body[data-theme="light"] #page-home .hero::after{
+  -webkit-text-stroke:1.35px rgba(48,83,148,.075)!important;
+  text-shadow:2px 2px 0 rgba(48,83,148,.022),5px 5px 0 rgba(48,83,148,.010)!important;
+  opacity:.45!important;
+}
+/* Reduce heavy card shadows globally, especially in light theme. */
+.card,.settings-card,.results-collection,.history-item,.profile-card,.result-card,.drop-zone,.preview-box{box-shadow:0 10px 28px rgba(30,60,90,.07),inset 0 1px 0 rgba(255,255,255,.035)!important}
+body[data-theme="light"] .card,body[data-theme="light"] .settings-card,body[data-theme="light"] .results-collection,body[data-theme="light"] .history-item,body[data-theme="light"] .profile-card,body[data-theme="light"] .result-card,body[data-theme="light"] .drop-zone{box-shadow:0 8px 24px rgba(48,83,119,.055),inset 0 1px 0 rgba(255,255,255,.92)!important}
+/* Give the recovery chooser a refined focal surface without another heavy shadow. */
+#drop-zone{background:linear-gradient(145deg,rgba(110,231,255,.055),rgba(139,124,255,.035) 48%,rgba(255,255,255,.018))!important;border-color:rgba(105,214,255,.20)!important}
+body[data-theme="light"] #drop-zone{background:linear-gradient(145deg,rgba(255,255,255,.98),rgba(234,244,252,.90) 55%,rgba(244,241,255,.78))!important;border-color:rgba(70,130,190,.16)!important}
+#drop-zone::before{border-color:rgba(105,214,255,.07)!important}
+/* Vertical video: deliberately smaller media, wider action rail, contained buttons. */
+.preview-stage.vertical-video{grid-template-columns:minmax(0,58%) minmax(118px,128px)!important;column-gap:12px!important;align-items:center!important}
+.preview-stage.vertical-video .preview-box{width:100%!important;justify-content:center!important}
+.preview-stage.vertical-video .preview-box video{width:auto!important;max-width:100%!important;max-height:58vh!important;margin:0 auto!important}
+.preview-stage.vertical-video .preview-action-rail{width:100%!important;grid-template-columns:1fr!important;gap:7px!important;overflow:visible!important}
+.preview-stage.vertical-video .preview-action-rail .small-button{width:100%!important;min-height:42px!important;padding:0 7px!important;font-size:10.5px!important;justify-content:center!important}
+@media(max-width:560px){
+  .preview-stage.vertical-video{grid-template-columns:minmax(0,57%) minmax(112px,43%)!important;column-gap:9px!important}
+  .preview-stage.vertical-video .preview-box video{max-height:56vh!important}
+  .preview-stage.vertical-video .preview-action-rail{gap:6px!important}
+  .preview-stage.vertical-video .preview-action-rail .small-button{min-height:40px!important;font-size:9.5px!important;padding:0 5px!important}
+}
+/* Custom filename editor — no browser/localhost prompt. */
+.filename-editor-modal .filename-editor-card{width:min(460px,100%);border-radius:24px!important}
+.filename-editor-field{display:grid;gap:7px}
+.filename-editor-field label{font-size:11px;font-weight:750;color:var(--text)}
+.filename-editor-input-wrap{display:flex;align-items:center;gap:9px;min-height:48px;padding:0 13px;border:1px solid var(--line);border-radius:15px;background:rgba(255,255,255,.045);transition:border-color .16s,box-shadow .16s}
+.filename-editor-input-wrap:focus-within{border-color:rgba(105,214,255,.55);box-shadow:0 0 0 3px rgba(105,214,255,.08)}
+.filename-editor-input-wrap>span{display:grid;place-items:center;color:var(--muted);flex:none}
+.filename-editor-input-wrap input{width:100%;min-width:0;border:0;outline:0;background:transparent;color:var(--text);font:inherit;font-size:13px}
+.filename-editor-note{font-size:10.5px;color:var(--muted);line-height:1.45}
+.filename-editor-footer{display:grid!important;grid-template-columns:1fr 1fr;gap:9px;margin-top:16px}
+.filename-editor-footer button{min-height:44px}
+body[data-theme="light"] .filename-editor-input-wrap{background:#f7f9fc}
+/* Password management uses the shared SVG icon system consistently. */
+.password-sheet .password-icon-action{display:grid!important;place-items:center!important}
+.password-sheet .password-icon-action svg{display:block!important;width:20px!important;height:20px!important}
+</style>
+
+<style id="agr-v10-final-user-fixes">
+/* Home: remove AG watermark/line shadow; use a restrained color gradient surface instead. */
+#page-home .hero::after{display:none!important;content:none!important}
+#page-home .hero{background:linear-gradient(135deg,rgba(72,129,235,.15) 0%,rgba(116,103,224,.11) 48%,rgba(255,255,255,.035) 100%)!important}
+body[data-theme="light"] #page-home .hero{background:linear-gradient(135deg,rgba(72,129,235,.12) 0%,rgba(116,103,224,.085) 50%,rgba(255,255,255,.72) 100%)!important}
+
+/* Keep preview filenames out of the preview surface; filename lives in Details. */
+.result-file-name-clean{display:none!important}
+
+/* Vertical video: slightly larger media, but reserve a clean, stable rail for five actions. */
+.preview-stage.vertical-video{grid-template-columns:minmax(0,1fr) 108px!important;column-gap:10px!important;align-items:center!important}
+.preview-stage.vertical-video .preview-box{width:100%!important;min-width:0!important}
+.preview-stage.vertical-video .preview-box video{width:auto!important;max-width:100%!important;max-height:64vh!important;margin:0 auto!important}
+.preview-stage.vertical-video .preview-action-rail{width:108px!important;display:grid!important;grid-template-columns:1fr!important;gap:7px!important;overflow:visible!important;align-self:center!important}
+.preview-stage.vertical-video .preview-action-rail .small-button{width:108px!important;min-height:41px!important;padding:0 7px!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:5px!important}
+@media(max-width:560px){
+  .preview-stage.vertical-video{grid-template-columns:minmax(0,1fr) 106px!important;column-gap:8px!important}
+  .preview-stage.vertical-video .preview-action-rail,.preview-stage.vertical-video .preview-action-rail .small-button{width:106px!important}
+  .preview-stage.vertical-video .preview-action-rail .small-button{min-height:40px!important;font-size:9.5px!important;padding:0 5px!important}
+  .preview-stage.vertical-video .preview-box video{max-width:100%!important;max-height:62vh!important}
+}
+@media(max-width:390px){
+  .preview-stage.vertical-video{grid-template-columns:minmax(0,1fr) 96px!important;column-gap:7px!important}
+  .preview-stage.vertical-video .preview-action-rail,.preview-stage.vertical-video .preview-action-rail .small-button{width:96px!important}
+  .preview-stage.vertical-video .preview-action-rail .small-button{font-size:9px!important;gap:3px!important}
+}
+
+/* Supported file-type expansion grows vertically, never by scaling or widening the card. */
+#profile-selection-grid{width:100%!important;min-width:0!important}
+#profile-selection-grid .file-type-item{width:100%!important;min-width:0!important;height:auto!important;transform:none!important;overflow:hidden!important}
+#profile-selection-grid .file-type-item.open,#profile-selection-grid .file-type-item:has(.profile-list-details:not([hidden])){height:auto!important;transform:none!important}
+#profile-selection-grid .profile-list-main{width:100%!important;box-sizing:border-box!important}
+#profile-selection-grid .profile-list-details{width:100%!important;box-sizing:border-box!important;min-width:0!important}
+#profile-selection-grid .profile-detail-line{width:100%!important;box-sizing:border-box!important}
+
+/* Softer large-surface shadows, especially in light theme. */
+.card,.settings-card,.results-collection,.history-item,.profile-card,.result-card,.drop-zone,.preview-box{box-shadow:0 7px 20px rgba(30,60,90,.045),inset 0 1px 0 rgba(255,255,255,.025)!important}
+body[data-theme="light"] .card,body[data-theme="light"] .settings-card,body[data-theme="light"] .results-collection,body[data-theme="light"] .history-item,body[data-theme="light"] .profile-card,body[data-theme="light"] .result-card,body[data-theme="light"] .drop-zone{box-shadow:0 5px 16px rgba(48,83,119,.035),inset 0 1px 0 rgba(255,255,255,.88)!important}
+</style>
+
+
+<style id="agr-bottom-sheet-profile-final">
+/* Supported file types: true bottom sheet, fixed shell, internal list scroll only. */
+#profile-modal{
+  align-items:flex-end!important;
+  justify-content:center!important;
+  padding:0!important;
+  overflow:hidden!important;
+  overscroll-behavior:none!important;
+}
+#profile-modal>.modal{
+  width:min(680px,100%)!important;
+  height:min(72vh,620px)!important;
+  max-height:min(72vh,620px)!important;
+  min-height:min(72vh,620px)!important;
+  margin:0!important;
+  padding:18px 18px calc(18px + env(safe-area-inset-bottom))!important;
+  border-radius:26px 26px 0 0!important;
+  overflow:hidden!important;
+  display:flex!important;
+  flex-direction:column!important;
+  box-sizing:border-box!important;
+  transform:translateY(0)!important;
+}
+#profile-selection-grid{
+  flex:1 1 auto!important;
+  min-height:0!important;
+  height:auto!important;
+  max-height:none!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  overscroll-behavior:contain!important;
+  -webkit-overflow-scrolling:touch!important;
+}
+#profile-selection-grid .file-type-row{
+  position:relative!important;
+  height:74px!important;
+  min-height:74px!important;
+  max-height:74px!important;
+  flex:0 0 74px!important;
+  overflow:hidden!important;
+}
+#profile-selection-grid .file-type-item,
+#profile-selection-grid .file-type-item .profile-list-main{
+  height:74px!important;
+  min-height:74px!important;
+  max-height:74px!important;
+}
+#profile-selection-grid .profile-list-details-panel{
+  position:absolute!important;
+  inset:1px!important;
+  z-index:4!important;
+  max-height:70px!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  overscroll-behavior:contain!important;
+  margin:0!important;
+  box-sizing:border-box!important;
+}
+@media(max-width:560px){
+  #profile-modal>.modal{
+    width:100%!important;
+    height:min(76vh,620px)!important;
+    max-height:min(76vh,620px)!important;
+    min-height:min(76vh,620px)!important;
+    padding:16px 14px calc(14px + env(safe-area-inset-bottom))!important;
+    border-radius:24px 24px 0 0!important;
+  }
+}
+</style>
+
+
+<style id="agr-feedback-and-details-final">
+/* Send feedback uses the same full-width action geometry as the other settings cards. */
+.settings-feedback-grid{grid-template-columns:1fr!important;width:100%!important;}
+.settings-feedback-grid .settings-action{width:100%!important;}
+
+/* Supported file-type details use the chevron as the expand action. Tapping the
+   opened details surface collapses it; no extra close/X button is shown. */
+#profile-selection-grid .profile-details-button{
+  cursor:pointer!important;
+  transition:transform .18s ease,background .18s ease,border-color .18s ease!important;
+}
+#profile-selection-grid .profile-details-button.open{
+  background:rgba(255,255,255,.07)!important;
+}
+#profile-selection-grid .profile-list-details-panel{
+  cursor:pointer!important;
+}
+#profile-selection-grid .profile-list-details-panel .profile-detail-line{
+  pointer-events:none!important;
+}
+#profile-selection-grid .profile-list-details-panel .profile-detail-line *{
+  pointer-events:none!important;
+}
+#profile-selection-grid .profile-details-close{display:none!important;}
+</style>
 </head>
 <body>
 <div class="app-shell">
@@ -847,16 +1148,16 @@ body[data-theme="light"] .app-header .brand-mark.logo-ag{
       </header>
       <div class="hero">
         <h2 id="home-title">Your files will be recovered privately.</h2>
-        <p id="home-description">Bring back supported photos, videos and files — right on your device.</p>
+        <p id="home-description">Bring back supported photos, videos and files — right on your device.</p><div class="home-best-choice"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m12 3 2.3 6.7L21 12l-6.7 2.3L12 21l-2.3-6.7L3 12l6.7-2.3L12 3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg><span>Best choice for Xiaomi, Redmi &amp; POCO</span></div>
       </div>
       <div class="card">
-        <div class="section-title" id="profile-label">Recovery profile</div>
+        <div class="section-title" id="profile-label">Recovery coverage</div>
         <div class="profile-selected">
           <div class="profile-pill">
             <div class="profile-icon" id="selected-profile-icon"></div>
-            <div><div class="profile-name" id="selected-profile-name">Xiaomi / Redmi / POCO</div><div class="profile-sub" id="selected-profile-sub">MIUI / HyperOS • .lsa / .lsav</div></div>
+            <div><div class="profile-name" id="selected-profile-name">All supported file types</div><div class="profile-sub" id="selected-profile-sub">Automatic format detection • known encrypted formats supported</div></div>
           </div>
-          <button id="change-profile-button" class="secondary-button small-button" type="button">Change</button>
+          <button id="change-profile-button" class="secondary-button small-button" type="button"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M2.8 12s3.2-5 9.2-5 9.2 5 9.2 5-3.2 5-9.2 5-9.2-5-9.2-5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="12" cy="12" r="2.5" stroke="currentColor" stroke-width="1.6"/></svg><span>View</span></button>
         </div>
         <div class="divider"></div>
         <button id="start-recover-button" class="primary-button full" type="button">
@@ -877,7 +1178,7 @@ body[data-theme="light"] .app-header .brand-mark.logo-ag{
 
     <section id="page-recover" class="page" aria-label="Recover">
       <header class="app-header">
-        <div class="brand"><div class="brand-mark logo-ag" aria-hidden="true">AG</div><div><h1>Recover</h1><p id="recover-profile-caption">Xiaomi / Redmi / POCO</p></div></div>
+        <div class="brand"><div class="brand-mark logo-ag" aria-hidden="true">AG</div><div><h1>Recover</h1><p id="recover-profile-caption">Automatic file-type recovery</p></div></div>
       </header>
       <div class="subhead"><div><h2 id="recover-title">Recover files</h2><p id="recover-subtitle">Select one file, multiple files, a folder, or a ZIP archive.</p></div></div>
       <div id="drop-zone" class="drop-zone" tabindex="0">
@@ -922,9 +1223,9 @@ body[data-theme="light"] .app-header .brand-mark.logo-ag{
       <div class="settings-grid">
         <div class="settings-card"><div class="section-title">Theme</div><div class="muted" style="font-size:12px">Choose a readable interface theme.</div><div class="theme-options"><button class="theme-option" data-theme-choice="light">Light</button><button class="theme-option" data-theme-choice="grey">Grey</button><button class="theme-option" data-theme-choice="dark">Dark</button></div></div>
         <div class="settings-card about-revault-card"><div class="section-title">About AG ReVault</div><div class="about-brand-row"><div class="about-logo logo-ag">AG</div><div><div class="about-brand-name">AG ReVault</div><div class="about-brand-sub">Private file recovery utility</div></div></div><div class="about-meta-grid"><div class="about-meta-item"><span>Version</span><strong>1.1.23</strong></div><div class="about-meta-item"><span>Creator</span><strong>Aung Myat Minn</strong></div><div class="about-meta-item"><span>Team</span><strong>AmazinG X Studio</strong></div></div><div class="contact-row"><a class="contact-link" href="https://t.me/aung_myat_minn" target="_blank" rel="noopener" aria-label="Telegram"><span class="contact-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="m21 4-3.1 16-5.8-4.5-3.1 2.9.7-4.2L17.5 7l-8.2 5.1-5.1-1.6L21 4Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></span><span>@aung_myat_minn</span></a><a class="contact-link" href="mailto:aungmyatminnx@gmail.com" aria-label="Gmail"><span class="contact-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3.5 6.2 12 12.6l8.5-6.4V18.5" fill="none" stroke="#EA4335" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.5 18.5V6.2L12 12.6" fill="none" stroke="#4285F4" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.5 6.2V18.5" fill="none" stroke="#34A853" stroke-width="2.2" stroke-linecap="round"/><path d="M20.5 6.2V18.5" fill="none" stroke="#FBBC04" stroke-width="2.2" stroke-linecap="round"/></svg></span><span>aungmyatminnx@gmail.com</span></a></div></div>
-        <div class="settings-card"><div class="section-title">History password</div><div id="history-password-status" class="muted" style="font-size:12px;line-height:1.55">Password is not set.</div><button id="history-password-button" class="secondary-button full" type="button" style="margin-top:11px">Set password</button></div>
-        <div class="settings-card"><div class="section-title">Local recovery data</div><div class="muted" style="font-size:12px;line-height:1.55">Delete all locally stored recovered files and recovery history.</div><button id="forgot-password-clear-button" class="danger-button full" type="button" style="margin-top:11px">Delete all local recovery data</button></div>
-        <div class="settings-card"><div class="section-title">Feedback</div><div class="muted" style="font-size:12px;line-height:1.55">Send an issue or suggestion. A starter message will be prepared for you.</div><div class="feedback-grid" style="margin-top:11px"><button id="feedback-telegram" class="secondary-button icon-only-button" type="button" aria-label="Telegram" title="Telegram"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="m21 4-3.1 16-5.8-4.5-3.1 2.9.7-4.2L17.5 7l-8.2 5.1-5.1-1.6L21 4Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button><button id="feedback-gmail" class="secondary-button icon-only-button" type="button" aria-label="Gmail" title="Gmail"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3.5 6.2 12 12.6l8.5-6.4V18.5" fill="none" stroke="#EA4335" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.5 18.5V6.2L12 12.6" fill="none" stroke="#4285F4" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.5 6.2V18.5" fill="none" stroke="#34A853" stroke-width="2.2" stroke-linecap="round"/><path d="M20.5 6.2V18.5" fill="none" stroke="#FBBC04" stroke-width="2.2" stroke-linecap="round"/></svg></button></div></div>
+        <div class="settings-card settings-modern-card"><div class="settings-card-head"><div class="settings-icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div><div><div class="section-title">History Password</div><div id="history-password-status" class="muted settings-card-copy">Password is not set.</div></div></div><button id="history-password-button" class="secondary-button settings-action" type="button"><span>Manage password</span><span>›</span></button></div>
+        <div class="settings-card settings-modern-card"><div class="settings-card-head"><div class="settings-icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><ellipse cx="12" cy="6" rx="7" ry="3" stroke="currentColor" stroke-width="1.6"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6" stroke="currentColor" stroke-width="1.6"/></svg></div><div><div class="section-title">Local Data Recovery</div><div class="muted settings-card-copy">Manage locally stored recovery history and recovered data.</div></div></div><button id="forgot-password-clear-button" class="danger-button settings-action" type="button"><span>Manage local data</span><span>›</span></button></div>
+        <div class="settings-card settings-modern-card"><div class="settings-card-head"><div class="settings-icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3.5" y="5" width="17" height="14" rx="2.5" stroke="currentColor" stroke-width="1.6"/><path d="m4.5 7 7.5 5.5L19.5 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="section-title">Feedback</div><div class="muted settings-card-copy">Tell us about bugs, ideas or improvements.</div></div></div><div class="feedback-grid settings-feedback-grid"><button id="feedback-open" class="secondary-button settings-action" type="button" aria-label="Send feedback"><span>Send feedback</span><span>›</span></button></div></div>
       </div>
     </section>
   </main>
@@ -939,9 +1240,17 @@ body[data-theme="light"] .app-header .brand-mark.logo-ag{
   </nav>
 </div>
 
+<div id="filename-editor-modal" class="modal-root filename-editor-modal" aria-hidden="true">
+  <div class="modal filename-editor-card" role="dialog" aria-modal="true" aria-labelledby="filename-editor-title">
+    <div class="modal-head"><div><h3 id="filename-editor-title">Edit file name</h3><p>Rename the recovered file before saving.</p></div><button id="filename-editor-close" class="icon-button" type="button" aria-label="Close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></div>
+    <div class="filename-editor-field"><label for="filename-editor-input">File name</label><div class="filename-editor-input-wrap"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 3h8l4 4v14H6V3Z" stroke="currentColor" stroke-width="1.7"/><path d="M14 3v5h5" stroke="currentColor" stroke-width="1.7"/></svg></span><input id="filename-editor-input" type="text" autocomplete="off" spellcheck="false"></div><div id="filename-editor-note" class="filename-editor-note">The edited name will be used when you save the file.</div></div>
+    <div class="modal-footer filename-editor-footer"><button id="filename-editor-cancel" class="secondary-button" type="button">Cancel</button><button id="filename-editor-save" class="primary-button" type="button">Save name</button></div>
+  </div>
+</div>
+
 <div id="profile-modal" class="modal-root" aria-hidden="true">
   <div class="modal">
-    <div class="modal-head"><div><h3 id="profile-modal-title">Choose recovery profile</h3><p id="profile-modal-subtitle">Select a supported application format.</p></div><button id="profile-modal-close" class="icon-button" type="button" aria-label="Close"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></div>
+    <div class="modal-head"><div><h3 id="profile-modal-title">Supported file types</h3><p id="profile-modal-subtitle">Browse what AG ReVault can recover and where these formats are commonly found.</p></div><button id="profile-modal-close" class="icon-button" type="button" aria-label="Close"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></div>
     <div id="profile-selection-grid" class="selection-grid"></div>
   </div>
 </div>
@@ -991,6 +1300,21 @@ body[data-theme="light"] .app-header .brand-mark.logo-ag{
   </div>
 </div>
 
+
+<div id="feedback-modal" class="modal-root feedback-modal" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="feedback-title">
+    <div class="modal-head">
+      <div><h3 id="feedback-title">Send feedback</h3><p>Tell us what happened or what you would like to improve.</p></div>
+      <button id="feedback-close" class="icon-button" type="button" aria-label="Close"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="feedback-form">
+      <div class="feedback-field"><label for="feedback-subject">Subject</label><input id="feedback-subject" type="text" maxlength="120" placeholder="e.g. Recovery issue, feature suggestion"></div>
+      <div class="feedback-field"><label for="feedback-message">Your feedback</label><textarea id="feedback-message" maxlength="5000" placeholder="Describe the issue or suggestion..." autofocus></textarea><div class="feedback-helper">Please avoid passwords, private keys, or other sensitive information.</div></div>
+      <div class="feedback-letter" id="feedback-preview">Your feedback will be formatted as a short letter before you send it.</div>
+    </div>
+    <div class="feedback-actions" style="margin-top:15px"><button id="feedback-send-telegram" class="secondary-button" type="button"><span style="display:inline-flex;align-items:center;gap:8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="m21 4-3.1 16-5.8-4.5-3.1 2.9.7-4.2L17.5 7l-8.2 5.1-5.1-1.6L21 4Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>Send via Telegram</span></button><button id="feedback-send-gmail" class="primary-button" type="button"><span style="display:inline-flex;align-items:center;gap:8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3.5 6.2 12 12.6l8.5-6.4V18.5" fill="none" stroke="#EA4335" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.5 18.5V6.2L12 12.6" fill="none" stroke="#4285F4" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.5 6.2V18.5" fill="none" stroke="#34A853" stroke-width="2.2" stroke-linecap="round"/><path d="M20.5 6.2V18.5" fill="none" stroke="#FBBC04" stroke-width="2.2" stroke-linecap="round"/></svg>Send via Gmail</span></button></div>
+  </div>
+</div>
 <div id="alert-root" class="modal-root" aria-hidden="true">
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="alert-title">
     <div class="modal-head">
@@ -1019,7 +1343,7 @@ body[data-theme="light"] .app-header .brand-mark.logo-ag{
 STATE
 ========================= */
 const state = {
-  selectedProfile: localStorage.getItem("agr-selected-profile") || "xiaomi",
+  selectedProfile: "auto",
   pendingFiles: [],
   results: [],
   history: [],
@@ -1039,7 +1363,7 @@ const state = {
 const PROFILES = {
   xiaomi: {
     id:"xiaomi", name:"Xiaomi / Redmi / POCO", group:"MIUI / HyperOS",
-    extensions:[".lsa",".lsav"], description:"MIUI / HyperOS Gallery encrypted media",
+    extensions:[".lsa",".lsav"], description:"Best choice for Xiaomi, Redmi & POCO • MIUI / HyperOS Gallery encrypted media",
     supported:true, engine:"miui", level:"decrypt",
     detailTitle:"MIUI / HyperOS encrypted Gallery files",
     detail:"Recognizes .lsa and .lsav. .lsa is processed as a full encrypted file; .lsav is processed through its encrypted header/data region. After decryption, AG ReVault validates the result with file signatures before restoring the extension.",
@@ -1117,11 +1441,19 @@ const PROFILES = {
     recovery:"Raw bytes → magic-byte detection → extension restoration.",
     limits:"No undocumented private-vault decryption or password bypass."
   },
-  iphone: {
-    id:"iphone", name:"iPhone Photos", group:"iOS Photos", extensions:[".jpg",".jpeg",".png",".heic",".heif",".mov",".mp4"], description:"Exported media + signature recovery", supported:true, engine:"repair", level:"signature", detailTitle:"Exported iPhone media", detail:"This profile is for normal files supplied to the browser. It does not bypass Apple-protected storage.", paths:"Files/iCloud/exports → select the file in AG ReVault.", recovery:"Signature detection → extension restoration.", limits:"No protected-album or account-security bypass." },
-  repair: { id:"repair", name:"Auto Detect / File Repair", group:"Format recovery", extensions:[], description:"Detect supported files by content signature", supported:true, engine:"repair", level:"signature", detailTitle:"Automatic signature recovery", detail:"Checks the actual bytes for common image, video, audio, PDF and archive signatures. Useful when a hidden file has no extension or a wrong extension.", paths:"Any accessible file selected from File Manager.", recovery:"Magic bytes → MIME/type → safe output extension.", limits:"If the bytes are encrypted/randomized or damaged before the signature, extension-only recovery cannot reconstruct the original." },
+  repair: { id:"repair", name:"Auto Detect / File Repair", group:"Format recovery", extensions:[], description:"Detect supported files by content signature", supported:true, engine:"repair", level:"signature", detailTitle:"Automatic signature recovery", detail:"Checks the actual bytes for common image, video, audio, PDF and archive signatures. Also routes files with known encrypted/container formats to a credential-based decryption adapter when a supported format and required password/key are available. Unknown proprietary encryption is never guessed.", paths:"Any accessible file selected from File Manager.", recovery:"Magic bytes → MIME/type → safe output extension.", limits:"If the bytes are encrypted/randomized or damaged before the signature, extension-only recovery cannot reconstruct the original." },
   other: { id:"other", name:"Other / Unknown OEM", group:"Format-based recovery", extensions:[], description:"Signature-based recovery only", supported:true, engine:"repair", level:"signature", detailTitle:"Unknown OEM / app files", detail:"Uses content signatures only. This profile deliberately avoids guessing an OEM encryption format.", paths:"Any raw file that the user can legally/accessibly select.", recovery:"Signature detection → supported extension.", limits:"No universal decryptor or brute-force key search." }
 };
+
+const FILE_TYPES = [
+  {id:"images",name:"Images",icon:"image",extensions:"JPG · JPEG · PNG · GIF · WebP · BMP · TIFF · PSD · ICO · HEIC/HEIF",description:"Works when image bytes are intact, even with a missing or wrong extension.",phones:"Common on Android phones and iPhone exports.",method:"Signature check → type detection → extension restore."},
+  {id:"video",name:"Video",icon:"video",extensions:"MP4 · MOV · 3GP · WebM · MKV · AVI",description:"Finds common camera and exported video containers.",phones:"Common across Android phones and iPhone exports.",method:"Container check → type detection → extension restore."},
+  {id:"audio",name:"Audio",icon:"audio",extensions:"MP3 · M4A · M4B · AAC · WAV · OGG · FLAC · AMR · AIFF",description:"Works when the audio header is intact.",phones:"Common in recordings, voice notes and downloads.",method:"Audio signature check → extension restore."},
+  {id:"documents",name:"Documents",icon:"file",extensions:"PDF · RTF · legacy Microsoft Office",description:"Finds supported document formats. Encrypted files need the correct password/key.",phones:"Common in Downloads, Documents and exported files.",method:"Signature check → format validation → supported decrypt."},
+  {id:"archives",name:"Archives & Packages",icon:"archive",extensions:"ZIP · RAR · 7Z · GZIP · BZIP2 · XZ · TAR · ISO · APK/EPUB/Office ZIP containers",description:"Finds common archives and containers. Encrypted archives need the correct password.",phones:"Common in Downloads, backups and exported packages.",method:"Container check → archive parser → safe recovery."},
+  {id:"data",name:"Data & Binary Files",icon:"file",extensions:"SQLite · EXE/PE · ELF · WebAssembly · Java class · UTF-8/UTF-16 text",description:"Identifies known structured and binary formats.",phones:"Common in app data, backups and downloaded packages.",method:"Signature check → type classification → extension restore."},
+  {id:"encrypted",name:"Known Encrypted Files",icon:"lock",extensions:"MIUI .lsa / .lsav · password-protected supported formats",description:"Uses a dedicated adapter for known encrypted formats. MIUI .lsa/.lsav is supported; password-protected formats need the user's password/key.",phones:"Most commonly seen on Xiaomi, Redmi & POCO; other formats vary by app.",method:"Known-format adapter → credential/static parameters → decrypt → verify."}
+];
 
 const I18N = {
   en: {
@@ -1129,7 +1461,7 @@ const I18N = {
     homeTitle:"Your files will be recovered privately.",
     homeDescription:"Bring back supported photos, videos and files — right on your device.",
     profileLabel:"Recovery profile",
-    change:"Change",
+    change:"View",
     startRecovery:"Start recovery",
     privacy:"Files are processed locally in your browser.",
     chooseProfile:"Choose recovery profile",
@@ -1241,12 +1573,13 @@ function svgIcon(name, size=18){
     warning:`<path d="m12 3 9 17H3L12 3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M12 9v4M12 16.5v.1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>`,
     error:`<circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><path d="m9 9 6 6m0-6-6 6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>`,
     info:`<circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><path d="M12 10v6M12 7.5v.1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>`,
+    eye:`<path d="M2.8 12s3.2-5 9.2-5 9.2 5 9.2 5-3.2 5-9.2 5-9.2-5-9.2-5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle cx="12" cy="12" r="2.6" stroke="currentColor" stroke-width="1.7"/>`,
     download:`<path d="M12 3v12m0 0-4-4m4 4 4-4M5 18v2h14v-2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>`,
     share:`<circle cx="18" cy="5" r="2.5" stroke="currentColor" stroke-width="1.7"/><circle cx="6" cy="12" r="2.5" stroke="currentColor" stroke-width="1.7"/><circle cx="18" cy="19" r="2.5" stroke="currentColor" stroke-width="1.7"/><path d="m8.3 10.8 7.4-4.6M8.3 13.2l7.4 4.6" stroke="currentColor" stroke-width="1.7"/>`,
     fullscreen:`<path d="M8 4H4v4M16 4h4v4M20 16v4h-4M4 16v4h4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>`,
     external:`<path d="M14 4h6v6M20 4l-9 9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M19 13v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>`,
     switch:`<path d="M7 7h10l-2.5-2.5M17 17H7l2.5 2.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M17 7v3M7 14v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>`,
-    delete:`<path d="M5 7.5h14M9 7.5V4.5h6v3M8 10.5v8M12 10.5v8M16 10.5v8M6.5 7.5l1 13h9l1-13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>`,
+    delete:`<path d="M7 7.5h10l-.7 12H7.7L7 7.5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M5 7.5h14M9 4.8h6M10 11v5.5M14 11v5.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>`,
     telegram:`<path d="m21 4-3.1 16-5.8-4.5-3.1 2.9.7-4.2L17.5 7l-8.2 5.1-5.1-1.6L21 4Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>`,
     gmail:`<path d="M3.5 6.2 12 12.6l8.5-6.4V18.5" fill="none" stroke="#EA4335" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.5 18.5V6.2L12 12.6" fill="none" stroke="#4285F4" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.5 6.2V18.5" fill="none" stroke="#34A853" stroke-width="2.2" stroke-linecap="round"/><path d="M20.5 6.2V18.5" fill="none" stroke="#FBBC04" stroke-width="2.2" stroke-linecap="round"/>`
   };
@@ -1292,33 +1625,66 @@ function detectHiddenMarker(filename){
 
 function detectType(data){
   const d = data instanceof Uint8Array ? data : new Uint8Array(data);
-  if(startsWithBytes(d,[0xFF,0xD8,0xFF])) return {type:"image",mime:"image/jpeg",extension:".jpg",label:"JPEG"};
-  if(startsWithBytes(d,[0x89,0x50,0x4E,0x47,0x0D,0x0A,0x1A,0x0A])) return {type:"image",mime:"image/png",extension:".png",label:"PNG"};
-  if(startsWithBytes(d,[0x47,0x49,0x46,0x38])) return {type:"image",mime:"image/gif",extension:".gif",label:"GIF"};
-  if(startsWithBytes(d,[0x52,0x49,0x46,0x46]) && asciiAt(d,8,4)==="WEBP") return {type:"image",mime:"image/webp",extension:".webp",label:"WebP"};
-  if(startsWithBytes(d,[0x42,0x4D])) return {type:"image",mime:"image/bmp",extension:".bmp",label:"BMP"};
-  if(isIsoBmff(d)){
-    const brand = asciiAt(d,8,4);
-    const brand4 = asciiAt(d,8,4).toLowerCase();
-    if(["heic","heix","hevc","hevx","mif1","msf1"].includes(brand4)) return {type:"image",mime:"image/heic",extension:".heic",label:"HEIC / HEIF"};
-    if(brand4 === "qt") return {type:"video",mime:"video/quicktime",extension:".mov",label:"MOV"};
-    if(["m4a ","M4A ","m4b ","M4B "].some(x=>brand===x) || /^(M4A |M4B )$/i.test(brand)) return {type:"audio",mime:"audio/mp4",extension:".m4a",label:"M4A"};
-    const videoBrands = ["isom","iso2","iso3","iso4","iso5","iso6","mp41","mp42","avc1","dash","msnv","3gp4","3gp5","3g2a"];
-    if(videoBrands.includes(brand4)) return {type:"video",mime:"video/mp4",extension:".mp4",label:"MP4"};
-    if(/^(m4a|m4b)/i.test(brand)) return {type:"audio",mime:"audio/mp4",extension:".m4a",label:"M4A"};
-    return {type:"video",mime:"video/mp4",extension:".mp4",label:"MP4"};
+  const has=(...b)=>startsWithBytes(d,b);
+  const textAt=(o,n)=>asciiAt(d,o,n);
+  const ascii=(o,n)=>textAt(o,n);
+  const isoBmff=isIsoBmff(d);
+
+  // Images
+  if(has(0xFF,0xD8,0xFF)) return {type:"image",mime:"image/jpeg",extension:".jpg",label:"JPEG",engine:"signature"};
+  if(has(0x89,0x50,0x4E,0x47,0x0D,0x0A,0x1A,0x0A)) return {type:"image",mime:"image/png",extension:".png",label:"PNG",engine:"signature"};
+  if(has(0x47,0x49,0x46,0x38)) return {type:"image",mime:"image/gif",extension:".gif",label:"GIF",engine:"signature"};
+  if(has(0x52,0x49,0x46,0x46) && ascii(8,4)==="WEBP") return {type:"image",mime:"image/webp",extension:".webp",label:"WebP",engine:"signature"};
+  if(has(0x42,0x4D)) return {type:"image",mime:"image/bmp",extension:".bmp",label:"BMP",engine:"signature"};
+  if(has(0x49,0x49,0x2A,0x00) || has(0x4D,0x4D,0x00,0x2A)) return {type:"image",mime:"image/tiff",extension:".tiff",label:"TIFF",engine:"signature"};
+  if(has(0x38,0x42,0x50,0x53)) return {type:"image",mime:"image/vnd.adobe.photoshop",extension:".psd",label:"Photoshop PSD",engine:"signature"};
+  if(has(0x00,0x00,0x01,0x00)) return {type:"image",mime:"image/x-icon",extension:".ico",label:"ICO",engine:"signature"};
+  if(isoBmff){
+    const brand=ascii(8,4), b=brand.toLowerCase();
+    if(["heic","heix","hevc","hevx","mif1","msf1"].includes(b)) return {type:"image",mime:"image/heic",extension:".heic",label:"HEIC / HEIF",engine:"container"};
+    if(b==="qt  ") return {type:"video",mime:"video/quicktime",extension:".mov",label:"MOV",engine:"container"};
+    if(/^m4[ab]/i.test(brand)) return {type:"audio",mime:"audio/mp4",extension:b.startsWith("m4b")?".m4b":".m4a",label:b.startsWith("m4b")?"M4B":"M4A",engine:"container"};
+    return {type:"video",mime:"video/mp4",extension:b.startsWith("3gp")?".3gp":".mp4",label:b.startsWith("3gp")?"3GP":"MP4",engine:"container"};
   }
-  if(startsWithBytes(d,[0x1A,0x45,0xDF,0xA3])) return {type:"video",mime:"video/webm",extension:".webm",label:"WebM / MKV"};
-  if(startsWithBytes(d,[0x52,0x49,0x46,0x46]) && asciiAt(d,8,4)==="AVI ") return {type:"video",mime:"video/x-msvideo",extension:".avi",label:"AVI"};
-  if(startsWithBytes(d,[0x52,0x49,0x46,0x46]) && asciiAt(d,8,4)==="WAVE") return {type:"audio",mime:"audio/wav",extension:".wav",label:"WAV"};
-  if(startsWithBytes(d,[0x4F,0x67,0x67,0x53])) return {type:"audio",mime:"audio/ogg",extension:".ogg",label:"OGG"};
-  if(startsWithBytes(d,[0x66,0x4C,0x61,0x43])) return {type:"audio",mime:"audio/flac",extension:".flac",label:"FLAC"};
-  if(startsWithBytes(d,[0x25,0x50,0x44,0x46])) return {type:"pdf",mime:"application/pdf",extension:".pdf",label:"PDF"};
-  if(startsWithBytes(d,[0x50,0x4B,0x03,0x04]) || startsWithBytes(d,[0x50,0x4B,0x05,0x06]) || startsWithBytes(d,[0x50,0x4B,0x07,0x08])) return {type:"archive",mime:"application/zip",extension:".zip",label:"ZIP"};
-  if(startsWithBytes(d,[0x52,0x61,0x72,0x21,0x1A,0x07])) return {type:"archive",mime:"application/vnd.rar",extension:".rar",label:"RAR"};
-  if(startsWithBytes(d,[0x37,0x7A,0xBC,0xAF,0x27,0x1C])) return {type:"archive",mime:"application/x-7z-compressed",extension:".7z",label:"7-Zip"};
-  if(startsWithBytes(d,[0x49,0x44,0x33]) || (d.length>=2 && d[0]===0xFF && (d[1]&0xE0)===0xE0)) return {type:"audio",mime:"audio/mpeg",extension:".mp3",label:"MP3"};
-  return {type:"unknown",mime:"application/octet-stream",extension:".bin",label:"Unknown"};
+
+  // Video / audio
+  if(has(0x1A,0x45,0xDF,0xA3)) return {type:"video",mime:"video/webm",extension:".webm",label:"WebM / Matroska",engine:"container"};
+  if(has(0x52,0x49,0x46,0x46) && ascii(8,4)==="AVI ") return {type:"video",mime:"video/x-msvideo",extension:".avi",label:"AVI",engine:"container"};
+  if(has(0x52,0x49,0x46,0x46) && ascii(8,4)==="WAVE") return {type:"audio",mime:"audio/wav",extension:".wav",label:"WAV",engine:"container"};
+  if(has(0x4F,0x67,0x67,0x53)) return {type:"audio",mime:"audio/ogg",extension:".ogg",label:"Ogg",engine:"container"};
+  if(has(0x66,0x4C,0x61,0x43)) return {type:"audio",mime:"audio/flac",extension:".flac",label:"FLAC",engine:"signature"};
+  if(has(0x23,0x21,0x41,0x4D,0x52)) return {type:"audio",mime:"audio/amr",extension:".amr",label:"AMR",engine:"signature"};
+  if(has(0x49,0x44,0x33) || (d.length>=2 && d[0]===0xFF && (d[1]&0xE0)===0xE0)) return {type:"audio",mime:"audio/mpeg",extension:".mp3",label:"MP3",engine:"signature"};
+  if(has(0xFF,0xF1) || has(0xFF,0xF9)) return {type:"audio",mime:"audio/aac",extension:".aac",label:"AAC",engine:"signature"};
+  if(has(0x46,0x4F,0x52,0x4D) && ascii(8,4)==="AIFF") return {type:"audio",mime:"audio/aiff",extension:".aiff",label:"AIFF",engine:"container"};
+
+  // Documents / ebook
+  if(has(0x25,0x50,0x44,0x46,0x2D)) return {type:"pdf",mime:"application/pdf",extension:".pdf",label:"PDF",engine:"signature"};
+  if(has(0x7B,0x5C,0x72,0x74,0x66)) return {type:"document",mime:"application/rtf",extension:".rtf",label:"Rich Text Format",engine:"signature"};
+  if(has(0xD0,0xCF,0x11,0xE0,0xA1,0xB1,0x1A,0xE1)) return {type:"document",mime:"application/vnd.ms-office",extension:".doc",label:"Microsoft Office Binary",engine:"container"};
+
+  // Archives / package containers
+  if(has(0x50,0x4B,0x03,0x04) || has(0x50,0x4B,0x05,0x06) || has(0x50,0x4B,0x07,0x08)) return {type:"archive",mime:"application/zip",extension:".zip",label:"ZIP / Office / APK / EPUB container",engine:"archive"};
+  if(has(0x52,0x61,0x72,0x21,0x1A,0x07)) return {type:"archive",mime:"application/vnd.rar",extension:".rar",label:"RAR",engine:"archive"};
+  if(has(0x37,0x7A,0xBC,0xAF,0x27,0x1C)) return {type:"archive",mime:"application/x-7z-compressed",extension:".7z",label:"7-Zip",engine:"archive"};
+  if(has(0x1F,0x8B,0x08)) return {type:"archive",mime:"application/gzip",extension:".gz",label:"GZIP",engine:"archive"};
+  if(has(0x42,0x5A,0x68)) return {type:"archive",mime:"application/x-bzip2",extension:".bz2",label:"BZIP2",engine:"archive"};
+  if(has(0xFD,0x37,0x7A,0x58,0x5A,0x00)) return {type:"archive",mime:"application/x-xz",extension:".xz",label:"XZ",engine:"archive"};
+  if(has(0x75,0x73,0x74,0x61,0x72)) return {type:"archive",mime:"application/x-tar",extension:".tar",label:"TAR",engine:"archive"};
+
+  // Databases / executable / binary formats
+  if(has(0x53,0x51,0x4C,0x69,0x74,0x65,0x20,0x66,0x6F,0x72,0x6D,0x61,0x74,0x20,0x33,0x00)) return {type:"database",mime:"application/vnd.sqlite3",extension:".sqlite",label:"SQLite Database",engine:"database"};
+  if(has(0x4D,0x5A)) return {type:"binary",mime:"application/vnd.microsoft.portable-executable",extension:".exe",label:"Windows PE / EXE",engine:"binary"};
+  if(has(0x7F,0x45,0x4C,0x46)) return {type:"binary",mime:"application/x-elf",extension:".elf",label:"ELF Binary",engine:"binary"};
+  if(has(0x00,0x61,0x73,0x6D)) return {type:"binary",mime:"application/wasm",extension:".wasm",label:"WebAssembly",engine:"binary"};
+  if(has(0xCA,0xFE,0xBA,0xBE) || has(0xCA,0xFE,0xD0,0x0D)) return {type:"binary",mime:"application/octet-stream",extension:".class",label:"Java Class / Mach-O Universal",engine:"binary"};
+  if(d.length>=0x8006 && ascii(0x8001,5)==="CD001") return {type:"archive",mime:"application/x-iso9660-image",extension:".iso",label:"ISO 9660 Disc Image",engine:"container"};
+
+  // Text formats without a strong binary signature: conservative UTF-8 / UTF-16 detection.
+  if(d.length>=3 && d[0]===0xEF && d[1]===0xBB && d[2]===0xBF) return {type:"text",mime:"text/plain;charset=utf-8",extension:".txt",label:"UTF-8 Text",engine:"text"};
+  if(d.length>=2 && ((d[0]===0xFF&&d[1]===0xFE)||(d[0]===0xFE&&d[1]===0xFF))) return {type:"text",mime:"text/plain",extension:".txt",label:"UTF-16 Text",engine:"text"};
+
+  return {type:"unknown",mime:"application/octet-stream",extension:".bin",label:"Unknown / Encrypted / Unsupported",engine:"unknown"};
 }
 const MIUI_KEY = new Uint8Array([
   0x30,0x82,0x04,0x6c,0x30,0x82,0x03,0x54,
@@ -1589,8 +1955,6 @@ function buildZip(entries){
   return new Blob([concatUint8([...locals,...centrals,end])],{type:"application/zip"});
 }
 async function processZip(file){
-  const profile=PROFILES[state.selectedProfile];
-  if(!profile || profile.engine!=="miui") throw new Error(t("unsupportedProfile"));
   const buffer=await file.arrayBuffer(), extracted=await extractZipEntries(buffer);
   if(!extracted.length) throw new Error("ZIP empty");
   const outputEntries=[], innerResults=[];
@@ -1625,45 +1989,20 @@ async function processZip(file){
 RECOVERY
 ========================= */
 function yieldToBrowser(){return new Promise(resolve=>setTimeout(resolve,0));}
-async function processFile(file, index=0, total=1){
-  const profile=PROFILES[state.selectedProfile];
-  if(!profile) throw new Error(t("unsupportedProfile"));
+async function processFile(file,index=0,total=1){
   const ext=getExtension(file.name);
-  if(!validateCrypto() && profile.engine==="miui") throw new Error("Web Crypto unavailable");
   const original=new Uint8Array(await file.arrayBuffer());
-
-  // .nomedia is a media-scanner marker, not recoverable media data.
-  if(detectHiddenMarker(file.name)) {
-    return {name:file.name,outputName:file.name,type:{type:"marker",mime:"application/octet-stream",extension:"",label:".nomedia marker"},size:original.length,status:"kept",data:original,path:relativePath(file),repairOnly:true,message:".nomedia is a media-scanner marker; it does not contain the hidden photo/video itself."};
+  if(detectHiddenMarker(file.name)) return {name:file.name,outputName:file.name,type:{type:"marker",mime:"application/octet-stream",extension:"",label:".nomedia marker"},size:original.length,status:"kept",data:original,path:relativePath(file),repairOnly:true,message:".nomedia is a media-scanner marker; it does not contain the hidden photo/video itself."};
+  if(ext===".lsa"||ext===".lsav"){
+    if(!validateCrypto()) throw new Error("Web Crypto unavailable");
+    let decrypted;if(ext===".lsa") decrypted=await decryptMIUI(original); else {const header=await decryptMIUI(original.slice(0,1024));decrypted=original.slice();decrypted.set(header,0);}
+    const type=detectType(decrypted);if(type.type==="unknown") throw new Error("Unknown decrypted type");
+    const outputName=outputNameFromPath(relativePath(file),type.extension);return {name:file.name,outputName,relativePath:relativePath(file),type,size:decrypted.length,status:"completed",data:decrypted,path:outputName,decrypted:true};
   }
-
-  // Safe, non-decrypting recovery for normal files with missing/wrong extensions.
-  if(profile.engine!=="miui") {
-    const type=detectType(original);
-    if(type.type==="unknown") return {name:file.name,outputName:file.name,type,size:file.size,status:"unsupported",message:t("unsupportedFormat"),path:relativePath(file)};
-    const out=outputNameFromPath(relativePath(file),type.extension);
-    return {name:file.name,outputName:out,relativePath:relativePath(file),type,size:original.length,status:"completed",data:original,path:out,repairOnly:true};
-  }
-
-  if(ext!==".lsa" && ext!==".lsav") {
-    const type=detectType(original);
-    if(type.type!=="unknown") {
-      const out=outputNameFromPath(relativePath(file),type.extension);
-      return {name:file.name,outputName:out,relativePath:relativePath(file),type,size:original.length,status:"completed",data:original,path:out,repairOnly:true};
-    }
-    return {name:file.name,outputName:file.name,type,size:file.size,status:"unsupported",message:t("unsupportedFormat"),path:relativePath(file)};
-  }
-  let decrypted;
-  if(ext===".lsa") decrypted=await decryptMIUI(original);
-  else {
-    const header=original.slice(0,1024);
-    const decryptedHeader=await decryptMIUI(header);
-    decrypted=original.slice(); decrypted.set(decryptedHeader,0);
-  }
-  const type=detectType(decrypted);
-  if(type.type==="unknown") throw new Error("Unknown decrypted type");
-  const outputName=outputNameFromPath(relativePath(file),type.extension);
-  return {name:file.name,outputName,relativePath:relativePath(file),type,size:decrypted.length,status:"completed",data:decrypted,path:outputName};
+  const type=detectType(original);
+  if(type.type==="unknown") return {name:file.name,outputName:file.name,type,size:file.size,status:"unsupported",message:t("unsupportedFormat"),path:relativePath(file)};
+  const out=outputNameFromPath(relativePath(file),type.extension);
+  return {name:file.name,outputName:out,relativePath:relativePath(file),type,size:original.length,status:"completed",data:original,path:out,repairOnly:true};
 }
 function outputNameFromPath(path,extension){
   const normalized=(path||"recovered").replaceAll("\\","/");
@@ -1708,6 +2047,75 @@ async function openWithFile(result){
   setTimeout(()=>URL.revokeObjectURL(url),1500);
   showToast(t("openWithFallback"));
 }
+let filenameEditorState=null;
+function openFilenameEditor(currentName,onSave){
+  const modal=$("filename-editor-modal");
+  if(!modal) return;
+  filenameEditorState={onSave};
+  const input=$("filename-editor-input");
+  input.value=currentName||"recovered.bin";
+  modal.classList.add("open");modal.setAttribute("aria-hidden","false");
+  setTimeout(()=>{input.focus();input.select();},60);
+}
+function closeFilenameEditor(){
+  const modal=$("filename-editor-modal");
+  if(!modal)return;
+  modal.classList.remove("open");modal.setAttribute("aria-hidden","true");
+  filenameEditorState=null;
+}
+function commitFilenameEditor(){
+  if(!filenameEditorState)return;
+  const input=$("filename-editor-input");
+  const cleaned=(input.value||"").trim().replace(/[\\/:*?"<>|]+/g,"_");
+  if(!cleaned){$("filename-editor-note").textContent="File name cannot be empty.";return;}
+  const cb=filenameEditorState.onSave;
+  closeFilenameEditor();
+  cb(cleaned);
+}
+function editRecoveredFileName(result){
+  if(!result) return;
+  const current=result.outputName||result.name||"recovered.bin";
+  openFilenameEditor(current,(cleaned)=>{
+    result.outputName=cleaned;
+    if(result.path) result.path=result.path.replace(/[^/\\]+$/,"" )+cleaned;
+    renderResults();
+    showToast("File name updated");
+  });
+}
+async function updateHistoryRecordName(id,cleaned){
+  if(state.db){
+    await new Promise((resolve,reject)=>{
+      const tx=state.db.transaction("history","readwrite");
+      const store=tx.objectStore("history");
+      const req=store.get(id);
+      req.onsuccess=()=>{const rec=req.result;if(!rec){resolve();return;}rec.outputName=cleaned;rec.path=(rec.path||rec.name||"").replace(/[^/\\]+$/,"" )+cleaned;store.put(rec);};
+      req.onerror=()=>reject(req.error);tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);
+    });
+  }else{
+    const simple=JSON.parse(localStorage.getItem("pfr-history")||"[]");
+    const found=simple.find(x=>x.id===id);
+    if(found){found.outputName=cleaned;found.path=(found.path||found.name||"").replace(/[^/\\]+$/,"" )+cleaned;}
+    localStorage.setItem("pfr-history",JSON.stringify(simple));
+  }
+  const local=state.history.find(x=>x.id===id);
+  if(local){local.outputName=cleaned;local.path=(local.path||local.name||"").replace(/[^/\\]+$/,"" )+cleaned;}
+}
+function showResultDetails(result){
+  if(!result)return;
+  const type=result.type?.label||result.type?.mime||"Unknown";
+  const size=formatBytes(result.size||result.data?.length||0);
+  showAlert("info","File details","",{hideClose:true});
+  const body=$("alert-body");body.replaceChildren();
+  const details=document.createElement("div");details.className="result-details-sheet";
+  details.innerHTML=`<div class="result-detail-row"><span>Name</span><strong>${escapeHtml(result.outputName||result.name||"")}</strong></div><div class="result-detail-row"><span>Type</span><strong>${escapeHtml(type)}</strong></div><div class="result-detail-row"><span>Size</span><strong>${escapeHtml(size)}</strong></div><div class="result-detail-row"><span>Status</span><strong>${escapeHtml(result.status||"unknown")}</strong></div>`;
+  body.appendChild(details);
+  const footer=$("alert-footer");footer.replaceChildren();
+  const edit=document.createElement("button");edit.className="secondary-button";edit.type="button";edit.innerHTML=`${svgIcon("edit",15)}<span>Edit file name</span>`;
+  edit.addEventListener("click",()=>{closeAlert();editRecoveredFileName(result);});
+  const close=document.createElement("button");close.className="primary-button";close.type="button";close.innerHTML=`${svgIcon("close",15)}<span>${t("close")}</span>`;close.addEventListener("click",closeAlert);
+  footer.append(edit,close);
+}
+
 async function saveRecoveredFile(result){
   if(!result || (result.status!=="completed" && result.status!=="kept")) return;
   const blob=result.blob || new Blob([result.data],{type:result.type.mime});
@@ -1902,55 +2310,79 @@ function focusNextPin(input){
 }
 
 function wirePinInputs(){
-  document.querySelectorAll(".pin-digit").forEach(input => {
-    input.addEventListener("input", async () => {
-      input.value = input.value.replace(/\D/g, "").slice(0,1);
-      focusNextPin(input);
+  const root = $("password-sheet");
+  if(!root || root.dataset.pinWired === "1") return;
+  root.dataset.pinWired = "1";
 
-      if(getSheetPin().length === 4){
-        await handlePasswordSheetAction();
-      }
-    });
+  // Delegated handlers survive every re-render of the PIN boxes.
+  root.addEventListener("input", async event => {
+    const input = event.target.closest?.(".pin-digit");
+    if(!input || !root.contains(input)) return;
 
-    input.addEventListener("keydown", event => {
-      if(event.key !== "Backspace" || input.value) return;
+    input.value = input.value.replace(/\D/g, "").slice(0,1);
+    focusNextPin(input);
+    keepPinVisible(input);
 
+    if(getSheetPin().length === 4){
+      await handlePasswordSheetAction();
+    }
+  });
+
+  root.addEventListener("keydown", event => {
+    const input = event.target.closest?.(".pin-digit");
+    if(!input || !root.contains(input)) return;
+
+    if(event.key === "Backspace" && !input.value){
       const row = input.closest(".pin-row");
       const inputs = [...row.querySelectorAll(".pin-digit")];
       const index = inputs.indexOf(input);
-
       if(index > 0){
+        event.preventDefault();
         inputs[index - 1].value = "";
         inputs[index - 1].focus();
+        keepPinVisible(inputs[index - 1]);
       }
-    });
-
-    input.addEventListener("paste", event => {
-      event.preventDefault();
-
-      const value = (event.clipboardData?.getData("text") || "")
-        .replace(/\D/g, "")
-        .slice(0,4);
-
+    } else if(event.key === "ArrowLeft" || event.key === "ArrowRight") {
       const row = input.closest(".pin-row");
       const inputs = [...row.querySelectorAll(".pin-digit")];
       const index = inputs.indexOf(input);
-
-      [...value].forEach((digit, offset) => {
-        if(inputs[index + offset]){
-          inputs[index + offset].value = digit;
-        }
-      });
-
-      if(getSheetPin().length === 4){
-        handlePasswordSheetAction();
-        return;
-      }
-
-      const nextIndex = Math.min(index + value.length, inputs.length - 1);
-      inputs[nextIndex]?.focus();
-    });
+      const next = event.key === "ArrowLeft" ? index - 1 : index + 1;
+      if(inputs[next]){ event.preventDefault(); inputs[next].focus(); }
+    }
   });
+
+  root.addEventListener("paste", event => {
+    const input = event.target.closest?.(".pin-digit");
+    if(!input || !root.contains(input)) return;
+    event.preventDefault();
+
+    const value = (event.clipboardData?.getData("text") || "")
+      .replace(/\D/g, "").slice(0,4);
+    if(!value) return;
+
+    const row = input.closest(".pin-row");
+    const inputs = [...row.querySelectorAll(".pin-digit")];
+    const index = inputs.indexOf(input);
+
+    [...value].forEach((digit, offset) => {
+      if(inputs[index + offset]) inputs[index + offset].value = digit;
+    });
+
+    if(getSheetPin().length === 4){
+      handlePasswordSheetAction();
+    } else {
+      inputs[Math.min(index + value.length, inputs.length - 1)]?.focus();
+    }
+  });
+}
+
+function keepPinVisible(input){
+  if(!input) return;
+  setTimeout(() => {
+    try{
+      input.scrollIntoView({block:"center", inline:"nearest", behavior:"smooth"});
+    }catch(_){}
+  }, 40);
 }
 
 /* ============================================================
@@ -2206,7 +2638,11 @@ async function renderPasswordSheet(mode, step = 1) {
 function openPasswordSheet(mode="set",step=1){
   const root = $("password-sheet");
 
+  // Always start from the requested flow. Never reuse a previous Forgot/Change/Unlock view.
   state.passwordSheet = {mode,step};
+  state.passwordFirstPin = "";
+  state.passwordOldPin = "";
+  state.passwordNewPin = "";
 
   clearPinInputs();
   renderPasswordSheet(mode,step);
@@ -2222,6 +2658,23 @@ function closePasswordSheet(){
 
   root.classList.remove("open");
   root.setAttribute("aria-hidden","true");
+
+  // Fully reset the rendered sheet too, so Forgot Password can never leak
+  // into the next Password Settings session.
+  const body = $("password-sheet-body");
+  body.style.display = "block";
+  body.innerHTML = `
+    <div class="pin-row">
+      <input class="pin-digit" id="pin-sheet-1" type="password" inputmode="numeric" maxlength="1" autocomplete="one-time-code">
+      <input class="pin-digit" id="pin-sheet-2" type="password" inputmode="numeric" maxlength="1" autocomplete="one-time-code">
+      <input class="pin-digit" id="pin-sheet-3" type="password" inputmode="numeric" maxlength="1" autocomplete="one-time-code">
+      <input class="pin-digit" id="pin-sheet-4" type="password" inputmode="numeric" maxlength="1" autocomplete="one-time-code">
+    </div>
+    <div id="password-sheet-note" class="password-note"></div>
+  `;
+  $("password-sheet-footer").replaceChildren();
+  $("password-sheet-title").textContent = "History password";
+  $("password-sheet-subtitle").textContent = "Enter a 4-digit password.";
 
   clearPinInputs();
 
@@ -2520,12 +2973,12 @@ function updateLanguage(){
   $("home-title").textContent=t("homeTitle");
   $("home-description").textContent=t("homeDescription");
   $("profile-label").textContent=t("profileLabel");
-  $("change-profile-button").textContent=t("change");
+  $("change-profile-button").innerHTML=`${svgIcon("eye",15)}<span>View</span>`;
   $("start-recover-text").textContent=t("startRecovery");
   $("privacy-home").querySelector("span").textContent=t("privacy");
-  $("profile-modal-title").textContent=t("chooseProfile");
-  $("profile-modal-subtitle").textContent=t("chooseProfileSub");
-  $("recover-profile-caption").textContent=PROFILES[state.selectedProfile].name;
+  $("profile-modal-title").textContent="Supported file types";
+  $("profile-modal-subtitle").textContent="Browse recoverable formats and common phone sources.";
+  $("recover-profile-caption").textContent="Automatic file-type recovery";
   $("recover-title").textContent=t("recoverTitle");
   $("recover-subtitle").textContent=t("recoverSubtitle");
   $("drop-title").textContent=t("dropTitle");
@@ -2543,8 +2996,8 @@ function updateLanguage(){
   $("clear-history-button").textContent=t("clearHistory");
   $("nav-home").textContent="Home";$("nav-recover").textContent=t("recover");$("nav-history").textContent=t("history");$("nav-settings").textContent="Settings";
 
-  $("selected-profile-name").textContent=PROFILES[state.selectedProfile].name;
-  $("selected-profile-sub").textContent=PROFILES[state.selectedProfile].engine==="miui"?".lsa and .lsav":t("otherSupport");
+  $("selected-profile-name").textContent="All supported file types";
+  $("selected-profile-sub").textContent="Automatic detection • known encrypted formats supported";
   renderProfileGrid();renderPendingFiles();renderResults();renderHistory();
 }
 function profileIcon(profile){
@@ -2558,54 +3011,61 @@ function profileLevelLabel(profile){
   return "Signature recovery";
 }
 function renderProfileGrid(){
-  const grid=$("profile-selection-grid");grid.replaceChildren();
-  Object.values(PROFILES).forEach(profile=>{
-    const wrap=document.createElement("div");
-    wrap.className="profile-list-item"+(profile.id===state.selectedProfile?" selected":"");
-    wrap.innerHTML=`
-      <div class="profile-list-main">
-        <div class="profile-icon">${profileIcon(profile.id)}</div>
-        <div class="profile-list-copy">
-          <div class="profile-list-title">${escapeHtml(profile.name)}${profile.id===state.selectedProfile?`<span class="profile-selected-check" aria-label="Selected">${svgIcon("check",11)}</span>`:""}</div>
-          <div class="profile-list-sub">${escapeHtml(profile.description)}</div>
-          <span class="profile-list-badge ${profile.level==='decrypt'?'decrypt':'signature'}">${escapeHtml(profileLevelLabel(profile))}</span>
+  const grid=$("profile-selection-grid");
+  grid.replaceChildren();
+  FILE_TYPES.forEach(item=>{
+    const row=document.createElement("div");
+    row.className="file-type-row";
+    row.innerHTML=`
+      <div class="profile-list-item file-type-item">
+        <div class="profile-list-main">
+          <div class="profile-icon">${svgIcon(item.icon,22)}</div>
+          <div class="profile-list-copy">
+            <div class="profile-list-title">${escapeHtml(item.name)}</div>
+            <div class="profile-list-sub">${escapeHtml(item.extensions)}</div>
+          </div>
+          <button type="button" class="profile-details-button" aria-expanded="false" aria-label="Show ${escapeHtml(item.name)} details">${svgIcon("chevron",16)}</button>
         </div>
-        <button type="button" class="profile-details-button" aria-expanded="false" aria-label="Show ${escapeHtml(profile.name)} details">${svgIcon("chevron",16)}</button>
       </div>
-      <div class="profile-list-details" hidden>
-        <div class="profile-detail-line"><b>Method</b><span>${escapeHtml(profile.recovery)}</span></div>
-        <div class="profile-detail-line"><b>Files</b><span>${escapeHtml(profile.extensions.join(", ") || "Content signature")}</span></div>
-        <div class="profile-detail-line"><b>Where to look</b><span>${escapeHtml(profile.paths)}</span></div>
-        <div class="profile-detail-line"><b>Limit</b><span>${escapeHtml(profile.limits)}</span></div>
+      <div class="profile-list-details-panel" hidden>
+        <div class="profile-detail-line"><b>Recoverable</b><span>${escapeHtml(item.description)}</span></div>
+        <div class="profile-detail-line"><b>Common on</b><span>${escapeHtml(item.phones)}</span></div>
+        <div class="profile-detail-line"><b>Engine</b><span>${escapeHtml(item.method)}</span></div>
       </div>`;
-    const detailsBtn=wrap.querySelector(".profile-details-button");
-    const details=wrap.querySelector(".profile-list-details");
+    const detailsBtn=row.querySelector(".profile-details-button");
+    const details=row.querySelector(".profile-list-details-panel");
     detailsBtn.addEventListener("click",e=>{
       e.stopPropagation();
-      const open=!details.hidden;
-      details.hidden=open;
-      detailsBtn.setAttribute("aria-expanded",String(!open));
-      detailsBtn.classList.toggle("open",!open);
+      const willOpen=details.hidden;
+      grid.querySelectorAll(".profile-list-details-panel:not([hidden])").forEach(panel=>{
+        panel.hidden=true;
+        const prevRow=panel.parentElement;
+        prevRow?.classList.remove("details-open");
+        prevRow?.querySelector(".profile-details-button")?.classList.remove("open");
+        prevRow?.querySelector(".profile-details-button")?.setAttribute("aria-expanded","false");
+      });
+      details.hidden=!willOpen;
+      detailsBtn.setAttribute("aria-expanded",String(willOpen));
+      detailsBtn.classList.toggle("open",willOpen);
+      row.classList.toggle("details-open",willOpen);
     });
-    wrap.querySelector(".profile-list-main").addEventListener("click",e=>{
-      if(e.target.closest(".profile-details-button"))return;
-      selectProfile(profile.id);
+    details.addEventListener("click",e=>{
+      if(e.target.closest("a,button,input,select,textarea")) return;
+      e.stopPropagation();
+      details.hidden=true;
+      row.classList.remove("details-open");
+      detailsBtn.setAttribute("aria-expanded","false");
+      detailsBtn.classList.remove("open");
     });
-    grid.appendChild(wrap);
+    grid.appendChild(row);
   });
 }
-function selectProfile(profileId){
-  const profile=PROFILES[profileId];
-  if(!profile) return;
-  state.selectedProfile=profileId;localStorage.setItem("agr-selected-profile",profileId);
-  $("selected-profile-icon").innerHTML=profileIcon(profileId);
-  $("selected-profile-name").textContent=profile.name;
-  $("selected-profile-sub").textContent=profile.engine==="miui"?"MIUI / HyperOS • .lsa / .lsav":profile.description;
-  $("recover-profile-caption").textContent=profile.name;
-  renderProfileGrid();
-  closeProfileModal();
-  showPage(profile.supported?"recover":"recover");
-  if(profile.engine==="repair") showToast(profile.id==="iphone"?"iPhone files are handled as normal exported media; locked Apple authentication is not bypassed.":"Signature-based recovery mode selected.");
+function selectProfile(){
+  state.selectedProfile="auto";localStorage.setItem("agr-selected-profile","auto");
+  $("selected-profile-name").textContent="All supported file types";
+  $("selected-profile-sub").textContent="Automatic detection • known encrypted formats supported";
+  $("recover-profile-caption").textContent="Automatic file-type recovery";
+  closeProfileModal();showPage("recover");
 }
 function showPage(page,force=false){
   const target=$("page-"+page);if(!target)return false;
@@ -2698,16 +3158,34 @@ function renderResults(){
 }
 function createResultCard(result){
   const card=document.createElement("article");card.className="result-card";
-  card.innerHTML=`<div class="preview-box" data-preview></div><div class="file-information"><div class="file-information-text"><div class="file-information-label">${t("fileInfo")}</div><div class="file-information-value">${escapeHtml(result.path||result.relativePath||result.name||"")}</div></div><div class="file-information-actions"></div></div><div class="result-actions"></div>`;
-  const preview=card.querySelector("[data-preview]"),actions=card.querySelector(".result-actions"),infoActions=card.querySelector(".file-information-actions");
+  card.innerHTML=`<div class="preview-stage" data-stage><div class="preview-box" data-preview></div><div class="preview-action-rail" data-media-actions></div></div><div class="result-actions" data-fallback-actions></div>`;
+  const preview=card.querySelector("[data-preview]"),stage=card.querySelector("[data-stage]"),mediaActions=card.querySelector("[data-media-actions]"),fallbackActions=card.querySelector("[data-fallback-actions]");
+  const addAction=(parent,icon,label,fn)=>{const b=document.createElement("button");b.className="secondary-button small-button";b.type="button";b.innerHTML=`${svgIcon(icon,15)}<span>${label}</span>`;b.addEventListener("click",fn);parent.appendChild(b);return b;};
   if(result.status==="completed"&&result.data){
     const media=showPreview(preview,result.data,result.type);
-    if(media&&(result.type.type==="image"||result.type.type==="video")){const fs=document.createElement("button");fs.className="secondary-button small-button";fs.type="button";fs.innerHTML=`${svgIcon("fullscreen",15)}<span>${t("fullscreen")}</span>`;fs.addEventListener("click",()=>showFullscreen(media));infoActions.appendChild(fs);}
-    const save=document.createElement("button");save.className="secondary-button small-button";save.type="button";save.innerHTML=`${svgIcon("download",15)}<span>${t("save")}</span>`;save.addEventListener("click",()=>saveRecoveredFile(result));infoActions.appendChild(save);
-    const share=document.createElement("button");share.className="secondary-button small-button";share.type="button";share.innerHTML=`${svgIcon("share",15)}<span>${t("share")}</span>`;share.addEventListener("click",()=>shareRecoveredFile(result));actions.appendChild(share);
-    const open=document.createElement("button");open.className="secondary-button small-button";open.type="button";open.innerHTML=`${svgIcon("external",15)}<span>${t("openWith")}</span>`;open.addEventListener("click",()=>openWithFile(result));actions.appendChild(open);
-  }else if(result.status==="completed"&&result.isZip&&result.blob){preview.appendChild(previewMessage(t("previewUnavailable")));const save=document.createElement("button");save.className="secondary-button small-button";save.type="button";save.innerHTML=`${svgIcon("download",15)}<span>${t("saveZip")}</span>`;save.addEventListener("click",()=>saveRecoveredFile(result));actions.appendChild(save);}
-  else {preview.appendChild(previewMessage(result.message||t("previewUnavailable")));if(result.data||result.blob){const save=document.createElement("button");save.className="secondary-button small-button";save.type="button";save.innerHTML=`${svgIcon("download",15)}<span>${t("save")}</span>`;save.addEventListener("click",()=>saveRecoveredFile(result));actions.appendChild(save);}}
+    if(media&&(result.type.type==="image"||result.type.type==="video")){
+      addAction(mediaActions,"info","Details",()=>showResultDetails(result));
+      addAction(mediaActions,"download",t("save"),()=>saveRecoveredFile(result));
+      addAction(mediaActions,"share",t("share"),()=>shareRecoveredFile(result));
+      addAction(mediaActions,"external",t("openWith"),()=>openWithFile(result));
+      addAction(mediaActions,"fullscreen",t("fullscreen"),()=>showFullscreen(media));
+      if(result.type.type==="video"){
+        const classify=()=>{if(media.videoWidth&&media.videoHeight)stage.classList.toggle("vertical-video",media.videoHeight>media.videoWidth*1.08);};
+        media.addEventListener("loadedmetadata",classify,{once:true});classify();
+      }
+    }else if(media){
+      addAction(fallbackActions,"info","Details",()=>showResultDetails(result));
+      addAction(fallbackActions,"download",t("save"),()=>saveRecoveredFile(result));
+      addAction(fallbackActions,"share",t("share"),()=>shareRecoveredFile(result));
+      addAction(fallbackActions,"external",t("openWith"),()=>openWithFile(result));
+    }
+  }else if(result.status==="completed"&&result.isZip&&result.blob){
+    preview.appendChild(previewMessage(t("previewUnavailable")));
+    addAction(fallbackActions,"download",t("saveZip"),()=>saveRecoveredFile(result));
+  }else{
+    preview.appendChild(previewMessage(result.message||t("previewUnavailable")));
+    if(result.data||result.blob) addAction(fallbackActions,"download",t("save"),()=>saveRecoveredFile(result));
+  }
   return card;
 }
 function renderHistory(){
@@ -2747,7 +3225,7 @@ async function openHistoryPreview(id){
       const fs=document.createElement("button");fs.className="secondary-button small-button";fs.type="button";fs.innerHTML=`${svgIcon("fullscreen",15)}<span>${t("fullscreen")}</span>`;fs.addEventListener("click",()=>showFullscreen(media));infoActions.appendChild(fs);
     }
     const save=document.createElement("button");save.className="secondary-button small-button";save.type="button";save.innerHTML=`${svgIcon("download",15)}<span>${t("save")}</span>`;save.addEventListener("click",()=>saveRecoveredFile({outputName:item.outputName,data,type:actual,status:"completed"}));infoActions.appendChild(save);
-    info.append(text,infoActions);body.appendChild(info);
+    const edit=document.createElement("button");edit.className="secondary-button small-button";edit.type="button";edit.innerHTML=`${svgIcon("edit",15)}<span>Edit file name</span>`;edit.addEventListener("click",()=>openFilenameEditor(item.outputName||item.name||"recovered.bin",async(cleaned)=>{await updateHistoryRecordName(id,cleaned);openHistoryPreview(id);}));infoActions.appendChild(edit);info.append(text,infoActions);body.appendChild(info);
   }else{
     body.textContent=t("previewUnavailable");
     const footer=$("alert-footer");footer.replaceChildren();
@@ -2830,13 +3308,30 @@ function wireEvents(){
     await processMultipleFiles(files);
   });
   $("clear-history-button").addEventListener("click",()=>showAlert("warning",t("warning"),t("confirmClear"),{confirm:async()=>{await clearHistory();showToast(t("downloadComplete"));}}));
-  $("history-password-button").addEventListener("click",()=>{if(historyLockConfig()?.enabled)openPasswordSheet("manage");else openPasswordSheet("set",1);});
+  $("history-password-button").addEventListener("click",()=>{
+    closePasswordSheet();
+    if(historyLockConfig()?.enabled) openPasswordSheet("manage");
+    else openPasswordSheet("set",1);
+  });
   $("password-sheet-close").addEventListener("click",closePasswordSheet);
   $("password-sheet").addEventListener("click",e=>{if(e.target===$("password-sheet"))closePasswordSheet();});
+  $("filename-editor-close").addEventListener("click",closeFilenameEditor);
+  $("filename-editor-cancel").addEventListener("click",closeFilenameEditor);
+  $("filename-editor-save").addEventListener("click",commitFilenameEditor);
+  $("filename-editor-modal").addEventListener("click",e=>{if(e.target===$("filename-editor-modal"))closeFilenameEditor();});
+  $("filename-editor-input").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();commitFilenameEditor();}else if(e.key==="Escape"){e.preventDefault();closeFilenameEditor();}});
   $("forgot-password-clear-button").addEventListener("click",()=>showAlert("warning","Delete all local recovery data","This permanently deletes every locally stored recovered file and recovery history. The password lock will remain until the data is fully deleted, after which you can remove the password.",{confirm:async()=>{await clearHistory();showToast("All local recovery data deleted.");}}));
   document.querySelectorAll("[data-theme-choice]").forEach(b=>b.addEventListener("click",()=>setTheme(b.dataset.themeChoice)));
-  $("feedback-telegram").addEventListener("click",()=>window.open("https://t.me/aung_myat_minn?text="+encodeURIComponent("AG ReVault feedback\n\nIssue / suggestion: "),"_blank"));
-  $("feedback-gmail").addEventListener("click",()=>{const subject=encodeURIComponent("AG ReVault Feedback");const body=encodeURIComponent("AG ReVault feedback\n\nIssue / suggestion: ");location.href=`mailto:aungmyatminnx@gmail.com?subject=${subject}&body=${body}`;});
+  const feedbackModal=$("feedback-modal");
+  const openFeedback=()=>{feedbackModal.classList.add("open");feedbackModal.setAttribute("aria-hidden","false");setTimeout(()=>$("feedback-subject").focus(),40)};
+  const closeFeedback=()=>{feedbackModal.classList.remove("open");feedbackModal.setAttribute("aria-hidden","true")};
+  const buildFeedback=()=>{const subject=$("feedback-subject").value.trim()||"AG ReVault Feedback";const message=$("feedback-message").value.trim()||"No details provided.";return {subject,message,body:`Dear AG ReVault Team,\n\nSubject: ${subject}\n\nI would like to share the following feedback:\n\n${message}\n\nThank you,\nAG ReVault user`}};
+  $("feedback-open").addEventListener("click",openFeedback);
+  $("feedback-close").addEventListener("click",closeFeedback);
+  feedbackModal.addEventListener("click",e=>{if(e.target===feedbackModal)closeFeedback()});
+  $("feedback-send-telegram").addEventListener("click",()=>{const f=buildFeedback();window.open("https://t.me/aung_myat_minn?text="+encodeURIComponent(f.body),"_blank")});
+  $("feedback-send-gmail").addEventListener("click",()=>{const f=buildFeedback();location.href=`mailto:aungmyatminnx@gmail.com?subject=${encodeURIComponent(f.subject)}&body=${encodeURIComponent(f.body)}`});
+  $("feedback-message").addEventListener("input",()=>{const f=buildFeedback();$("feedback-preview").textContent=`Dear AG ReVault Team,\n\nSubject: ${f.subject}\n\n${f.message}\n\nThank you,\nAG ReVault user`});
   document.querySelectorAll(".nav-item").forEach(btn=>btn.addEventListener("click",()=>showPage(btn.dataset.page)));
   document.addEventListener("keydown",e=>{
     if(e.key==="Escape"){
@@ -2884,113 +3379,262 @@ init();
 </script>
 
 <style id="agr-final-branding-polish">
-/* Final branding polish: gradient AG lettering, glass backing, line-art AG shadows. */
+/* Clean AG branding: gradient lettering, minimal surfaces, line-art echo only. */
 .app-header .brand-mark.logo-ag{
-  color:transparent!important;
-  -webkit-text-fill-color:transparent!important;
+  color:transparent!important;-webkit-text-fill-color:transparent!important;
   background:linear-gradient(135deg,#18c8f2 0%,#657cff 48%,#a451f4 100%)!important;
-  -webkit-background-clip:text!important;
-  background-clip:text!important;
-  position:relative!important;
-  isolation:isolate!important;
-  overflow:visible!important;
-  border:1px solid rgba(110,150,225,.34)!important;
-  box-shadow:0 10px 28px rgba(62,92,150,.18),inset 0 1px 0 rgba(255,255,255,.5)!important;
+  -webkit-background-clip:text!important;background-clip:text!important;
+  position:relative!important;isolation:isolate!important;overflow:visible!important;
+  border:0!important;box-shadow:none!important;
 }
 .app-header .brand-mark.logo-ag::before,
-.about-logo::before{
-  content:"";
-  position:absolute;
-  inset:2px;
-  border-radius:inherit;
-  background:linear-gradient(145deg,rgba(110,231,255,.10),rgba(139,124,255,.08))!important;
-  border:1px solid rgba(120,155,225,.22)!important;
-  z-index:-1;
-  pointer-events:none;
-}
 .app-header .brand-mark.logo-ag::after,
-.about-logo::after{
-  content:"";
-  position:absolute;
-  inset:-7px;
-  border-radius:inherit;
-  background:transparent!important;
-  border:1px solid rgba(102,145,225,.18)!important;
-  box-shadow:0 0 0 5px rgba(102,145,225,.045),0 0 24px rgba(102,145,225,.10)!important;
-  z-index:-2;
-  pointer-events:none;
+.about-logo::before,.about-logo::after{border:0!important;background:none!important;box-shadow:none!important;}
+.app-header .brand-mark.logo-ag::after{
+  content:"";position:absolute;inset:-8px;border-radius:50%;
+  background:radial-gradient(circle,rgba(105,140,235,.13),transparent 68%)!important;
+  z-index:-1;pointer-events:none;
 }
-
-/* Home AG watermark: outline/echo lines only — no color fill. */
-#page-home .hero::after{
-  color:transparent!important;
-  -webkit-text-fill-color:transparent!important;
-  background:none!important;
-  -webkit-background-clip:initial!important;
-  background-clip:initial!important;
-  -webkit-text-stroke:1.7px rgba(91,132,207,.27)!important;
-  text-shadow:
-    2px 2px 0 rgba(91,132,207,.10),
-    5px 5px 0 rgba(91,132,207,.075),
-    8px 8px 0 rgba(91,132,207,.05),
-    0 0 26px rgba(91,132,207,.10)!important;
-  opacity:1!important;
-}
-
-/* About AG ReVault gets the same branding language. */
-.about-revault-card{position:relative!important;overflow:hidden!important}
-.about-revault-card::after{
-  content:"AG"!important;
-  position:absolute!important;
-  right:-8px!important;
-  top:-20px!important;
-  font:950 118px/1 system-ui,sans-serif!important;
-  letter-spacing:-.13em!important;
-  color:transparent!important;
-  -webkit-text-fill-color:transparent!important;
-  background:none!important;
-  -webkit-background-clip:initial!important;
-  background-clip:initial!important;
-  -webkit-text-stroke:1.65px rgba(91,132,207,.25)!important;
-  text-shadow:
-    2px 2px 0 rgba(91,132,207,.095),
-    5px 5px 0 rgba(91,132,207,.07),
-    8px 8px 0 rgba(91,132,207,.045),
-    0 0 28px rgba(91,132,207,.10)!important;
-  opacity:1!important;
-  pointer-events:none!important;
-  z-index:0!important;
-}
-.about-brand-row{position:relative!important;z-index:1!important}
 .about-logo{
-  position:relative!important;
-  isolation:isolate!important;
-  overflow:visible!important;
-  color:transparent!important;
-  -webkit-text-fill-color:transparent!important;
+  position:relative!important;isolation:isolate!important;overflow:visible!important;
+  color:transparent!important;-webkit-text-fill-color:transparent!important;
   background:linear-gradient(135deg,#18c8f2 0%,#657cff 48%,#a451f4 100%)!important;
-  -webkit-background-clip:text!important;
-  background-clip:text!important;
-  border:1px solid rgba(110,150,225,.34)!important;
-  box-shadow:0 10px 28px rgba(62,92,150,.18),inset 0 1px 0 rgba(255,255,255,.5)!important;
+  -webkit-background-clip:text!important;background-clip:text!important;
+  border:0!important;box-shadow:none!important;
 }
-
-/* Light theme: keep the outline AG clearly visible without filling it. */
+.about-logo::after{
+  content:"";position:absolute;inset:-8px;border-radius:50%;
+  background:radial-gradient(circle,rgba(105,140,235,.12),transparent 68%)!important;
+  z-index:-1;pointer-events:none;
+}
+#page-home .hero::after{
+  color:transparent!important;-webkit-text-fill-color:transparent!important;
+  background:none!important;-webkit-background-clip:initial!important;background-clip:initial!important;
+  -webkit-text-stroke:1.9px rgba(91,132,207,.22)!important;
+  text-shadow:2px 2px 0 rgba(91,132,207,.08),5px 5px 0 rgba(91,132,207,.035),8px 8px 0 rgba(91,132,207,.035)!important;
+  opacity:1!important;
+}
+.about-revault-card{position:relative!important;overflow:hidden!important;}
+.about-revault-card::after{
+  content:"AG"!important;position:absolute!important;right:-8px!important;top:-20px!important;
+  font:950 118px/1 system-ui,sans-serif!important;letter-spacing:-.13em!important;
+  color:transparent!important;-webkit-text-fill-color:transparent!important;background:none!important;
+  -webkit-background-clip:initial!important;background-clip:initial!important;
+  -webkit-text-stroke:1.85px rgba(91,132,207,.21)!important;
+  text-shadow:2px 2px 0 rgba(91,132,207,.075),5px 5px 0 rgba(91,132,207,.052),8px 8px 0 rgba(91,132,207,.035)!important;
+  opacity:.24!important;pointer-events:none!important;z-index:0!important;
+}
+.about-brand-row{position:relative!important;z-index:1!important;}
 body[data-theme="light"] #page-home .hero::after,
 body[data-theme="light"] .about-revault-card::after{
-  -webkit-text-stroke:1.8px rgba(48,83,148,.34)!important;
-  text-shadow:
-    2px 2px 0 rgba(48,83,148,.14),
-    5px 5px 0 rgba(48,83,148,.105),
-    8px 8px 0 rgba(48,83,148,.07),
-    0 0 30px rgba(70,110,185,.13)!important;
+  -webkit-text-stroke:1.5px rgba(48,83,148,.18)!important;
+  text-shadow:2px 2px 0 rgba(48,83,148,.095),5px 5px 0 rgba(48,83,148,.065),8px 8px 0 rgba(48,83,148,.045)!important;
 }
-body[data-theme="light"] .about-logo{
-  border-color:rgba(70,105,170,.38)!important;
-  box-shadow:0 10px 28px rgba(54,88,145,.18),inset 0 1px 0 rgba(255,255,255,.85)!important;
+@media(max-width:560px){.about-revault-card::after{font-size:92px!important;right:-6px!important;top:-12px!important}}
+</style>
+<style id="agr-ag-shadow-adaptive-gradient">
+/* Subtle adaptive gradients for AG-shadow surfaces. The gradient follows the same blue/violet family as the AG line-art. */
+#page-home .hero,
+.about-revault-card{
+  background:
+    radial-gradient(circle at 88% 12%, rgba(91,132,207,.095), transparent 34%),
+    radial-gradient(circle at 12% 88%, rgba(139,124,255,.065), transparent 38%),
+    var(--glass)!important;
 }
+#page-home .hero{
+  background:
+    radial-gradient(circle at 86% 14%, rgba(91,132,207,.12), transparent 36%),
+    radial-gradient(circle at 10% 90%, rgba(139,124,255,.075), transparent 42%),
+    linear-gradient(145deg, rgba(255,255,255,.055), rgba(255,255,255,.018)),
+    var(--glass)!important;
+}
+body[data-theme="light"] #page-home .hero,
+body[data-theme="light"] .about-revault-card{
+  background:
+    radial-gradient(circle at 88% 12%, rgba(61,115,201,.10), transparent 34%),
+    radial-gradient(circle at 12% 88%, rgba(109,104,216,.075), transparent 38%),
+    linear-gradient(145deg, rgba(255,255,255,.98), rgba(240,246,253,.90)),
+    var(--glass)!important;
+}
+body[data-theme="light"] #page-home .hero{
+  background:
+    radial-gradient(circle at 86% 14%, rgba(61,115,201,.12), transparent 36%),
+    radial-gradient(circle at 10% 90%, rgba(109,104,216,.085), transparent 42%),
+    linear-gradient(145deg, rgba(255,255,255,.99), rgba(239,246,253,.92)),
+    var(--glass)!important;
+}
+</style>
+
+
+<style id="agr-supported-type-vertical-expand-fix">
+/* Supported file-type details: the visible card stays the same size.
+   Details live in a separate block immediately below it, so later cards are pushed down. */
+#profile-selection-grid{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:stretch!important;
+  gap:10px!important;
+  width:100%!important;
+  min-width:0!important;
+}
+#profile-selection-grid .file-type-row{
+  width:100%!important;
+  min-width:0!important;
+  display:block!important;
+  flex:0 0 auto!important;
+  box-sizing:border-box!important;
+}
+#profile-selection-grid .file-type-item{
+  position:relative!important;
+  display:block!important;
+  width:100%!important;
+  height:62px!important;
+  min-height:62px!important;
+  max-height:62px!important;
+  flex:none!important;
+  margin:0!important;
+  transform:none!important;
+  overflow:hidden!important;
+  box-sizing:border-box!important;
+}
+#profile-selection-grid .file-type-item .profile-list-main{
+  position:relative!important;
+  display:grid!important;
+  width:100%!important;
+  height:62px!important;
+  min-height:62px!important;
+  max-height:62px!important;
+  box-sizing:border-box!important;
+}
+#profile-selection-grid .profile-list-details-panel{
+  position:relative!important;
+  display:block!important;
+  width:100%!important;
+  margin-top:7px!important;
+  padding:10px 13px 12px!important;
+  box-sizing:border-box!important;
+  border:1px solid var(--line-soft)!important;
+  border-radius:15px!important;
+  background:rgba(255,255,255,.022)!important;
+  overflow:visible!important;
+}
+#profile-selection-grid .profile-list-details-panel[hidden]{display:none!important;}
+#profile-selection-grid .profile-list-details-panel .profile-detail-line{
+  display:grid!important;
+  grid-template-columns:84px minmax(0,1fr)!important;
+  gap:9px!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+  padding:5px 0!important;
+  font-size:10.5px!important;
+  line-height:1.5!important;
+}
+#profile-selection-grid .profile-list-details-panel .profile-detail-line b{color:var(--text)!important;font-weight:700!important;}
+#profile-selection-grid .profile-list-details-panel .profile-detail-line span{color:var(--muted)!important;overflow-wrap:anywhere!important;min-width:0!important;}
 @media(max-width:560px){
-  .about-revault-card::after{font-size:92px!important;right:-6px!important;top:-12px!important}
+  #profile-selection-grid .profile-list-details-panel{padding:10px 12px 11px!important;}
+  #profile-selection-grid .profile-list-details-panel .profile-detail-line{grid-template-columns:1fr!important;gap:2px!important;}
+}
+body[data-theme="light"] #profile-selection-grid .profile-list-details-panel{background:rgba(248,251,255,.78)!important;}
+</style>
+
+
+<style id="agr-password-keyboard-and-fixed-profile-panel">
+/* Keyboard-safe password sheet. The sheet follows the visual viewport and the focused PIN stays above the IME. */
+.password-sheet-root{
+  align-items:flex-end!important;
+  padding:0!important;
+  overflow:hidden!important;
+  overscroll-behavior:none!important;
+}
+.password-sheet-root .password-sheet{
+  width:min(520px,100%)!important;
+  max-height:min(78dvh,620px)!important;
+  margin:0!important;
+  overflow:auto!important;
+  overscroll-behavior:contain!important;
+  padding-bottom:calc(16px + env(safe-area-inset-bottom))!important;
+}
+.password-sheet .pin-row{
+  scroll-margin-top:18px;
+  scroll-margin-bottom:calc(120px + env(safe-area-inset-bottom));
+}
+.password-sheet .pin-digit{
+  flex:0 0 56px!important;
+  width:56px!important;
+  min-width:56px!important;
+  max-width:56px!important;
+  height:56px!important;
+  min-height:56px!important;
+  max-height:56px!important;
+  box-sizing:border-box!important;
+}
+
+/* Supported-file modal is a self-contained panel: opening details never changes the page height. */
+#profile-modal{
+  overflow:hidden!important;
+  overscroll-behavior:none!important;
+}
+#profile-modal>.modal{
+  height:min(78vh,640px)!important;
+  max-height:min(78vh,640px)!important;
+  overflow:hidden!important;
+  display:flex!important;
+  flex-direction:column!important;
+  box-sizing:border-box!important;
+}
+#profile-selection-grid{
+  flex:1 1 auto!important;
+  min-height:0!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  overscroll-behavior:contain!important;
+  padding:1px 3px 4px 1px!important;
+  box-sizing:border-box!important;
+}
+#profile-selection-grid .file-type-row{
+  position:relative!important;
+  height:74px!important;
+  min-height:74px!important;
+  max-height:74px!important;
+  flex:0 0 74px!important;
+  overflow:hidden!important;
+  box-sizing:border-box!important;
+}
+#profile-selection-grid .file-type-item{
+  height:74px!important;
+  min-height:74px!important;
+  max-height:74px!important;
+  overflow:hidden!important;
+  box-sizing:border-box!important;
+}
+#profile-selection-grid .file-type-item .profile-list-main{
+  height:74px!important;
+  min-height:74px!important;
+  max-height:74px!important;
+  box-sizing:border-box!important;
+}
+#profile-selection-grid .profile-list-details-panel{
+  position:absolute!important;
+  inset:1px 1px 1px 1px!important;
+  z-index:3!important;
+  margin:0!important;
+  max-height:70px!important;
+  overflow-y:auto!important;
+  overscroll-behavior:contain!important;
+  padding:8px 12px!important;
+  border:0!important;
+  border-radius:16px!important;
+  background:var(--surface-strong,rgba(18,23,34,.98))!important;
+  box-sizing:border-box!important;
+}
+#profile-selection-grid .profile-list-details-panel[hidden]{display:none!important;}
+#profile-selection-grid .profile-list-details-panel .profile-detail-line{
+  grid-template-columns:74px minmax(0,1fr)!important;
+  padding:3px 0!important;
+}
+body[data-theme="light"] #profile-selection-grid .profile-list-details-panel{
+  background:rgba(248,251,255,.98)!important;
 }
 </style>
 </body>
